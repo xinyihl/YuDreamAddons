@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(value = DenseCell.class, remap = false)
-public class DenseCellMixin {
+public abstract class DenseCellMixin {
     @Final
     @Shadow(remap = false)
     protected Materials.MaterialType component;

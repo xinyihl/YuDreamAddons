@@ -12,6 +12,7 @@ public class MixinLoader implements ILateMixinLoader {
         return Lists.newArrayList(
                 "mixins.yudreamaddons_botania.json",
                 "mixins.yudreamaddons_appliedenergistics2.json",
+                "mixins.yudreamaddons_mekeng.json",
                 "mixins.yudreamaddons_nae2.json"
         );
     }
