@@ -66,4 +66,5 @@ dependencies {
     implementation rfg.deobf("curse.maven:appliedenergistics2-570458:5378163")
     implementation rfg.deobf("curse.maven:nae2-884359:5317480")
     implementation rfg.deobf("curse.maven:mekanismenergistics-1027681:5393252")
+    implementation rfg.deobf("curse.maven:hadenoughitems-557549:5229422")
 }
