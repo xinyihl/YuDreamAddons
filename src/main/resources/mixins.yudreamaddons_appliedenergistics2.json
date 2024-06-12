@@ -8,6 +8,8 @@
     "AbstractCellInventoryMixin",
     "AbstractStorageCellMixin",
     "BasicFluidStorageCellMixin",
-    "CellConfigMixin"
+    "CellConfigMixin",
+    "ContainerPatternEncoderMixin",
+    "ItemEncodedPatternMixin"
   ]
 }

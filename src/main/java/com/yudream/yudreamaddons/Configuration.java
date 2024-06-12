@@ -8,4 +8,6 @@ public class Configuration {
     public static boolean duRuneConsume = true;
     @Config.Comment("存储元件存储种类上限")
     public static int aeTotalTypes = 1024;
+    @Config.Comment("启用编码样板显示由谁编码")
+    public static boolean patternEncoder = true;
 }
