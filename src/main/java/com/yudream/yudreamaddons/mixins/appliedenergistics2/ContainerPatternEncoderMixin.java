@@ -20,7 +20,7 @@ public abstract class ContainerPatternEncoderMixin extends AEBaseContainer {
     }
 
     @Inject(
-            method = "encode()V",
+            method = "encode",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/item/ItemStack;setTagCompound(Lnet/minecraft/nbt/NBTTagCompound;)V"

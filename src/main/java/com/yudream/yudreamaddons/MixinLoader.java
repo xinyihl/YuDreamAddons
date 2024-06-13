@@ -14,7 +14,8 @@ public class MixinLoader implements ILateMixinLoader {
                 "mixins.yudreamaddons_appliedenergistics2.json",
                 "mixins.yudreamaddons_mekeng.json",
                 "mixins.yudreamaddons_nae2.json",
-                "mixins.yudreamaddons_jei.json"
+                "mixins.yudreamaddons_jei.json",
+                "mixins.yudreamaddons_ae2fc.json"
         );
     }
     @Override

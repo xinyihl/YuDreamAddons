@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = RecipesGui.class, remap = false)
 public abstract class RecipesGuiMixin {
     @Inject(
-            method = "updateLayout()V",
+            method = "updateLayout",
             at = @At(
                     value = "INVOKE",
                     target = "Lmezz/jei/api/gui/IDrawable;getHeight()I"
