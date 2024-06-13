@@ -23,7 +23,7 @@ public abstract class ContainerPatternEncoderMixin extends AEBaseContainer {
             method = "encode",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/item/ItemStack;setTagCompound(Lnet/minecraft/nbt/NBTTagCompound;)V"
+                    target = "Lappeng/container/implementations/ContainerPatternEncoder;isCraftingMode()Z"
             )
     )
     private void injected(CallbackInfo ci, @Local(name = "encodedValue") NBTTagCompound encodedValue) {

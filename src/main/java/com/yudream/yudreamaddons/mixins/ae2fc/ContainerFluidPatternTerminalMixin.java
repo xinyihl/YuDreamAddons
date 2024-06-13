@@ -26,7 +26,7 @@ public abstract class ContainerFluidPatternTerminalMixin extends AEBaseContainer
                 method = "encodeFluidCraftPattern",
                 at = @At(
                         value = "INVOKE",
-                        target = "Lnet/minecraft/item/ItemStack;setTagCompound(Lnet/minecraft/nbt/NBTTagCompound;)V"
+                        target = "Lcom/glodblock/github/client/container/ContainerFluidPatternTerminal;isCraftingMode()Z"
                 )
         )
         private void injected(CallbackInfo ci, @Local(name = "encodedValue") NBTTagCompound encodedValue) {
