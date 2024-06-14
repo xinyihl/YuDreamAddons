@@ -17,7 +17,6 @@ import static com.yudream.yudreamaddons.Configuration.patternEncoder;
 
 @Mixin(value = ItemEncodedPattern.class, remap = false)
 public abstract class ItemEncodedPatternMixin {
-
     @Inject(
             method = "addCheckedInformation",
             at = @At(
@@ -25,7 +24,8 @@ public abstract class ItemEncodedPatternMixin {
             )
     )
     private void injected(CallbackInfo ci, @Local(name = "stack") ItemStack stack, @Local(name = "lines") List<String> lines) {
-        if (patternEncoder && !stack.getItem().equals(FCItems.DENSE_ENCODED_PATTERN) && !stack.getItem().equals(FCItems.LARGE_ITEM_ENCODED_PATTERN)) {
+        boolean isFCencode = stack.getItem() == FCItems.DENSE_ENCODED_PATTERN || stack.getItem() == FCItems.LARGE_ITEM_ENCODED_PATTERN;
+        if (patternEncoder && !isFCencode) {
             NBTTagCompound tag = stack.getTagCompound();
             if (tag != null && tag.hasKey("encoderName")) {
                 lines.add(I18n.format("ae2fc.tooltip.pattern_encoder.name", tag.getString("encoderName")));

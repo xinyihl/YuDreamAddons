@@ -1,10 +1,8 @@
 ## TemplateDevEnv
 
-Template workspace for modding Minecraft 1.12.2. Licensed under MIT, it is made for public use.
-
-This template currently utilizies **Gradle 8.7** + **[RetroFuturaGradle](https://github.com/GTNewHorizons/RetroFuturaGradle) 1.3.35** + **Forge 14.23.5.2847**.
-
-With **coremod and mixin support** that is easy to configure.
+1. 符文祭坛是否消耗符文
+2. 存储元件存储种类上限
+3. 编码样板显示由谁编码
 
 ### Instructions:
 

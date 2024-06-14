@@ -18,7 +18,13 @@ public abstract class AbstractCellInventoryMixin {
      * @author xinyihl
      * @reason 修改存储元件存储种类上限
      */
-    @ModifyConstant(method = {"<init>","<clinit>"} ,constant = @Constant(intValue = 63))
+    @ModifyConstant(
+            method = {
+                    "<init>",
+                    "<clinit>"
+            },
+            constant = @Constant(intValue = 63)
+    )
     private static int injected(int original) {
         return Configuration.aeTotalTypes;
     }

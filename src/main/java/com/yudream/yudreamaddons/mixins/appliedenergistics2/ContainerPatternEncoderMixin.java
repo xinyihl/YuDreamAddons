@@ -10,15 +10,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.yudream.yudreamaddons.Configuration.patternEncoder;
-
 @Mixin(value = ContainerPatternEncoder.class, remap = false)
 public abstract class ContainerPatternEncoderMixin extends AEBaseContainer {
-
     public ContainerPatternEncoderMixin(InventoryPlayer ip, Object anchor) {
         super(ip, anchor);
     }
-
     @Inject(
             method = "encode",
             at = @At(
@@ -27,9 +23,7 @@ public abstract class ContainerPatternEncoderMixin extends AEBaseContainer {
             )
     )
     private void injected(CallbackInfo ci, @Local(name = "encodedValue") NBTTagCompound encodedValue) {
-        if (patternEncoder) {
-            encodedValue.setString("encoderId", getInventoryPlayer().player.getGameProfile().getId().toString());
-            encodedValue.setString("encoderName", getInventoryPlayer().player.getGameProfile().getName());
-        }
+        encodedValue.setString("encoderId", getInventoryPlayer().player.getGameProfile().getId().toString());
+        encodedValue.setString("encoderName", getInventoryPlayer().player.getGameProfile().getName());
     }
 }
