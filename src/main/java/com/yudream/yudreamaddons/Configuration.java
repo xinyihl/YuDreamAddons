@@ -2,7 +2,7 @@ package com.yudream.yudreamaddons;
 
 import net.minecraftforge.common.config.Config;
 
-@Config(modid = YuDreamAddons.MOD_ID)
+@Config(modid = YuDreamAddons.MOD_ID, name = YuDreamAddons.NAME)
 public class Configuration {
     @Config.Comment("符文祭坛是否消耗符文")
     public static boolean DO_RUNE_CONSUME = true;

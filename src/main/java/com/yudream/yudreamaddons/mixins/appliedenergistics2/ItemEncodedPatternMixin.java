@@ -26,7 +26,7 @@ public abstract class ItemEncodedPatternMixin {
         if (PATTERN_ENCODER) {
             NBTTagCompound tag = stack.getTagCompound();
             if (tag != null && tag.hasKey("encoderName")) {
-                lines.add(I18n.format("ae2fc.tooltip.pattern_encoder.name", tag.getString("encoderName")));
+                lines.add(I18n.format("yudreamaddons.tooltip.pattern_encoder.name", tag.getString("encoderName")));
             }
         }
     }

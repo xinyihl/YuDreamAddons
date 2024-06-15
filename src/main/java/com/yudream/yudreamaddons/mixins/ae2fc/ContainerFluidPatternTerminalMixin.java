@@ -19,7 +19,6 @@ public abstract class ContainerFluidPatternTerminalMixin extends AEBaseContainer
     public ContainerFluidPatternTerminalMixin(InventoryPlayer ip, TileEntity myTile, IPart myPart) {
         super(ip, myTile, myPart);
     }
-
     @Inject(
             method = "encodeFluidCraftPattern",
             at = @At(

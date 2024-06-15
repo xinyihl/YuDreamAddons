@@ -7,17 +7,12 @@ import zone.rong.mixinbooter.ILateMixinLoader;
 import java.util.List;
 
 public class MixinLoader implements ILateMixinLoader {
+    private final String[] mixins = {"botania", "appliedenergistics2", "mekeng", "nae2", "jei", "ae2fc", "astralsorcery"};
     @Override
     public List<String> getMixinConfigs() {
-        return Lists.newArrayList(
-                "mixins.yudreamaddons_botania.json",
-                "mixins.yudreamaddons_appliedenergistics2.json",
-                "mixins.yudreamaddons_mekeng.json",
-                "mixins.yudreamaddons_nae2.json",
-                "mixins.yudreamaddons_jei.json",
-                "mixins.yudreamaddons_ae2fc.json",
-                "mixins.yudreamaddons_astralsorcery.json"
-        );
+        List<String> mixinconfigs = Lists.newArrayList();
+        for(String mixin : mixins) mixinconfigs.add("mixins.yudreamaddons_" + mixin + ".json");
+        return mixinconfigs;
     }
     @Override
     public boolean shouldMixinConfigQueue(String mixinConfig) {
