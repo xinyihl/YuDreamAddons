@@ -1,9 +1,6 @@
 package com.yudream.yudreamaddons.mixins.appliedenergistics2;
 
-import appeng.api.storage.data.IAEFluidStack;
 import appeng.fluids.items.BasicFluidStorageCell;
-import appeng.items.materials.MaterialType;
-import appeng.items.storage.AbstractStorageCell;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -14,7 +11,7 @@ public abstract class BasicFluidStorageCellMixin extends AbstractStorageCellMixi
      * @author xinyihl
      * @reason 修改存储元件存储种类
      */
-    @Overwrite(remap = false)
+    @Overwrite
     public int getTotalTypes(ItemStack cellItem) {
         switch (component) {
             case FLUID_CELL1K_PART:

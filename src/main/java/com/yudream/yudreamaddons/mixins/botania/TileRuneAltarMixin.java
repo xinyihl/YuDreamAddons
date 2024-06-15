@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import vazkii.botania.common.block.tile.TileRuneAltar;
 import vazkii.botania.common.item.ModItems;
 
-import static com.yudream.yudreamaddons.Configuration.duRuneConsume;
+import static com.yudream.yudreamaddons.Configuration.DO_RUNE_CONSUME;
 
 @Mixin(value = TileRuneAltar.class, remap = false)
 public abstract class TileRuneAltarMixin {
@@ -20,6 +20,6 @@ public abstract class TileRuneAltarMixin {
             )
     )
     public Item injected() {
-        return duRuneConsume ? Items.AIR : ModItems.rune;
+        return DO_RUNE_CONSUME ? Items.AIR : ModItems.rune;
     }
 }

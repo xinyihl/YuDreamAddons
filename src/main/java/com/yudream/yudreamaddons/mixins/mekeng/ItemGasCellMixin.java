@@ -13,24 +13,19 @@ import static com.mekeng.github.common.ItemAndBlocks.*;
 @Mixin(value = ItemGasCell.class, remap = false)
 public abstract class ItemGasCellMixin {
     @Final
-    @Shadow(remap = false)
+    @Shadow
     private ItemStack core;
     /**
      * @author xinyihl
      * @reason 修改存储元件存储种类
      */
-    @Overwrite(remap = false)
+    @Overwrite
     public int getTotalTypes(ItemStack cellItem) {
         Item item = core.getItem();
-        if (GAS_CELL_CORE_1k.equals(item)) {
-            return 4;
-        } else if (GAS_CELL_CORE_4k.equals(item)) {
-            return 8;
-        } else if (GAS_CELL_CORE_16k.equals(item)) {
-            return 16;
-        } else if (GAS_CELL_CORE_64k.equals(item)) {
-            return 32;
-        }
+        if (GAS_CELL_CORE_1k == item) return 4;
+        if (GAS_CELL_CORE_4k == item) return 8;
+        if (GAS_CELL_CORE_16k == item) return 16;
+        if (GAS_CELL_CORE_64k == item) return 32;
         return 0;
     }
 }

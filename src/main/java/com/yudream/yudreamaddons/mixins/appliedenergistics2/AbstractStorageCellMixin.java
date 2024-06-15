@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(value = AbstractStorageCell.class, remap = false)
 public abstract class AbstractStorageCellMixin {
     @Final
-    @Shadow(remap = false)
+    @Shadow
     protected MaterialType component;
     /**
      * @author xinyihl
      * @reason 修改存储元件存储种类
      */
-    @Overwrite(remap = false)
+    @Overwrite
     public int getTotalTypes(ItemStack cellItem) {
         switch (component) {
             case CELL1K_PART:

@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(value = DenseCell.class, remap = false)
 public abstract class DenseCellMixin {
     @Final
-    @Shadow(remap = false)
+    @Shadow
     protected Materials.MaterialType component;
     /**
      * @author xinyihl
      * @reason 修改存储元件存储种类
      */
-    @Overwrite(remap = false)
+    @Overwrite
     public int getTotalTypes(ItemStack cellItem) {
         switch (component) {
             case CELL_PART_256K:
@@ -36,7 +36,7 @@ public abstract class DenseCellMixin {
      * @author xinyihl
      * @reason 修改一种物品占用字节
      */
-    @Overwrite(remap = false)
+    @Overwrite
     public int getBytesPerType(ItemStack itemStack) {
         switch (component) {
             case CELL_PART_256K:
