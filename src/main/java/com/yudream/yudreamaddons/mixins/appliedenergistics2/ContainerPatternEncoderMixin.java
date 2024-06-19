@@ -19,8 +19,9 @@ public abstract class ContainerPatternEncoderMixin extends AEBaseContainer {
             method = "encode",
             at = @At(
                     value = "INVOKE",
-                    target = "Lappeng/container/implementations/ContainerPatternEncoder;isCraftingMode()Z"
-            )
+                    target = "Lnet/minecraft/item/ItemStack;setTagCompound(Lnet/minecraft/nbt/NBTTagCompound;)V"
+            ),
+            remap = true
     )
     private void injected(CallbackInfo ci, @Local(name = "encodedValue") NBTTagCompound encodedValue) {
         encodedValue.setString("encoderId", getInventoryPlayer().player.getGameProfile().getId().toString());

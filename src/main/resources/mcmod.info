@@ -1,13 +1,8 @@
-[
-{
+[{
   "modid": "yudreamaddons",
-  "name": "YuDreamAddons",
-  "description": "YuDreamAddons",
-  "version": "1.0.0",
+  "name": "余梦附加",
+  "description": "专为余梦服务器编写，未经允许禁止引用。",
+  "version": "1.0.2",
   "mcversion": "1.12.2",
-  "authorList": ["xinyihl"],
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": ["botania"]
-}
-]
+  "authorList": ["xinyihl"]
+}]

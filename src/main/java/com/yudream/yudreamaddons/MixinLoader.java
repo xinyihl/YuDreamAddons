@@ -7,7 +7,7 @@ import zone.rong.mixinbooter.ILateMixinLoader;
 import java.util.List;
 
 public class MixinLoader implements ILateMixinLoader {
-    private final String[] mixins = {"botania", "appliedenergistics2", "mekeng", "nae2", "jei", "ae2fc", "astralsorcery"};
+    private final String[] mixins = {"botania", "appliedenergistics2", "mekeng", "nae2", "jei", "ae2fc", "astralsorcery", "ftblib"};
     @Override
     public List<String> getMixinConfigs() {
         List<String> mixinconfigs = Lists.newArrayList();
