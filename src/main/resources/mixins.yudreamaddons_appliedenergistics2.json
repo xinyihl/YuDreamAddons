@@ -9,7 +9,9 @@
     "AbstractStorageCellMixin",
     "BasicFluidStorageCellMixin",
     "CellConfigMixin",
-    "ContainerPatternEncoderMixin",
+    "ContainerPatternEncoderMixin"
+  ],
+  "client": [
     "ItemEncodedPatternMixin"
   ]
 }
