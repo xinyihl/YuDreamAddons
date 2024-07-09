@@ -59,9 +59,15 @@ public class ClientEvents {
                 GuiContainer guiContainer = (GuiContainer) gui;
                 ItemStack hoveredStack = guiContainer.getSlotUnderMouse() != null ? guiContainer.getSlotUnderMouse().getStack() : ItemStack.EMPTY;
                 if (!hoveredStack.isEmpty()) {
-                    String itemId = hoveredStack.getItem().getRegistryName().toString();
-                    player.sendMessage(new TextComponentString("Item ID: " + itemId));
-                    setSysClipboardText("<" + itemId + ">");
+                    int meta = hoveredStack.getMetadata();
+                    String text = "<" + hoveredStack.getItem().getRegistryName().toString() + (meta == 0 ? "" : ":" + meta) + ">";
+                    if (hoveredStack.serializeNBT().hasKey("tag")) {
+                        String nbt = hoveredStack.serializeNBT().getTag("tag").toString();
+                        if (nbt.length() > 0)
+                            text += ".withTag(" + nbt + ")";
+                    }
+                    player.sendMessage(new TextComponentString("Item: " + text));
+                    setSysClipboardText(text);
                 }
                 //player.sendMessage(new TextComponentString("Current GUI: " + guiContainer.getClass().getSimpleName()));
             }
