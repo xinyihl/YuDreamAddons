@@ -8,21 +8,22 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
-import java.awt.*;
+import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.util.Objects;
 
 public class ClientEvents {
     public static final KeyBinding KEY_PLACE = new KeyBinding("key.yudreamaddons.getitemId", Keyboard.KEY_K, "key.yudreamaddons.desc");
 
     public ClientEvents() {
-        FMLCommonHandler.instance().bus().register(this);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     public static void setSysClipboardText(String writeMe) {
@@ -60,7 +61,7 @@ public class ClientEvents {
                 ItemStack hoveredStack = guiContainer.getSlotUnderMouse() != null ? guiContainer.getSlotUnderMouse().getStack() : ItemStack.EMPTY;
                 if (!hoveredStack.isEmpty()) {
                     int meta = hoveredStack.getMetadata();
-                    String text = "<" + hoveredStack.getItem().getRegistryName().toString() + (meta == 0 ? "" : ":" + meta) + ">";
+                    String text = "<" + Objects.requireNonNull(hoveredStack.getItem().getRegistryName()) + (meta == 0 ? "" : ":" + meta) + ">";
                     if (hoveredStack.serializeNBT().hasKey("tag")) {
                         String nbt = hoveredStack.serializeNBT().getTag("tag").toString();
                         if (nbt.length() > 0)

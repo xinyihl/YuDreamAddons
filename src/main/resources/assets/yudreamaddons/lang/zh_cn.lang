@@ -1,4 +1,5 @@
 #PARSE_ESCAPES
 yudreamaddons.tooltip.pattern_encoder.name=由 %s 编码
+
 key.yudreamaddons.desc=余梦附加
 key.yudreamaddons.getitemId=获取物品ID
