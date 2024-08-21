@@ -70,7 +70,6 @@ dependencies {
     implementation rfg.deobf("curse.maven:hadenoughitems-557549:5229422")
     implementation rfg.deobf("curse.maven:ae2fluidcraftingrework-623955:5405482")
     implementation rfg.deobf("curse.maven:astralsorcery-241721:3044416")
-    implementation rfg.deobf("curse.maven:ftblibrarylegacy-237167:2985811")
     implementation rfg.deobf("curse.maven:valkyrielib-245480:2691542")
     implementation rfg.deobf("curse.maven:extrautilities-225561:2678374")
 }
