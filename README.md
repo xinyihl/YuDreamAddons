@@ -7,7 +7,8 @@
 5. 更多实用设备2月尘参与星辉合成报错
 6. JEI在cleanroom下最小化报错
 7. 环境科技允许加速
-8. 通过快捷键获取物品id
+8. FTB任务在cleanroom下鼠标滚轮无效
+9. 通过快捷键获取物品id
 
 ### Instructions:
 
