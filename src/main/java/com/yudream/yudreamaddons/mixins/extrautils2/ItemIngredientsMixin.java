@@ -11,8 +11,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ItemIngredientsMixin {
     @Inject(
             method = "getType",
-            at = @At( "HEAD" ),
-            cancellable = true)
+            at = @At( value = "HEAD" ),
+            cancellable = true
+    )
     private void injected(ItemStack stack, CallbackInfoReturnable<ItemIngredients.Type> cir) {
         if (stack == null){
             cir.setReturnValue(ItemIngredients.Type.SYMBOL_ERROR);
