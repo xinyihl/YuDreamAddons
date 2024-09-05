@@ -2,4 +2,5 @@
 yudreamaddons.tooltip.pattern_encoder.name=Encoded By %s
 
 key.yudreamaddons.desc=Yudream Addons
-key.yudreamaddons.getitemId=Get Item ID
+key.yudreamaddons.getItemId=Get Item ID
+key.yudreamaddons.getItemIdList=Get Item ID List
