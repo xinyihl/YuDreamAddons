@@ -47,10 +47,10 @@ public class ClientEvents {
     private boolean handleKeyEvent(Pre event) {
         char typedChar = Keyboard.getEventCharacter();
         int eventKey = Keyboard.getEventKey();
-        return ((eventKey == 0 && typedChar >= 32) || Keyboard.getEventKeyState()) && handleKeyDown(eventKey, event);
+        return ((eventKey == 0 && typedChar >= 32) || Keyboard.getEventKeyState()) && handleKeyDown(event, eventKey);
     }
 
-    private boolean handleKeyDown(int eventKey, Pre event) {
+    private boolean handleKeyDown(Pre event, int eventKey) {
         Minecraft mc = Minecraft.getMinecraft();
         EntityPlayerSP player = mc.player;
         GuiScreen gui = event.getGui();
@@ -62,8 +62,8 @@ public class ClientEvents {
                     String item = getItemId(hoveredStack);
                     player.sendMessage(new TextComponentString("Item: " + item));
                     setSysClipboardText(item);
+                    return true;
                 }
-                return true;
                 //player.sendMessage(new TextComponentString("Current GUI: " + guiContainer.getClass().getSimpleName()));
             }
         }
@@ -75,12 +75,12 @@ public class ClientEvents {
                     String item = getItemId(hoveredStack);
                     itemList.add(item);
                     player.sendMessage(new TextComponentString("ItemList Add: " + item));
+                    return true;
                 } else {
                     player.sendMessage(new TextComponentString("ItemList: " + itemList));
                     setSysClipboardText(itemList.toString());
                     itemList.clear();
                 }
-                return true;
             }
         }
         return false;
