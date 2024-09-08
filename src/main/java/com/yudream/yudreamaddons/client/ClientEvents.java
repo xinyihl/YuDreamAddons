@@ -47,7 +47,7 @@ public class ClientEvents {
     private boolean handleKeyEvent(Pre event) {
         char typedChar = Keyboard.getEventCharacter();
         int eventKey = Keyboard.getEventKey();
-        return ((eventKey == 0 && typedChar >= 32) || Keyboard.getEventKeyState()) && handleKeyDown(event, eventKey);
+        return eventKey != 0 && typedChar >= 32 && Keyboard.getEventKeyState() && handleKeyDown(event, eventKey);
     }
 
     private boolean handleKeyDown(Pre event, int eventKey) {
