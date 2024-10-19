@@ -21,13 +21,13 @@ public abstract class DenseCellMixin {
     public int getTotalTypes(ItemStack cellItem) {
         switch (component) {
             case CELL_PART_256K:
-                return 128;
+                return 96;
             case CELL_PART_1024K:
-                return 256;
+                return 128;
             case CELL_PART_4096K:
-                return 512;
+                return 160;
             case CELL_PART_16384K:
-                return 1024;
+                return 192;
             default:
                 return 0;
         }
