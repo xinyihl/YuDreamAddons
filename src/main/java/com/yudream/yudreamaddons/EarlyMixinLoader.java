@@ -1,6 +1,5 @@
 package com.yudream.yudreamaddons;
 
-import com.google.common.collect.Lists;
 import net.minecraftforge.common.ForgeVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import zone.rong.mixinbooter.IEarlyMixinLoader;

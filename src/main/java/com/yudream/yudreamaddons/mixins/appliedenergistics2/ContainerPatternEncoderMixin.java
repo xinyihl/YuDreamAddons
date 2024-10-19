@@ -15,6 +15,7 @@ public abstract class ContainerPatternEncoderMixin extends AEBaseContainer {
     public ContainerPatternEncoderMixin(InventoryPlayer ip, Object anchor) {
         super(ip, anchor);
     }
+
     @Inject(
             method = "encode",
             at = @At(

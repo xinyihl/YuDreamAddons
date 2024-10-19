@@ -15,6 +15,7 @@ public abstract class ItemGasCellMixin {
     @Final
     @Shadow
     private ItemStack core;
+
     /**
      * @author xinyihl
      * @reason 修改存储元件存储种类

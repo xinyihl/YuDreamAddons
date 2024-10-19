@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ItemIngredientsMixin {
     @Inject(
             method = "getType",
-            at = @At( value = "HEAD" ),
+            at = @At(value = "HEAD"),
             cancellable = true
     )
     private void injected(ItemStack stack, CallbackInfoReturnable<ItemIngredients.Type> cir) {
-        if (stack == null){
+        if (stack == null) {
             cir.setReturnValue(ItemIngredients.Type.SYMBOL_ERROR);
         }
     }

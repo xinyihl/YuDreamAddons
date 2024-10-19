@@ -13,6 +13,7 @@ public abstract class AbstractStorageCellMixin {
     @Final
     @Shadow
     protected MaterialType component;
+
     /**
      * @author xinyihl
      * @reason 修改存储元件存储种类

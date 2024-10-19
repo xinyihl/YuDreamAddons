@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class GuiWrapperMixin {
     @Shadow
     private GuiBase wrappedGui;
+
     @Inject(
             method = "handleMouseInput",
             at = @At(
@@ -24,8 +25,8 @@ public abstract class GuiWrapperMixin {
             cancellable = true,
             remap = true
     )
-    public void injected(CallbackInfo ci){
-        if(Utils.isCleanroomLoader()) {
+    public void injected(CallbackInfo ci) {
+        if (Utils.isCleanroomLoader()) {
             int scroll = Mouse.getEventDWheel();
             this.wrappedGui.mouseScrolled(scroll);
             ci.cancel();

@@ -16,7 +16,7 @@ public abstract class ScoreboardMixin {
             cancellable = true
     )
     private void injected(ScoreObjective objective, CallbackInfo ci) {
-        if(objective == null){
+        if (objective == null) {
             ci.cancel();
         }
     }

@@ -13,6 +13,7 @@ public abstract class DenseCellMixin {
     @Final
     @Shadow
     protected Materials.MaterialType component;
+
     /**
      * @author xinyihl
      * @reason 修改存储元件存储种类
@@ -32,6 +33,7 @@ public abstract class DenseCellMixin {
                 return 0;
         }
     }
+
     /**
      * @author xinyihl
      * @reason 修改一种物品占用字节

@@ -16,6 +16,7 @@ public abstract class AbstractCellInventoryMixin {
     private static final String[] ITEM_SLOT_COUNT_KEYS = new String[AE_TOTAL_TYPES];
     @Unique
     private static final int MAX_ITEM_TYPES = AE_TOTAL_TYPES;
+
     /**
      * @author xinyihl
      * @reason 修改存储元件存储种类上限

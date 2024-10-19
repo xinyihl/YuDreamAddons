@@ -9,12 +9,14 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class LateMixinLoader implements ILateMixinLoader {
     private final String[] mixins = {"botania", "appliedenergistics2", "mekeng", "nae2", "jei", "ae2fc", "astralsorcery", "ftblib", "valkyrielib", "extrautils2"};
+
     @Override
     public List<String> getMixinConfigs() {
         List<String> mixinconfigs = Lists.newArrayList();
-        for(String mixin : mixins) mixinconfigs.add("mixins.yudreamaddons_" + mixin + ".json");
+        for (String mixin : mixins) mixinconfigs.add("mixins.yudreamaddons_" + mixin + ".json");
         return mixinconfigs;
     }
+
     @Override
     public boolean shouldMixinConfigQueue(String mixinConfig) {
         return Loader.isModLoaded(mixinConfig.substring(mixinConfig.indexOf('_') + 1, mixinConfig.lastIndexOf('.')));
