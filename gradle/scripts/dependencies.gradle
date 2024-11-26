@@ -73,4 +73,5 @@ dependencies {
     implementation rfg.deobf("curse.maven:ftblibrarylegacy-237167:2985811")
     implementation rfg.deobf("curse.maven:valkyrielib-245480:2691542")
     implementation rfg.deobf("curse.maven:extrautilities-225561:2678374")
+    implementation rfg.deobf("curse.maven:immersiveengineering-231951:2974106")
 }

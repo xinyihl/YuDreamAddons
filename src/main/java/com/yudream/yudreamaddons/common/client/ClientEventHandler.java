@@ -1,4 +1,4 @@
-package com.yudream.yudreamaddons.client;
+package com.yudream.yudreamaddons.common.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -19,22 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ClientEvents {
+public class ClientEventHandler {
     public static final KeyBinding KEY_GET_ITEM_ID = new KeyBinding("key.yudreamaddons.getItemId", Keyboard.KEY_K, "key.yudreamaddons.desc");
     public static final KeyBinding KEY_GET_ITEM_ID_LIST = new KeyBinding("key.yudreamaddons.getItemIdList", Keyboard.KEY_L, "key.yudreamaddons.desc");
     private static final List<String> itemList = new ArrayList<>();
 
-    public ClientEvents() {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    public static void setSysClipboardText(String writeMe) {
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(writeMe), null);
-    }
-
-    public void registerKeyBindings() {
-        ClientRegistry.registerKeyBinding(ClientEvents.KEY_GET_ITEM_ID);
-        ClientRegistry.registerKeyBinding(ClientEvents.KEY_GET_ITEM_ID_LIST);
+    public ClientEventHandler() {
+        ClientRegistry.registerKeyBinding(ClientEventHandler.KEY_GET_ITEM_ID);
+        ClientRegistry.registerKeyBinding(ClientEventHandler.KEY_GET_ITEM_ID_LIST);
     }
 
     @SubscribeEvent
@@ -42,6 +34,10 @@ public class ClientEvents {
         if (handleKeyEvent(event)) {
             event.setCanceled(true);
         }
+    }
+
+    public static void setSysClipboardText(String writeMe) {
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(writeMe), null);
     }
 
     private boolean handleKeyEvent(Pre event) {
@@ -91,7 +87,7 @@ public class ClientEvents {
         String text = "<" + Objects.requireNonNull(itemStack.getItem().getRegistryName()) + (meta == 0 ? "" : ":" + meta) + ">";
         if (itemStack.serializeNBT().hasKey("tag")) {
             String nbt = itemStack.serializeNBT().getTag("tag").toString();
-            if (nbt.length() > 0)
+            if (!nbt.isEmpty())
                 text += ".withTag(" + nbt + ")";
         }
         return text;
