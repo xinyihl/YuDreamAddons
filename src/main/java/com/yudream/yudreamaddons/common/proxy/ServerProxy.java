@@ -7,6 +7,6 @@ import net.minecraftforge.common.MinecraftForge;
 public class ServerProxy implements CommonProxy {
     @Override
     public void init() {
-        MinecraftForge.EVENT_BUS.register(new ServerEventHandler());;
+        MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
     }
 }
