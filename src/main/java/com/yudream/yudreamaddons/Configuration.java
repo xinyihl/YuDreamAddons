@@ -13,5 +13,5 @@ public class Configuration {
     @Config.Comment("星辉等级上限")
     public static int AS_LEVEL_CAP = 300;
     @Config.Comment("不接触地面时是否受电线的伤害")
-    public static boolean DO_ELECTRIC_UNGROUND = true;
+    public static boolean DO_ELECTRIC_UNGROUND = false;
 }
