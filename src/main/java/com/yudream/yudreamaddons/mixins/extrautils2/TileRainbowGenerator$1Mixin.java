@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(targets = "com.rwtema.extrautils2.tile.TileRainbowGenerator$1", remap = false)
-public class TileRainbowGenerator$1Mixin {
+public abstract class TileRainbowGenerator$1Mixin {
     @ModifyConstant(
             method = {
                     "getEnergyStored",

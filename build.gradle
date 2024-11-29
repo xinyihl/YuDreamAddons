@@ -1,6 +1,7 @@
 //file:noinspection GroovyAssignabilityCheck
 //file:noinspection DependencyNotationArgument
 //file:noinspection GrUnresolvedAccess
+//file:noinspection ConfigurationAvoidance
 import org.jetbrains.gradle.ext.Gradle
 
 plugins {

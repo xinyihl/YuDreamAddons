@@ -2,6 +2,7 @@ package com.yudream.yudreamaddons.mixins.astralsorcery;
 
 import com.yudream.yudreamaddons.Configurations;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkLevelManager;
+import net.minecraftforge.common.config.Configuration;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -15,7 +16,7 @@ public abstract class PerkLevelManagerMixin {
                     target = "Lnet/minecraftforge/common/config/Configuration;getInt(Ljava/lang/String;Ljava/lang/String;IIILjava/lang/String;)I"
             )
     )
-    public int injected(Configurations instance, String name, String category, int defaultValue, int minValue, int maxValue, String comment) {
+    public int injected(Configuration instance, String a, String b, int c, int d, int e, String f) {
         return Configurations.AS_LEVEL_CAP;
     }
 }

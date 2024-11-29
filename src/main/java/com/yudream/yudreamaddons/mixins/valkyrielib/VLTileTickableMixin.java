@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
+@SuppressWarnings("rawtypes")
 @Mixin(value = VLTileTickable.class, remap = false)
 public abstract class VLTileTickableMixin extends VLTileOwned {
 
