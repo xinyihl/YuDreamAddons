@@ -1,11 +1,10 @@
 package com.yudream.yudreamaddons.mixins.appliedenergistics2;
 
 import appeng.items.contents.CellConfig;
+import com.yudream.yudreamaddons.Configurations;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-
-import static com.yudream.yudreamaddons.Configuration.AE_TOTAL_TYPES;
 
 @Mixin(value = CellConfig.class, remap = false)
 public abstract class CellConfigMixin {
@@ -18,6 +17,6 @@ public abstract class CellConfigMixin {
             constant = @Constant(intValue = 63)
     )
     private static int injected(int original) {
-        return AE_TOTAL_TYPES;
+        return Configurations.AE_TOTAL_TYPES;
     }
 }

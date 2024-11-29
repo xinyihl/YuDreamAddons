@@ -28,15 +28,15 @@ public class ClientEventHandler {
         ClientRegistry.registerKeyBinding(ClientEventHandler.KEY_GET_ITEM_ID_LIST);
     }
 
+    public static void setSysClipboardText(String writeMe) {
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(writeMe), null);
+    }
+
     @SubscribeEvent
     public void onGuiKeyboardEvent(Pre event) {
         if (handleKeyEvent(event)) {
             event.setCanceled(true);
         }
-    }
-
-    public static void setSysClipboardText(String writeMe) {
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(writeMe), null);
     }
 
     private boolean handleKeyEvent(Pre event) {
