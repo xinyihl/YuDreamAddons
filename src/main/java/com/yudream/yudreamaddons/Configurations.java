@@ -1,6 +1,5 @@
 package com.yudream.yudreamaddons;
 
-import com.yudream.yudreamaddons.yudreamaddons.Tags;
 import net.minecraftforge.common.config.Config;
 
 @Config(modid = Tags.MOD_ID, name = Tags.MOD_NAME)
