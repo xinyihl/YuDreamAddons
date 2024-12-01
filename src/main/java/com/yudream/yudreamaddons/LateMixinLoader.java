@@ -18,7 +18,8 @@ public class LateMixinLoader implements ILateMixinLoader {
             "astralsorcery",
             "ftblib",
             "valkyrielib",
-            "extrautils2"
+            "extrautils2",
+            "betterbuilderswands"
     };
 
     @Override

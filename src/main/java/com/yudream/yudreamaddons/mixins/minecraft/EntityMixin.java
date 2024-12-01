@@ -18,7 +18,7 @@ public abstract class EntityMixin {
     )
     @SuppressWarnings({"ConstantValue", "UnresolvedMixinReference"})
     private void injected(boolean invisible, CallbackInfo ci) {
-        if (invisible && (Object)this instanceof EntityPlayer && ((EntityPlayer)(Object)this).isPotionActive(MobEffects.INVISIBILITY)) {
+        if (invisible && (Object) this instanceof EntityPlayer && ((EntityPlayer) (Object) this).isPotionActive(MobEffects.INVISIBILITY)) {
             ci.cancel();
         }
     }

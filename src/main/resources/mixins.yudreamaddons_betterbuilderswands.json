@@ -1,0 +1,11 @@
+{
+  "package": "com.yudream.yudreamaddons.mixins.betterbuilderswands",
+  "refmap": "mixins.yudreamaddons.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BasicPlayerShimMixin",
+    "WandWorkerMixin"
+  ]
+}
