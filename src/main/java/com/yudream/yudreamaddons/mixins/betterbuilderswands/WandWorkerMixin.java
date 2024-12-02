@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 @Mixin(value = WandWorker.class, remap = false)
-public class WandWorkerMixin {
+public abstract class WandWorkerMixin {
 
     @Final
     @Shadow
