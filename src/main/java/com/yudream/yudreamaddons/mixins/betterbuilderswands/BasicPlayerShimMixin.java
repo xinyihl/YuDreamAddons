@@ -13,7 +13,8 @@ public abstract class BasicPlayerShimMixin {
             method = {"countItems", "useItem"},
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/item/ItemStack;isItemEqual(Lnet/minecraft/item/ItemStack;)Z")
+                    target = "Lnet/minecraft/item/ItemStack;isItemEqual(Lnet/minecraft/item/ItemStack;)Z"
+            )
     )
     public boolean injected(ItemStack instance, ItemStack itemStack) {
         return instance.isItemEqual(itemStack) && ItemStack.areItemStackTagsEqual(instance, itemStack);

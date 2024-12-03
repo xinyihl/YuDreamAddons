@@ -15,7 +15,7 @@ public abstract class TileRainbowGeneratorMixin {
             remap = true
     )
     private int injected(int constant) {
-        return Configurations.RAINBOW_GENERATOR_ENERGY;
+        return Configurations.rainbowGeneratorEnergy;
     }
 
     @ModifyConstant(
@@ -23,6 +23,6 @@ public abstract class TileRainbowGeneratorMixin {
             constant = @Constant(intValue = 25000000)
     )
     private int injected1(int constant) {
-        return Configurations.RAINBOW_GENERATOR_ENERGY;
+        return Configurations.rainbowGeneratorEnergy;
     }
 }

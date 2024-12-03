@@ -105,6 +105,9 @@ repositories {
         name = "Modrinth"
         url = "https://api.modrinth.com/maven"
     }
+    maven {
+        url 'https://maven.cleanroommc.com'
+    }
     mavenLocal() // Must be last for caching to work
 }
 
@@ -113,15 +116,11 @@ dependencies {
         implementation 'com.cleanroommc:assetmover:2.5'
     }
     if (project.use_mixins.toBoolean()) {
-        implementation 'zone.rong:mixinbooter:9.1'
+        implementation 'zone.rong:mixinbooter:9.3'
     }
-
-    // Example of deobfuscating a dependency
-    // implementation rfg.deobf('curse.maven:had-enough-items-557549:4543375')
-
     if (project.use_mixins.toBoolean()) {
         // Change your mixin refmap name here:
-        String mixin = modUtils.enableMixins('zone.rong:mixinbooter:9.1', "mixins.yudreamaddons.refmap.json")
+        String mixin = modUtils.enableMixins('zone.rong:mixinbooter:9.3', "mixins.yudreamaddons.refmap.json")
         api (mixin) {
             transitive = false
         }
@@ -132,6 +131,12 @@ dependencies {
             transitive = false
         }
     }
+
+    implementation 'com.cleanroommc:configanytime:1.0'
+
+    // Example of deobfuscating a dependency
+    // implementation rfg.deobf('curse.maven:had-enough-items-557549:4543375')
+
     implementation rfg.deobf("curse.maven:baubles-227083:2518667")
     implementation rfg.deobf("curse.maven:mekanismceunofficial-840735:5946841")
     implementation rfg.deobf("curse.maven:botania-225643:3330934")

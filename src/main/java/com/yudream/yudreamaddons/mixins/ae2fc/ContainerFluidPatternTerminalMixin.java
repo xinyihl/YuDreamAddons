@@ -28,7 +28,7 @@ public abstract class ContainerFluidPatternTerminalMixin extends AEBaseContainer
             remap = true
     )
     private void injected(CallbackInfo ci, @Local(name = "encodedValue") NBTTagCompound encodedValue) {
-        if (Configurations.PATTERN_ENCODER) {
+        if (Configurations.patternEncoder) {
             encodedValue.setString("encoderId", getInventoryPlayer().player.getGameProfile().getId().toString());
             encodedValue.setString("encoderName", getInventoryPlayer().player.getGameProfile().getName());
         }
