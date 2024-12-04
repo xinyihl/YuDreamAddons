@@ -19,7 +19,8 @@ public class LateMixinLoader implements ILateMixinLoader {
             "ftblib",
             "valkyrielib",
             "extrautils2",
-            "betterbuilderswands"
+            "betterbuilderswands",
+            "tinymobfarm"
     };
 
     @Override

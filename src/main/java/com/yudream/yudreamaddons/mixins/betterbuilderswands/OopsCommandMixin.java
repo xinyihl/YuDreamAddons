@@ -41,7 +41,7 @@ public abstract class OopsCommandMixin {
             ),
             remap = true
     )
-    public boolean injected1(NBTTagCompound instance, String s, int i){
+    public boolean injected(NBTTagCompound instance, String s, int i){
         return false;
     }
 }
