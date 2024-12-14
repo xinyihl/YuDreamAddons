@@ -17,6 +17,6 @@ public abstract class PerkLevelManagerMixin {
             )
     )
     public int injected(Configuration instance, String a, String b, int c, int d, int e, String f) {
-        return Configurations.asLevelCap;
+        return Configurations.GENERAL.asLevelCap;
     }
 }

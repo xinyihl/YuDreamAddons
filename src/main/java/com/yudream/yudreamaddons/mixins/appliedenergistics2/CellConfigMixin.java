@@ -17,6 +17,6 @@ public abstract class CellConfigMixin {
             constant = @Constant(intValue = 63)
     )
     private static int injected(int original) {
-        return Configurations.aeTotalTypes;
+        return Configurations.GENERAL.aeTotalTypes;
     }
 }

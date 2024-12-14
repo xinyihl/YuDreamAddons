@@ -87,6 +87,10 @@ tasks.injectTags.configure {
 
 repositories {
     maven {
+        name = 'blamejared'
+        url = 'https://maven.blamejared.com'
+    }
+    maven {
         name 'CleanroomMC Maven'
         url 'https://maven.cleanroommc.com'
     }
@@ -137,6 +141,7 @@ dependencies {
     // Example of deobfuscating a dependency
     // implementation rfg.deobf('curse.maven:had-enough-items-557549:4543375')
 
+    implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.698"
     implementation rfg.deobf("curse.maven:baubles-227083:2518667")
     implementation rfg.deobf("curse.maven:mekanismceunofficial-840735:5946841")
     implementation rfg.deobf("curse.maven:botania-225643:3330934")

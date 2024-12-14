@@ -1,6 +1,7 @@
 package com.yudream.yudreamaddons;
 
 import com.yudream.yudreamaddons.common.proxy.CommonProxy;
+import net.minecraft.init.Items;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

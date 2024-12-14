@@ -19,6 +19,6 @@ public abstract class TileRuneAltarMixin {
             )
     )
     public Item injected() {
-        return Configurations.doRuneConsume ? Items.AIR : ModItems.rune;
+        return Configurations.GENERAL.doRuneConsume ? Items.AIR : ModItems.rune;
     }
 }

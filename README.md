@@ -15,6 +15,7 @@
 13. 添加 更好的建筑之杖副手存在物品时放置副手物品
 14. 修改 生物农场在没有存储空间时不输出物品
 15. 添加 多人游戏服务器列表美化
+16. 添加 电磁发动机发电量计算函数（mods.yudreamaddons.YdUtils.getRandGeneratorEnergy(int x, int y, int z)）
 
 ### Instructions:
 

@@ -16,6 +16,6 @@ public abstract class TileRainbowGenerator$1Mixin {
 
     )
     private int injected(int constant) {
-        return Configurations.rainbowGeneratorEnergy;
+        return Configurations.GENERAL.rainbowGeneratorEnergy;
     }
 }

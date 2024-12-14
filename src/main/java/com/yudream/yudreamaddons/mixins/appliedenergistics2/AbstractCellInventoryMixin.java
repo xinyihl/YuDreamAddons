@@ -10,11 +10,11 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(value = AbstractCellInventory.class, remap = false)
 public abstract class AbstractCellInventoryMixin {
     @Unique
-    private static final String[] ITEM_SLOT_KEYS = new String[Configurations.aeTotalTypes];
+    private static final String[] ITEM_SLOT_KEYS = new String[Configurations.GENERAL.aeTotalTypes];
     @Unique
-    private static final String[] ITEM_SLOT_COUNT_KEYS = new String[Configurations.aeTotalTypes];
+    private static final String[] ITEM_SLOT_COUNT_KEYS = new String[Configurations.GENERAL.aeTotalTypes];
     @Unique
-    private static final int MAX_ITEM_TYPES = Configurations.aeTotalTypes;
+    private static final int MAX_ITEM_TYPES = Configurations.GENERAL.aeTotalTypes;
 
     /**
      * @author xinyihl
@@ -29,6 +29,6 @@ public abstract class AbstractCellInventoryMixin {
     )
     @SuppressWarnings("InvalidInjectorMethodSignature")
     private static int injected(int original) {
-        return Configurations.aeTotalTypes;
+        return Configurations.GENERAL.aeTotalTypes;
     }
 }
