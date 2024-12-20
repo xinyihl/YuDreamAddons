@@ -79,7 +79,8 @@ public abstract class WandWorkerMixin {
             if (!placeEvent.isCanceled()) {
                 ItemStack itemFromInventory = player.useItem(sourceItems);
                 if (itemFromInventory != null && itemFromInventory.getItem() instanceof ItemBlock) {
-                    if (((ItemBlock) itemFromInventory.getItem()).placeBlockAt(itemFromInventory, player.getPlayer(), world.getWorld(), blockPos.toBlockPos(), EnumFacing.DOWN, hitX, hitY, hitZ, targetBlock)){
+                    ItemBlock itemBlock = ((ItemBlock) itemFromInventory.getItem());
+                    if (itemBlock.getBlock().canPlaceBlockAt(world.getWorld(), blockPos.toBlockPos()) && itemBlock.placeBlockAt(itemFromInventory, player.getPlayer(), world.getWorld(), blockPos.toBlockPos(), EnumFacing.DOWN, hitX, hitY, hitZ, targetBlock)){
                         world.playPlaceAtBlock(blockPos, targetBlock.getBlock());
                         placedBlocks.add(blockPos);
                         if (!player.isCreative()) wand.placeBlock(wandItem, player.getPlayer());
