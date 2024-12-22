@@ -20,7 +20,8 @@ public class LateMixinLoader implements ILateMixinLoader {
             "valkyrielib",
             "extrautils2",
             "betterbuilderswands",
-            "tinymobfarm"
+            "tinymobfarm",
+            "tcomplement"
     };
 
     @Override
