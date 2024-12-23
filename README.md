@@ -1,4 +1,6 @@
-## TemplateDevEnv
+## YuDreamAddons
+
+> 服务器私用mod，不提供维护&技术支持。
 
 1. 修改 可配置符文祭坛是否消耗符文
 2. 修改 AE存储元件存储种类上限
@@ -18,11 +20,9 @@
 16. 添加 电磁发动机发电量计算函数（mods.yudreamaddons.YdUtils.getRandGeneratorEnergy(int x, int y, int z)）
 17. 修复 匠魂补充的一个崩服/炸档bug
 
-### Instructions:
+### 构建:
 
 * 建立项目`gradlew setupDecompWorkspace`
-* 注入标签`gradlew injectTags`
+* 构建项目`gradlew build`
 * 运行客户端`gradlew runClient`
 * 运行服务端`gradlew runServer`
-* 清理构建`gradlew clean build`
-* 构建项目`gradlew build`
