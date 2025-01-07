@@ -2,7 +2,6 @@ package com.yudream.yudreamaddons.common.server;
 
 import blusunrize.immersiveengineering.common.util.IEDamageSources.ElectricDamageSource;
 import com.yudream.yudreamaddons.Configurations;
-import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 

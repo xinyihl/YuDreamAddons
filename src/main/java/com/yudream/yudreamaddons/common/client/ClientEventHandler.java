@@ -24,8 +24,8 @@ public class ClientEventHandler {
     private static final List<String> itemList = new ArrayList<>();
 
     public ClientEventHandler() {
-        ClientRegistry.registerKeyBinding(ClientEventHandler.KEY_GET_ITEM_ID);
-        ClientRegistry.registerKeyBinding(ClientEventHandler.KEY_GET_ITEM_ID_LIST);
+        ClientRegistry.registerKeyBinding(KEY_GET_ITEM_ID);
+        ClientRegistry.registerKeyBinding(KEY_GET_ITEM_ID_LIST);
     }
 
     public static void setSysClipboardText(String writeMe) {
@@ -59,7 +59,6 @@ public class ClientEventHandler {
                     setSysClipboardText(item);
                     return true;
                 }
-                //player.sendMessage(new TextComponentString("Current GUI: " + guiContainer.getClass().getSimpleName()));
             }
         }
         if (eventKey == KEY_GET_ITEM_ID_LIST.getKeyCode()) {

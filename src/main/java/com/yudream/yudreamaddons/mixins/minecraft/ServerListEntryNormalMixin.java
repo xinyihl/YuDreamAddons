@@ -26,7 +26,7 @@ public abstract class ServerListEntryNormalMixin {
             )
     )
     @SuppressWarnings("UnresolvedMixinReference")
-    public int injected(ServerData version){
+    public int injected(ServerData version) {
         return 340;
     }
 
@@ -39,10 +39,10 @@ public abstract class ServerListEntryNormalMixin {
             )
     )
     @SuppressWarnings("UnresolvedMixinReference")
-    public int injecteda(FontRenderer fontRenderer, String text, int x, int y, int color){
+    public int injecteda(FontRenderer fontRenderer, String text, int x, int y, int color) {
         int i = fontRenderer.getStringWidth(text);
         int j = fontRenderer.getStringWidth(server.gameVersion);
-        if("1.12.2".equals(server.gameVersion)) return 0;
+        if ("1.12.2".equals(server.gameVersion)) return 0;
         return fontRenderer.drawString(server.gameVersion, x + i - j, y, color);
     }
 }

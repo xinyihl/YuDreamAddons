@@ -24,11 +24,12 @@ public abstract class OopsCommandMixin {
             ),
             remap = true
     )
-    public boolean injected(World instance, BlockPos blockPos, @Local(name = "player") EntityPlayerMP player){
+    public boolean injected(World instance, BlockPos blockPos, @Local(name = "player") EntityPlayerMP player) {
         IBlockState iBlockState = player.getEntityWorld().getBlockState(blockPos);
         ItemStack item = iBlockState.getBlock().getPickBlock(iBlockState, new RayTraceResult(player), player.getEntityWorld(), blockPos, player);
         boolean isSetAir = instance.setBlockToAir(blockPos);
-        if (isSetAir && !player.isCreative()) player.getServerWorld().spawnEntity(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, item));
+        if (isSetAir && !player.isCreative())
+            player.getServerWorld().spawnEntity(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, item));
         return isSetAir;
     }
 
@@ -41,7 +42,7 @@ public abstract class OopsCommandMixin {
             ),
             remap = true
     )
-    public boolean injected(NBTTagCompound instance, String s, int i){
+    public boolean injected(NBTTagCompound instance, String s, int i) {
         instance.removeTag("lastPlaced");
         instance.removeTag("lastBlock");
         instance.removeTag("lastItemBlock");

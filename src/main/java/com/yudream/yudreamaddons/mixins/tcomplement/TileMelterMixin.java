@@ -13,7 +13,7 @@ public class TileMelterMixin {
             method = "<init>",
             at = @At("RETURN")
     )
-    public void injected(CallbackInfo ci){
+    public void injected(CallbackInfo ci) {
         ((TileMelter) (Object) this).resize(3);
     }
 }

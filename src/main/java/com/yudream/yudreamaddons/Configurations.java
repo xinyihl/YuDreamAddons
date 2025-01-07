@@ -1,7 +1,6 @@
 package com.yudream.yudreamaddons;
 
 import com.cleanroommc.configanytime.ConfigAnytime;
-import net.minecraft.block.Block;
 import net.minecraftforge.common.config.Config;
 
 @Config(modid = Tags.MOD_ID, name = Tags.MOD_NAME)

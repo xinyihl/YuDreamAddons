@@ -16,6 +16,8 @@ public abstract class FMLClientHandlerMixin {
      */
     @Nullable
     @Overwrite
-    public String enhanceServerListEntry(ServerListEntryNormal serverListEntry, ServerData serverEntry, int x, int width, int y, int relativeMouseX, int relativeMouseY) { return null; }
+    public String enhanceServerListEntry(ServerListEntryNormal serverListEntry, ServerData serverEntry, int x, int width, int y, int relativeMouseX, int relativeMouseY) {
+        return null;
+    }
 
 }

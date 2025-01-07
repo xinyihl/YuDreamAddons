@@ -9,7 +9,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.EmptyHandler;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,7 +27,7 @@ public abstract class TileEntityMobFarmMixin extends TileEntity {
                     target = "Ljava/util/List;iterator()Ljava/util/Iterator;"
             )
     )
-    public void injected(CallbackInfo ci, @Local(name = "drops") List<ItemStack> drops){
+    public void injected(CallbackInfo ci, @Local(name = "drops") List<ItemStack> drops) {
         drops.clear();
     }
 
@@ -41,13 +40,13 @@ public abstract class TileEntityMobFarmMixin extends TileEntity {
             ),
             remap = true
     )
-    public boolean injected(TileEntityMobFarm instance){
+    public boolean injected(TileEntityMobFarm instance) {
         return yuDreamAddons$getInv() != null && instance.isWorking();
     }
 
     @Unique
-    private IItemHandler yuDreamAddons$getInv(){
-        for (EnumFacing facing: EnumFacing.VALUES) {
+    private IItemHandler yuDreamAddons$getInv() {
+        for (EnumFacing facing : EnumFacing.VALUES) {
             final TileEntity mobFarm = this.world.getTileEntity(this.pos.offset(facing));
             if (mobFarm != null) {
                 final IItemHandler invCap = mobFarm.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
