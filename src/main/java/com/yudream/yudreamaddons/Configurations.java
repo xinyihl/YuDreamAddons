@@ -15,7 +15,7 @@ public class Configurations {
     public static class General {
         @Config.Comment("符文祭坛是否消耗符文")
         public boolean doRuneConsume = true;
-        @Config.Comment("存储元件存储种类上限")
+        @Config.Comment("存储元件存储种类上限(生成世界后不要修改)")
         public int aeTotalTypes = 1024;
         @Config.Comment("编码样板显示由谁编码")
         public boolean patternEncoder = true;
