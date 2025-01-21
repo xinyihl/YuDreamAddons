@@ -1,4 +1,4 @@
-package com.yudream.yudreamaddons.common.util;
+package com.yudream.yudreamaddons.common.crafttweaker;
 
 import com.yudream.yudreamaddons.Configurations;
 import crafttweaker.annotations.ZenRegister;
@@ -25,4 +25,5 @@ public class YdUtils {
         int result = (int) (resultFactor * (MAX_VALUE - MIN_VALUE) + MIN_VALUE);
         return Math.max(MIN_VALUE, Math.min(MAX_VALUE, result));
     }
+
 }
