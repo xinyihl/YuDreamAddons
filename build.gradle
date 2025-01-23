@@ -17,14 +17,11 @@ version = project.mod_version
 group = project.maven_group
 archivesBaseName = project.mod_name
 
-// Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
-        // Azul covers the most platforms for Java 8 toolchains, crucially including MacOS arm64
         vendor.set(JvmVendorSpec.AZUL)
     }
-    // Generate sources and javadocs jars when building and publishing
     withSourcesJar()
     // withJavadocJar()
 }
@@ -41,17 +38,13 @@ configurations {
 minecraft {
     mcVersion = '1.12.2'
 
-    // MCP Mappings
     mcpMappingChannel = 'stable'
     mcpMappingVersion = '39'
-    
-    // Set username here, the UUID will be looked up automatically
+
     username = 'Developer'
-    
-    // Add any additional tweaker classes here
+
     extraTweakClasses.add('org.spongepowered.asm.launch.MixinTweaker')
-    
-    // Add various JVM arguments here for runtime
+
     def args = ["-ea:${project.group}"]
     if (project.use_mixins.toBoolean()) {
         args << '-Dmixin.hotSwap=true'
@@ -60,17 +53,13 @@ minecraft {
     }
     extraRunJvmArguments.addAll(args)
 
-    // Include and use dependencies' Access Transformer files
     useDependencyAccessTransformers = true
-    
-    // Add any properties you want to swap out for a dynamic value at build time here
-    // Any properties here will be added to a class at build time, the name can be configured below
+
     injectedTags.put('MOD_ID', project.archives_base_name)
     injectedTags.put('MOD_NAME', project.mod_name)
     injectedTags.put('VERSION', project.version)
 }
 
-// Don't add coremod arg to runDeobf tasks
 if (project.use_coremod.toBoolean()) {
     for (runTask in ['runClient', 'runServer']) {
         tasks.named(runTask).configure {
@@ -79,9 +68,7 @@ if (project.use_coremod.toBoolean()) {
     }
 }
 
-// Generate a group.archives_base_name.Tags class
 tasks.injectTags.configure {
-    // Change Tags class' name here:
     outputClassName.set("${project.group}.${project.archives_base_name}.Tags")
 }
 
@@ -112,7 +99,7 @@ repositories {
     maven {
         url 'https://maven.cleanroommc.com'
     }
-    mavenLocal() // Must be last for caching to work
+    mavenLocal()
 }
 
 dependencies {
@@ -123,7 +110,6 @@ dependencies {
         implementation 'zone.rong:mixinbooter:9.3'
     }
     if (project.use_mixins.toBoolean()) {
-        // Change your mixin refmap name here:
         String mixin = modUtils.enableMixins('zone.rong:mixinbooter:9.3', "mixins.yudreamaddons.refmap.json")
         api (mixin) {
             transitive = false
@@ -162,7 +148,6 @@ dependencies {
     implementation rfg.deobf("curse.maven:tinkersconstruct-74072:2902483")
 }
 
-// Adds Access Transformer files to tasks
 if (project.use_access_transformer.toBoolean()) {
     for (File at : sourceSets.getByName("main").resources.files) {
         if (at.name.toLowerCase().endsWith("_at.cfg")) {
@@ -173,13 +158,10 @@ if (project.use_access_transformer.toBoolean()) {
 }
 
 processResources {
-    // This will ensure that this task is redone when the versions change
     inputs.property 'version', project.version
     inputs.property 'mcversion', project.minecraft.version
-    
-    // Replace various properties in mcmod.info and pack.mcmeta if applicable
+
     filesMatching(['mcmod.info', 'pack.mcmeta']) { fcd ->
-        // Replace version and mcversion
         fcd.expand (
                 'version': project.version,
                 'mcversion': project.minecraft.version
@@ -187,13 +169,15 @@ processResources {
     }
     
     if (project.use_access_transformer.toBoolean()) {
-        rename '(.+_at.cfg)', 'META-INF/$1' // Make sure Access Transformer files are in META-INF folder
+        rename '(.+_at.cfg)', 'META-INF/$1'
     }
 }
 
 jar {
     manifest {
         def attribute_map = [:]
+        attribute_map['Implementation-Title'] = project.name
+        attribute_map['Implementation-Version'] = project.version
         if(project.use_mixins.toBoolean()) {
             attribute_map['TweakClass'] = "org.spongepowered.asm.launch.MixinTweaker"
         }
@@ -209,8 +193,38 @@ jar {
         }
         attributes(attribute_map)
     }
-    // Add all embedded dependencies into the jar
     from(provider{ configurations.embed.collect {it.isDirectory() ? it : zipTree(it)} })
+}
+
+tasks.register('signJar') {
+    def keystorePath = file("C:/Users/xinyihl/.gradle/keystore.jks")
+    def keystoreAlias = "xinyihl"
+
+    def unsignedJar = file(jar.archiveFile.get().asFile)
+    def signedJar = file("$buildDir/libs/${jar.archiveBaseName.get()}-${jar.archiveVersion.get()}-signed.jar")
+
+    def keystorePassword = System.getenv("KEYSTORE_PASSWORD")
+    def keyPassword = System.getenv("KEY_PASSWORD")
+
+    doLast {
+        if (keystorePassword.isEmpty() || keyPassword.isEmpty()) {
+            throw new GradleException("Keystore passwords are not set in environment variables!")
+        }
+        ant.signjar(
+                jar: unsignedJar,
+                alias: keystoreAlias,
+                keystore: keystorePath,
+                storepass: keystorePassword,
+                keypass: keyPassword,
+                signedjar: signedJar
+        )
+    }
+}
+
+build.dependsOn signJar
+
+tasks.named("processIdeaSettings").configure {
+    dependsOn("injectTags")
 }
 
 idea {
@@ -243,8 +257,4 @@ idea {
             }
         }
     }
-}
-
-tasks.named("processIdeaSettings").configure {
-    dependsOn("injectTags")
 }
