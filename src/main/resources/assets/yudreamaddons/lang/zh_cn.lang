@@ -4,3 +4,4 @@ yudreamaddons.tooltip.pattern_encoder.name=由 %s 编码
 key.yudreamaddons.desc=余梦附加
 key.yudreamaddons.getItemId=获取物品ID
 key.yudreamaddons.getItemIdList=获取物品ID列表
+key.yudreamaddons.getItemIdListOut=导出物品ID列表
