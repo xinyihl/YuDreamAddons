@@ -21,7 +21,8 @@ public class LateMixinLoader implements ILateMixinLoader {
             "extrautils2",
             "betterbuilderswands",
             "tinymobfarm",
-            "tcomplement"
+            "tcomplement",
+            "modularmachinery"
     };
 
     @Override

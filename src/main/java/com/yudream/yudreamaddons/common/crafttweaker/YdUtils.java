@@ -11,8 +11,8 @@ import java.util.Random;
 @ZenClass("mods.yudreamaddons.YdUtils")
 public class YdUtils {
 
-    private static final int MIN_VALUE = Configurations.ELECTROMAGNETIC_GENERATOR.minValue;
-    private static final int MAX_VALUE = Configurations.ELECTROMAGNETIC_GENERATOR.maxValue;
+    private static final int MIN_VALUE = Configurations.ELECTROMAGNETIC_GENERATOR_CONFIG.minValue;
+    private static final int MAX_VALUE = Configurations.ELECTROMAGNETIC_GENERATOR_CONFIG.maxValue;
 
     @ZenMethod
     public static int getRandGeneratorEnergy(int x, int y, int z) {

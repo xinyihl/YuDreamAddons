@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ServerEventHandler {
     @SubscribeEvent
     public void onHurt(LivingAttackEvent event) {
-        if (!Configurations.GENERAL.doElectricUnground && event.getSource() instanceof ElectricDamageSource && !event.getEntity().onGround) {
+        if (!Configurations.GENERAL_CONFIG.doElectricUnground && event.getSource() instanceof ElectricDamageSource && !event.getEntity().onGround) {
             ElectricDamageSource dmg = (ElectricDamageSource) event.getSource();
             dmg.dmg = 0;
             event.setCanceled(true);

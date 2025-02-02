@@ -1,5 +1,6 @@
 package com.yudream.yudreamaddons.common.client;
 
+import com.yudream.yudreamaddons.common.util.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
@@ -47,14 +48,14 @@ public class ClientEventHandler {
 
         if (keyDown1) {
             keyDown1 = false;
-            String item = getItemId(itemStack);
+            String item = Utils.getItemId(itemStack);
             player.sendMessage(new TextComponentString("Item: " + item));
             setSysClipboardText(item);
         }
 
         if (keyDown2) {
             keyDown2 = false;
-            String item = getItemId(itemStack);
+            String item = Utils.getItemId(itemStack);
             itemList.add(item);
             player.sendMessage(new TextComponentString("ItemList Add: " + item));
         }
@@ -142,15 +143,4 @@ public class ClientEventHandler {
         return false;
     }
 */
-
-    private String getItemId(ItemStack itemStack) {
-        int meta = itemStack.getMetadata();
-        String text = "<" + Objects.requireNonNull(itemStack.getItem().getRegistryName()) + (meta == 0 ? "" : ":" + meta) + ">";
-        if (itemStack.serializeNBT().hasKey("tag")) {
-            String nbt = itemStack.serializeNBT().getTag("tag").toString();
-            if (!nbt.isEmpty())
-                text += ".withTag(" + nbt + ")";
-        }
-        return text;
-    }
 }

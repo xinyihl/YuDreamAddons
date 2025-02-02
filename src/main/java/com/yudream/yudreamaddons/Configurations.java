@@ -7,12 +7,15 @@ import net.minecraftforge.common.config.Config;
 public class Configurations {
 
     @Config.Comment("基础设置")
-    public static final General GENERAL = new General();
+    public static final GeneralConfig GENERAL_CONFIG = new GeneralConfig();
+
+    @Config.Comment("其他设置")
+    public static final OtherConfig OTHER_CONFIG = new OtherConfig();
 
     @Config.Comment("电磁发电机")
-    public static final ElectromagneticGenerator ELECTROMAGNETIC_GENERATOR = new ElectromagneticGenerator();
+    public static final ElectromagneticGeneratorConfig ELECTROMAGNETIC_GENERATOR_CONFIG = new ElectromagneticGeneratorConfig();
 
-    public static class General {
+    public static class GeneralConfig {
         @Config.Comment("符文祭坛是否消耗符文")
         public boolean doRuneConsume = true;
         @Config.Comment("存储元件存储种类上限(生成世界后不要修改)")
@@ -27,7 +30,12 @@ public class Configurations {
         public int rainbowGeneratorEnergy = 2500000;
     }
 
-    public static class ElectromagneticGenerator {
+    public static class OtherConfig {
+        @Config.Comment("神秘坩埚配方耗时")
+        public int crucibleTime = 100;
+    }
+
+    public static class ElectromagneticGeneratorConfig {
         @Config.Comment("最小发电量")
         public int minValue = 1000000;
         @Config.Comment("最大发电量")

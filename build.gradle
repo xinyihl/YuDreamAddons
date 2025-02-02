@@ -127,6 +127,8 @@ dependencies {
     // Example of deobfuscating a dependency
     // implementation rfg.deobf('curse.maven:had-enough-items-557549:4543375')
 
+    implementation rfg.deobf(fileTree(dir: 'libs', include: ['*.jar']))
+
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.698"
     implementation rfg.deobf("curse.maven:baubles-227083:2518667")
     implementation rfg.deobf("curse.maven:botania-225643:3330934")
@@ -146,6 +148,12 @@ dependencies {
     implementation rfg.deobf("curse.maven:tinkerscomplement-272671:2843439")
     implementation rfg.deobf("curse.maven:mantle-74924:2713386")
     implementation rfg.deobf("curse.maven:tinkersconstruct-74072:2902483")
+    implementation rfg.deobf("curse.maven:mmce-817377:5952626")
+    implementation rfg.deobf("curse.maven:guguutils-530919:3652765")
+    implementation rfg.deobf("curse.maven:thaumcraft-223628:2629023")
+    implementation rfg.deobf("curse.maven:codechickenlib-242818:2779848")
+    implementation rfg.deobf("curse.maven:mcjtylib-233105:2745846")
+
 }
 
 if (project.use_access_transformer.toBoolean()) {
