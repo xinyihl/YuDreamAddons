@@ -32,7 +32,7 @@ public class PacketWandOops implements IMessage {
         @Override
         public IMessage onMessage(PacketWandOops packetWandOops, MessageContext context) {
             EntityPlayerMP player = context.getServerHandler().player;
-            player.getServerWorld().addScheduledTask(()->{
+            player.getServerWorld().addScheduledTask(() -> {
                 ItemStack currentItemstack = BasicPlayerShim.getHeldWandIfAny(player);
                 if (currentItemstack != null && currentItemstack.getItem() instanceof IWandItem) {
                     NBTTagCompound tagComponent = currentItemstack.getTagCompound();
@@ -47,7 +47,8 @@ public class PacketWandOops implements IMessage {
                                 IBlockState iBlockState = player.getEntityWorld().getBlockState(blockPos);
                                 ItemStack item = iBlockState.getBlock().getPickBlock(iBlockState, new RayTraceResult(player), player.getEntityWorld(), blockPos, player);
                                 boolean isSetAir = player.getEntityWorld().setBlockToAir(blockPos);
-                                if (isSetAir && !player.isCreative()) player.getServerWorld().spawnEntity(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, item));
+                                if (isSetAir && !player.isCreative())
+                                    player.getServerWorld().spawnEntity(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, item));
                             }
                         }
                         bbwCompound.removeTag("lastPlaced");

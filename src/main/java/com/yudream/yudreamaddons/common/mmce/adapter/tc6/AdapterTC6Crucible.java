@@ -7,7 +7,6 @@ import github.kasuminova.mmce.common.itemtype.ChancedIngredientStack;
 import hellfirepvp.modularmachinery.common.crafting.MachineRecipe;
 import hellfirepvp.modularmachinery.common.crafting.adapter.RecipeAdapter;
 import hellfirepvp.modularmachinery.common.crafting.helper.ComponentRequirement;
-import hellfirepvp.modularmachinery.common.crafting.requirement.RequirementEnergy;
 import hellfirepvp.modularmachinery.common.crafting.requirement.RequirementIngredientArray;
 import hellfirepvp.modularmachinery.common.crafting.requirement.RequirementItem;
 import hellfirepvp.modularmachinery.common.lib.RequirementTypesMM;
@@ -67,9 +66,7 @@ public class AdapterTC6Crucible extends RecipeAdapter {
             }
 
             // Aspect Inputs
-            recipe.getAspects().aspects.forEach((aspect, amount) -> {
-                machineRecipe.addRequirement(RequirementAspect.createInput(amount, aspect));
-            });
+            recipe.getAspects().aspects.forEach((aspect, amount) -> machineRecipe.addRequirement(RequirementAspect.createInput(amount, aspect)));
 
             // Output
             ItemStack output = recipe.getRecipeOutput();

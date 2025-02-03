@@ -69,16 +69,14 @@ public class AdapterTC6InfusionMatrix extends RecipeAdapter {
             // Input Components
             recipe.getComponents().stream()
                     .map(ingredient -> Arrays.stream(ingredient.getMatchingStacks())
-                    .map(ChancedIngredientStack::new)
-                    .collect(Collectors.toList()))
+                            .map(ChancedIngredientStack::new)
+                            .collect(Collectors.toList()))
                     .filter(stackList -> !stackList.isEmpty())
                     .map(RequirementIngredientArray::new)
                     .forEach(machineRecipe::addRequirement);
 
             // Aspect Inputs
-            recipe.getAspects().aspects.forEach((aspect, amount) -> {
-                machineRecipe.addRequirement(RequirementAspect.createInput(amount, aspect));
-            });
+            recipe.getAspects().aspects.forEach((aspect, amount) -> machineRecipe.addRequirement(RequirementAspect.createInput(amount, aspect)));
 
             // Outputs
             Object output = recipe.recipeOutput;

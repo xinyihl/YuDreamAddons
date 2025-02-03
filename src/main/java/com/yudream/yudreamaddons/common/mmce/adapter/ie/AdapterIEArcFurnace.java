@@ -1,5 +1,6 @@
 package com.yudream.yudreamaddons.common.mmce.adapter.ie;
 
+import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import crafttweaker.util.IEventHandler;
 import github.kasuminova.mmce.common.event.recipe.RecipeEvent;
 import github.kasuminova.mmce.common.itemtype.ChancedIngredientStack;
@@ -17,7 +18,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static blusunrize.immersiveengineering.api.crafting.ArcFurnaceRecipe.recipeList;
@@ -32,7 +36,7 @@ public class AdapterIEArcFurnace extends RecipeAdapter {
     public Collection<MachineRecipe> createRecipesFor(ResourceLocation owningMachineName, List<RecipeModifier> modifiers, List<ComponentRequirement<?, ?>> additionalRequirements, Map<Class<?>, List<IEventHandler<RecipeEvent>>> eventHandlers, List<String> recipeTooltips) {
         List<MachineRecipe> machineRecipeList = new ArrayList<>();
 
-        recipeList.forEach((recipe)->{
+        recipeList.forEach((recipe) -> {
             if (recipe.input == null) {
                 return;
             }
@@ -42,11 +46,6 @@ public class AdapterIEArcFurnace extends RecipeAdapter {
             if (recipe.output == null) {
                 return;
             }
-            int inAmount = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.INPUT, 1, false));
-            if (inAmount <= 0) {
-                return;
-            }
-
             MachineRecipe machineRecipe = createRecipeShell(
                     new ResourceLocation("immersiveengineering", "yudream_auto_arcfurnace" + incId),
                     owningMachineName,
@@ -54,18 +53,34 @@ public class AdapterIEArcFurnace extends RecipeAdapter {
                     incId, false);
 
             // Input
-            ItemStack[] inputMain = recipe.input.toRecipeIngredient().getMatchingStacks();
-            List<ChancedIngredientStack> inputMainList = Arrays.stream(inputMain)
-                    .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, inAmount)))
+            int inAmount1 = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.INPUT, recipe.input.inputSize, false));
+            if (inAmount1 <= 0) {
+                return;
+            }
+            List<ChancedIngredientStack> inputMainList1 = recipe.input.getStackList().stream()
+                    .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, inAmount1)))
                     .collect(Collectors.toList());
-            if (!inputMainList.isEmpty()) {
-                machineRecipe.addRequirement(new RequirementIngredientArray(inputMainList));
+
+            if (!inputMainList1.isEmpty()) {
+                machineRecipe.addRequirement(new RequirementIngredientArray(inputMainList1));
             }
 
-            int energyPerTick = Math.round(RecipeModifier.applyModifiers(
-                    modifiers, RequirementTypesMM.REQUIREMENT_ENERGY, IOType.INPUT, (float) recipe.getTotalProcessEnergy() / (float) recipe.getTotalProcessTime() , false)
-            );
+            for (IngredientStack ingredientStack : recipe.additives) {
+                int inAmount2 = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.INPUT, ingredientStack.inputSize, false));
+                if (inAmount2 <= 0) {
+                    continue;
+                }
+                List<ChancedIngredientStack> inputMainList2 = ingredientStack.getStackList().stream()
+                        .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, inAmount2)))
+                        .collect(Collectors.toList());
+
+                if (!inputMainList2.isEmpty()) {
+                    machineRecipe.addRequirement(new RequirementIngredientArray(inputMainList2));
+                }
+            }
+
             // Energy
+            int energyPerTick = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ENERGY, IOType.INPUT, (float) recipe.getTotalProcessEnergy() / (float) recipe.getTotalProcessTime(), false));
             if (energyPerTick > 0) {
                 machineRecipe.addRequirement(new RequirementEnergy(IOType.INPUT, energyPerTick));
             }

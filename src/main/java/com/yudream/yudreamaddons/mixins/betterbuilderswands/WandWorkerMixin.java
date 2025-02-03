@@ -1,6 +1,7 @@
 package com.yudream.yudreamaddons.mixins.betterbuilderswands;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
@@ -92,12 +93,14 @@ public abstract class WandWorkerMixin {
                 } else {
                     isPlace = world.setBlock(blockPos, targetBlock);
                 }
-                if(isPlace){
+                if (isPlace) {
                     world.playPlaceAtBlock(blockPos, targetBlock.getBlock());
                     placedBlocks.add(blockPos);
                     if (!player.isCreative()) wand.placeBlock(wandItem, entityPlayer);
                 } else {
-                    itemFromInventory.grow(1);
+                    itemFromInventory.setCount(1);
+                    EntityItem entityItem = new EntityItem(worldObj, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, itemFromInventory);
+                    world.getWorld().spawnEntity(entityItem);
                 }
             }
         }

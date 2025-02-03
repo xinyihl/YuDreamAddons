@@ -15,7 +15,7 @@ public abstract class RegistryRecipeAdaptersMixin {
                     value = "HEAD"
             )
     )
-    private static void injected(CallbackInfo ci){
+    private static void injected(CallbackInfo ci) {
         RegRecipeAdapters.initialize();
     }
 }

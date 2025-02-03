@@ -15,6 +15,10 @@ public class Configurations {
     @Config.Comment("电磁发电机")
     public static final ElectromagneticGeneratorConfig ELECTROMAGNETIC_GENERATOR_CONFIG = new ElectromagneticGeneratorConfig();
 
+    static {
+        ConfigAnytime.register(Configurations.class);
+    }
+
     public static class GeneralConfig {
         @Config.Comment("符文祭坛是否消耗符文")
         public boolean doRuneConsume = true;
@@ -40,9 +44,5 @@ public class Configurations {
         public int minValue = 1000000;
         @Config.Comment("最大发电量")
         public int maxValue = 10000000;
-    }
-
-    static {
-        ConfigAnytime.register(Configurations.class);
     }
 }

@@ -17,17 +17,15 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ClientEventHandler {
-
-    private static boolean keyDown1 = false;
-    private static boolean keyDown2 = false;
 
     public static final KeyBinding KEY_GET_ITEM_ID = new KeyBinding("key.yudreamaddons.getItemId", Keyboard.KEY_K, "key.yudreamaddons.desc");
     public static final KeyBinding KEY_GET_ITEM_ID_LIST = new KeyBinding("key.yudreamaddons.getItemIdList", Keyboard.KEY_L, "key.yudreamaddons.desc");
     public static final KeyBinding KEY_GET_ITEM_ID_LIST_OUT = new KeyBinding("key.yudreamaddons.getItemIdListOut", Keyboard.KEY_J, "key.yudreamaddons.desc");
     private static final List<String> itemList = new ArrayList<>();
+    private static boolean keyDown1 = false;
+    private static boolean keyDown2 = false;
 
     public ClientEventHandler() {
         ClientRegistry.registerKeyBinding(KEY_GET_ITEM_ID);
@@ -66,8 +64,8 @@ public class ClientEventHandler {
         //char typedChar = Keyboard.getEventCharacter();
         int keyCode = Keyboard.getEventKey();
         boolean isPressed = Keyboard.getEventKeyState();
-        if(keyCode != 0 /*&& typedChar >= 32*/){
-            if(isPressed){ // 按下
+        if (keyCode != 0 /*&& typedChar >= 32*/) {
+            if (isPressed) { // 按下
                 if (keyCode == KEY_GET_ITEM_ID.getKeyCode()) {
                     keyDown1 = true;
                 }
@@ -83,7 +81,7 @@ public class ClientEventHandler {
                     }
                 }
             }
-            if(!isPressed){ // 抬起
+            if (!isPressed) { // 抬起
                 if (keyCode == KEY_GET_ITEM_ID.getKeyCode()) {
                     keyDown1 = false;
                 }

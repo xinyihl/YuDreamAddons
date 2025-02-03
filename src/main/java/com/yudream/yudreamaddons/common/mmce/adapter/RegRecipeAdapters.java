@@ -9,11 +9,11 @@ import static hellfirepvp.modularmachinery.common.registry.RegistryRecipeAdapter
 
 public class RegRecipeAdapters {
     public static void initialize() {
-        if(Loader.isModLoaded("thaumcraft")){
+        if (Loader.isModLoaded("thaumcraft")) {
             registerAdapter(new AdapterTC6Crucible());
             registerAdapter(new AdapterTC6InfusionMatrix());
         }
-        if(Loader.isModLoaded("immersiveengineering")){
+        if (Loader.isModLoaded("immersiveengineering")) {
             registerAdapter(new AdapterIEArcFurnace());
         }
     }

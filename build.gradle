@@ -208,7 +208,7 @@ tasks.register('signJar') {
     def keystorePath = file("C:/Users/xinyihl/.gradle/keystore.jks")
     def keystoreAlias = "xinyihl"
 
-    def unsignedJar = file(jar.archiveFile.get().asFile)
+    def unsignedJar = file("$buildDir/libs/${jar.archiveBaseName.get()}-${jar.archiveVersion.get()}.jar")
     def signedJar = file("$buildDir/libs/${jar.archiveBaseName.get()}-${jar.archiveVersion.get()}-signed.jar")
 
     def keystorePassword = System.getenv("KEYSTORE_PASSWORD")

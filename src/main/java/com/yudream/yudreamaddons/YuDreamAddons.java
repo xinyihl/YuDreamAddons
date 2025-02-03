@@ -12,11 +12,11 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = Tags.MOD_ID, name = Tags.MOD_NAME, version = Tags.VERSION, dependencies =
         "required-after:configanytime@[2.0,);" +
-        "required-after:mixinbooter@[8.0,);" +
-        "required-after:immersiveengineering@[0.12-98,);" +
-        "required-after:betterbuilderswands@[0.13.2,);" +
-        "required-after:modularmachinery@[2.0,);" +
-        "required-after:gugu-utils@[0.8,)"
+                "required-after:mixinbooter@[8.0,);" +
+                "required-after:immersiveengineering@[0.12-98,);" +
+                "required-after:betterbuilderswands@[0.13.2,);" +
+                "required-after:modularmachinery@[2.0,);" +
+                "required-after:gugu-utils@[0.8,)"
 )
 public class YuDreamAddons {
     @Mod.Instance
