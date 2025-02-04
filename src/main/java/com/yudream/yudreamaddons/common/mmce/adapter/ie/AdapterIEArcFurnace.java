@@ -52,7 +52,7 @@ public class AdapterIEArcFurnace extends RecipeAdapter {
                     recipe.getTotalProcessTime(),
                     incId, false);
 
-            // Input
+            // Item Input
             int inAmount1 = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.INPUT, recipe.input.inputSize, false));
             if (inAmount1 <= 0) {
                 return;

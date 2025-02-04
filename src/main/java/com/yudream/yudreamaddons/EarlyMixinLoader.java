@@ -15,7 +15,7 @@ import java.util.Map;
 public class EarlyMixinLoader implements IFMLLoadingPlugin, IEarlyMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
-        return Collections.singletonList("mixins.yudreamaddons_minecraft.json");
+        return Collections.singletonList("mixins.yudreamaddons.minecraft.json");
     }
 
     @Override

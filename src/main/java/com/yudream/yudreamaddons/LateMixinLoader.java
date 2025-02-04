@@ -1,39 +1,17 @@
 package com.yudream.yudreamaddons;
 
-import com.google.common.collect.Lists;
-import net.minecraftforge.fml.common.Loader;
+import com.yudream.yudreamaddons.common.Mods;
 import zone.rong.mixinbooter.ILateMixinLoader;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class LateMixinLoader implements ILateMixinLoader {
-    private final String[] mixins = {
-            "botania",
-            "appliedenergistics2",
-            "mekeng",
-            "nae2",
-            "jei",
-            "ae2fc",
-            "astralsorcery",
-            "ftblib",
-            "valkyrielib",
-            "extrautils2",
-            "betterbuilderswands",
-            "tinymobfarm",
-            "tcomplement",
-            "modularmachinery"
-    };
 
     @Override
     public List<String> getMixinConfigs() {
-        List<String> mixinconfigs = Lists.newArrayList();
-        for (String mixin : mixins) mixinconfigs.add("mixins.yudreamaddons_" + mixin + ".json");
-        return mixinconfigs;
-    }
-
-    @Override
-    public boolean shouldMixinConfigQueue(String mixinConfig) {
-        return Loader.isModLoaded(mixinConfig.substring(mixinConfig.indexOf('_') + 1, mixinConfig.lastIndexOf('.')));
+        return Arrays.stream(Mods.values()).filter(Mods::isMixin).filter(Mods::isLoaded).map(value -> "mixins.yudreamaddons." + value.modid + ".json").collect(Collectors.toList());
     }
 }

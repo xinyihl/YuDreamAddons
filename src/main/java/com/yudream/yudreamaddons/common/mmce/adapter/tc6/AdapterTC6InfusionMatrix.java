@@ -57,7 +57,7 @@ public class AdapterTC6InfusionMatrix extends RecipeAdapter {
                     recipe.instability == 0 ? BASE_WORK_TIME : recipe.instability * 1000,
                     incId, false);
 
-            // Input Main
+            // Item Input
             ItemStack[] inputMain = recipe.getRecipeInput().getMatchingStacks();
             List<ChancedIngredientStack> inputMainList = Arrays.stream(inputMain)
                     .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, inAmount)))

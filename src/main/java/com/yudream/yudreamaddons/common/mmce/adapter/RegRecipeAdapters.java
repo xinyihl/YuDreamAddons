@@ -1,20 +1,26 @@
 package com.yudream.yudreamaddons.common.mmce.adapter;
 
+import com.yudream.yudreamaddons.common.Mods;
 import com.yudream.yudreamaddons.common.mmce.adapter.ie.AdapterIEArcFurnace;
 import com.yudream.yudreamaddons.common.mmce.adapter.tc6.AdapterTC6Crucible;
 import com.yudream.yudreamaddons.common.mmce.adapter.tc6.AdapterTC6InfusionMatrix;
-import net.minecraftforge.fml.common.Loader;
+import com.yudream.yudreamaddons.common.mmce.adapter.tconstruct.AdapterSmelteryBasinCasting;
+import com.yudream.yudreamaddons.common.mmce.adapter.tconstruct.AdapterSmelteryTableCasting;
 
 import static hellfirepvp.modularmachinery.common.registry.RegistryRecipeAdapters.registerAdapter;
 
 public class RegRecipeAdapters {
     public static void initialize() {
-        if (Loader.isModLoaded("thaumcraft")) {
+        if (Mods.TC6.isLoaded()) {
             registerAdapter(new AdapterTC6Crucible());
             registerAdapter(new AdapterTC6InfusionMatrix());
         }
-        if (Loader.isModLoaded("immersiveengineering")) {
+        if (Mods.IE.isLoaded()) {
             registerAdapter(new AdapterIEArcFurnace());
+        }
+        if (Mods.TCO.isLoaded()){
+            registerAdapter(new AdapterSmelteryBasinCasting());
+            registerAdapter(new AdapterSmelteryTableCasting());
         }
     }
 }

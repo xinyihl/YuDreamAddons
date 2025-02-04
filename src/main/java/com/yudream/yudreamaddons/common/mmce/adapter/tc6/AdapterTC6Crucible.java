@@ -56,7 +56,7 @@ public class AdapterTC6Crucible extends RecipeAdapter {
                     OTHER_CONFIG.crucibleTime,
                     incId, false);
 
-            // Input
+            // Item Input
             ItemStack[] inputMain = recipe.getCatalyst().getMatchingStacks();
             List<ChancedIngredientStack> inputMainList = Arrays.stream(inputMain)
                     .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, inAmount)))

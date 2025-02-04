@@ -2,6 +2,7 @@
 //file:noinspection DependencyNotationArgument
 //file:noinspection GrUnresolvedAccess
 //file:noinspection ConfigurationAvoidance
+//file:noinspection VulnerableLibrariesLocal
 import org.jetbrains.gradle.ext.Gradle
 
 plugins {
@@ -130,6 +131,7 @@ dependencies {
     implementation rfg.deobf(fileTree(dir: 'libs', include: ['*.jar']))
 
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.698"
+    implementation rfg.deobf("curse.maven:theoneprobe-245211:2667280")
     implementation rfg.deobf("curse.maven:baubles-227083:2518667")
     implementation rfg.deobf("curse.maven:botania-225643:3330934")
     implementation rfg.deobf("curse.maven:mekanismceunofficial-840735:5946841")
