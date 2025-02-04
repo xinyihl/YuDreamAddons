@@ -1,0 +1,12 @@
+{
+  "package": "com.yudream.yudreamaddons.mixins.extrautils2",
+  "refmap": "mixins.yudreamaddons.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ItemIngredientsMixin",
+    "TileRainbowGenerator$1Mixin",
+    "TileRainbowGeneratorMixin"
+  ]
+}
