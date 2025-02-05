@@ -40,9 +40,6 @@ public class AdapterSmelteryBasinCasting extends RecipeAdapter {
         TinkerRegistry.getAllBasinCastingRecipes().forEach((irecipe -> {
             if (!(irecipe instanceof CastingRecipe)) return;
             CastingRecipe recipe = (CastingRecipe) irecipe;
-            if (recipe.cast == null) {
-                return;
-            }
             if (recipe.getFluid() == null) {
                 return;
             }
@@ -58,7 +55,7 @@ public class AdapterSmelteryBasinCasting extends RecipeAdapter {
 
             // Item Input
             int inAmount1 = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.INPUT, 1, false));
-            if (inAmount1 > 0) {
+            if (recipe.cast != null && inAmount1 > 0) {
                 if (recipe.consumesCast()){
                     List<ChancedIngredientStack> inputMainList1 = recipe.cast.getInputs().stream()
                             .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, inAmount1)))
