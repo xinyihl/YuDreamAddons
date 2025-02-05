@@ -4,6 +4,7 @@ import com.yudream.yudreamaddons.common.Mods;
 import com.yudream.yudreamaddons.common.mmce.adapter.ie.AdapterIEArcFurnace;
 import com.yudream.yudreamaddons.common.mmce.adapter.tc6.AdapterTC6Crucible;
 import com.yudream.yudreamaddons.common.mmce.adapter.tc6.AdapterTC6InfusionMatrix;
+import com.yudream.yudreamaddons.common.mmce.adapter.tc6.AdapterTC6Smelter;
 import com.yudream.yudreamaddons.common.mmce.adapter.tconstruct.AdapterSmelteryBasinCasting;
 import com.yudream.yudreamaddons.common.mmce.adapter.tconstruct.AdapterSmelteryTableCasting;
 
@@ -14,6 +15,7 @@ public class RegRecipeAdapters {
         if (Mods.TC6.isLoaded()) {
             registerAdapter(new AdapterTC6Crucible());
             registerAdapter(new AdapterTC6InfusionMatrix());
+            registerAdapter(new AdapterTC6Smelter());
         }
         if (Mods.IE.isLoaded()) {
             registerAdapter(new AdapterIEArcFurnace());

@@ -37,6 +37,8 @@ public class Configurations {
     public static class OtherConfig {
         @Config.Comment("神秘坩埚配方耗时")
         public int crucibleTime = 100;
+        @Config.Comment("神秘源质配方耗时")
+        public int smelterTime = 100;
     }
 
     public static class ElectromagneticGeneratorConfig {
