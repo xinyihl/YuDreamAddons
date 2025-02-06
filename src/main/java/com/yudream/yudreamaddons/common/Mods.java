@@ -20,8 +20,8 @@ public enum Mods {
     MMCE("modularmachinery", true),
     TC6("thaumcraft", false),
     IE("immersiveengineering", false);
-    private final boolean mixin;
     public final String modid;
+    private final boolean mixin;
     private final boolean loaded;
 
     Mods(String modid, boolean mixin) {
@@ -34,7 +34,7 @@ public enum Mods {
         return loaded;
     }
 
-    public boolean isMixin(){
+    public boolean isMixin() {
         return mixin;
     }
 }

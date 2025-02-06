@@ -20,7 +20,7 @@ public class RegRecipeAdapters {
         if (Mods.IE.isLoaded()) {
             registerAdapter(new AdapterIEArcFurnace());
         }
-        if (Mods.TCO.isLoaded()){
+        if (Mods.TCO.isLoaded()) {
             registerAdapter(new AdapterSmelteryBasinCasting());
             registerAdapter(new AdapterSmelteryTableCasting());
         }

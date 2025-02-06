@@ -58,14 +58,14 @@ public class AdapterSmelteryTableCasting extends RecipeAdapter {
             // Item Input
             int inAmount1 = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.INPUT, 1, false));
             if (inAmount1 > 0) {
-                if (recipe.consumesCast()){
+                if (recipe.consumesCast()) {
                     List<ChancedIngredientStack> inputMainList1 = recipe.cast.getInputs().stream()
                             .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, inAmount1)))
                             .collect(Collectors.toList());
                     if (!inputMainList1.isEmpty()) {
                         machineRecipe.addRequirement(new RequirementIngredientArray(inputMainList1));
                     }
-                }else {
+                } else {
                     List<ChancedIngredientStack> inputMainList1 = recipe.cast.getInputs().stream()
                             .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, 1)))
                             .collect(Collectors.toList());
