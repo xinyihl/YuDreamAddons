@@ -1,6 +1,7 @@
 package com.yudream.yudreamaddons.common.mmce.adapter.tc6;
 
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.RequirementAspectOutput;
+import com.yudream.yudreamaddons.YuDreamAddons;
 import com.yudream.yudreamaddons.common.util.Utils;
 import crafttweaker.util.IEventHandler;
 import github.kasuminova.mmce.common.event.recipe.RecipeEvent;
@@ -10,7 +11,6 @@ import hellfirepvp.modularmachinery.common.crafting.helper.ComponentRequirement;
 import hellfirepvp.modularmachinery.common.crafting.requirement.RequirementItem;
 import hellfirepvp.modularmachinery.common.machine.IOType;
 import hellfirepvp.modularmachinery.common.modifier.RecipeModifier;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -29,7 +29,6 @@ import static com.yudream.yudreamaddons.Configurations.OTHER_CONFIG;
 
 public class AdapterTC6Smelter extends RecipeAdapter {
 
-    private static final File file = new File(Minecraft.getMinecraft().gameDir, "config/thaumcraft_smelter.dat");
     private static final Logger log = LogManager.getLogger(AdapterTC6Smelter.class);
     private static Map<Item, AspectList> itemAspectListMap = new HashMap<>();
 
@@ -39,6 +38,7 @@ public class AdapterTC6Smelter extends RecipeAdapter {
 
     @Nonnull
     public Collection<MachineRecipe> createRecipesFor(ResourceLocation owningMachineName, List<RecipeModifier> modifiers, List<ComponentRequirement<?, ?>> additionalRequirements, Map<Class<?>, List<IEventHandler<RecipeEvent>>> eventHandlers, List<String> recipeTooltips) {
+        File file = new File(YuDreamAddons.instance.configDir, "thaumcraft_smelter.dat");
         List<MachineRecipe> machineRecipeList = new ArrayList<>();
         if (file.exists()) {
             try {
@@ -72,8 +72,9 @@ public class AdapterTC6Smelter extends RecipeAdapter {
             });
             try {
                 Utils.tc6SmelterSerialize(itemAspectListMap, file);
+                log.info("[YuDreamAddons] 源质演练厂配方缓存保存成功, {}", file);
             } catch (IOException e) {
-                log.error("[YuDreamAddons] 源质演练厂配方缓存保存失败");
+                log.error("[YuDreamAddons] 源质演练厂配方缓存保存失败, {}", file);
                 //noinspection ResultOfMethodCallIgnored
                 file.delete();
                 throw new RuntimeException(e);

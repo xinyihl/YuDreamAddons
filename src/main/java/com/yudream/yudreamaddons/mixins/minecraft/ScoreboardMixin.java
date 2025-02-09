@@ -15,7 +15,6 @@ public abstract class ScoreboardMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    @SuppressWarnings("UnresolvedMixinReference")
     private void injected(ScoreObjective objective, CallbackInfo ci) {
         if (objective == null) {
             ci.cancel();

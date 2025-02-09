@@ -25,7 +25,6 @@ public abstract class ServerListEntryNormalMixin {
                     opcode = Opcodes.GETFIELD
             )
     )
-    @SuppressWarnings("UnresolvedMixinReference")
     public int injected(ServerData version) {
         return 340;
     }
@@ -38,7 +37,6 @@ public abstract class ServerListEntryNormalMixin {
                     ordinal = 2
             )
     )
-    @SuppressWarnings("UnresolvedMixinReference")
     public int injecteda(FontRenderer fontRenderer, String text, int x, int y, int color) {
         int i = fontRenderer.getStringWidth(text);
         int j = fontRenderer.getStringWidth(server.gameVersion);
