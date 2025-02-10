@@ -155,6 +155,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:thaumcraft-223628:2629023")
     implementation rfg.deobf("curse.maven:codechickenlib-242818:2779848")
     implementation rfg.deobf("curse.maven:mcjtylib-233105:2745846")
+    implementation rfg.deobf("curse.maven:forestry-59751:6104316")
 
 }
 

@@ -1,5 +1,6 @@
 package com.yudream.yudreamaddons.mixins.betterbuilderswands;
 
+import com.yudream.yudreamaddons.common.util.Utils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -91,7 +92,8 @@ public abstract class WandWorkerMixin {
                 if (itemFromInventory.hasTagCompound()) {
                     isPlace = itemBlock.getBlock().canPlaceBlockAt(worldObj, bp) && itemBlock.placeBlockAt(itemFromInventory, entityPlayer, worldObj, bp, EnumFacing.DOWN, hitX, hitY, hitZ, targetBlock);
                 } else {
-                    isPlace = world.setBlock(blockPos, targetBlock);
+                    isPlace = Utils.setBlockWithoutLighting(worldObj, bp, targetBlock);
+                    //isPlace = world.setBlock(blockPos, targetBlock);
                 }
                 if (isPlace) {
                     world.playPlaceAtBlock(blockPos, targetBlock.getBlock());
