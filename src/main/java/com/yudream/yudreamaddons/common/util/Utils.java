@@ -25,6 +25,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static net.minecraft.world.chunk.Chunk.NULL_BLOCK_STORAGE;
+
 public class Utils {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
@@ -33,9 +35,10 @@ public class Utils {
     public static void checkAuthType() {
         String type = Minecraft.getMinecraft().getVersionType();
         if (!"余梦|皮肤站".equals(type)) {
-            JFrame frame = new JFrame();
-            JOptionPane.showMessageDialog(frame, "你需要使用皮肤站登录才能进入服务器！", "错误", JOptionPane.ERROR_MESSAGE);
-            FMLCommonHandler.instance().exitJava(0, true);
+            int i = JOptionPane.showOptionDialog(null,"你需要使用皮肤站登录才能进入服务器", "客户端未登录", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[]{"退出","继续"}, "退出");
+            if (i == 0){
+                FMLCommonHandler.instance().exitJava(0, true);
+            }
         }
     }
 
@@ -109,18 +112,18 @@ public class Utils {
         Chunk chunk = world.getChunk(pos);
         int sectionIndex = pos.getY() >> 4;
         ExtendedBlockStorage[] storageArray = chunk.getBlockStorageArray();
-
-        if (sectionIndex < 0 || sectionIndex >= storageArray.length) {
-            return false;
-        }
-
         ExtendedBlockStorage storage = storageArray[sectionIndex];
-        if (storage == null) {
-            return false;
+
+        if (storage == NULL_BLOCK_STORAGE)
+        {
+            storage = new ExtendedBlockStorage(pos.getY() >> 4 << 4, chunk.getWorld().provider.hasSkyLight());
+            chunk.getBlockStorageArray()[sectionIndex] = storage;
         }
+
         int x = pos.getX() & 15;
         int y = pos.getY() & 15;
         int z = pos.getZ() & 15;
+
         IBlockState oldState = storage.get(x, y, z);
         storage.set(x, y, z, newState);
         chunk.markDirty();
