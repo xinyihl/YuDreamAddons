@@ -1,4 +1,4 @@
-package com.yudream.yudreamaddons.common.mmce.adapter.ie;
+package com.yudream.yudreamaddons.common.integration.mmce.adapter.ie;
 
 import blusunrize.immersiveengineering.api.crafting.IngredientStack;
 import crafttweaker.util.IEventHandler;

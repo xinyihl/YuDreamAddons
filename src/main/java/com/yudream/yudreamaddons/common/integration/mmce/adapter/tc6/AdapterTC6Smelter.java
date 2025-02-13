@@ -1,4 +1,4 @@
-package com.yudream.yudreamaddons.common.mmce.adapter.tc6;
+package com.yudream.yudreamaddons.common.integration.mmce.adapter.tc6;
 
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.RequirementAspectOutput;
 import com.yudream.yudreamaddons.YuDreamAddons;

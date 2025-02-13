@@ -1,6 +1,6 @@
 package com.yudream.yudreamaddons.mixins.mmce;
 
-import com.yudream.yudreamaddons.common.mmce.adapter.RegRecipeAdapters;
+import com.yudream.yudreamaddons.common.integration.mmce.adapter.RegRecipeAdapters;
 import hellfirepvp.modularmachinery.common.registry.RegistryRecipeAdapters;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

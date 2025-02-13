@@ -1,4 +1,4 @@
-package com.yudream.yudreamaddons.common.mmce.adapter.tconstruct;
+package com.yudream.yudreamaddons.common.integration.mmce.adapter.tconstruct;
 
 import crafttweaker.util.IEventHandler;
 import github.kasuminova.mmce.common.event.recipe.RecipeEvent;

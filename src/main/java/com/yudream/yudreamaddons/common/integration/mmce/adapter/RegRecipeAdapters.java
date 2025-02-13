@@ -1,12 +1,12 @@
-package com.yudream.yudreamaddons.common.mmce.adapter;
+package com.yudream.yudreamaddons.common.integration.mmce.adapter;
 
 import com.yudream.yudreamaddons.common.Mods;
-import com.yudream.yudreamaddons.common.mmce.adapter.ie.AdapterIEArcFurnace;
-import com.yudream.yudreamaddons.common.mmce.adapter.tc6.AdapterTC6Crucible;
-import com.yudream.yudreamaddons.common.mmce.adapter.tc6.AdapterTC6InfusionMatrix;
-import com.yudream.yudreamaddons.common.mmce.adapter.tc6.AdapterTC6Smelter;
-import com.yudream.yudreamaddons.common.mmce.adapter.tconstruct.AdapterSmelteryBasinCasting;
-import com.yudream.yudreamaddons.common.mmce.adapter.tconstruct.AdapterSmelteryTableCasting;
+import com.yudream.yudreamaddons.common.integration.mmce.adapter.ie.AdapterIEArcFurnace;
+import com.yudream.yudreamaddons.common.integration.mmce.adapter.tc6.AdapterTC6Crucible;
+import com.yudream.yudreamaddons.common.integration.mmce.adapter.tc6.AdapterTC6InfusionMatrix;
+import com.yudream.yudreamaddons.common.integration.mmce.adapter.tc6.AdapterTC6Smelter;
+import com.yudream.yudreamaddons.common.integration.mmce.adapter.tconstruct.AdapterSmelteryBasinCasting;
+import com.yudream.yudreamaddons.common.integration.mmce.adapter.tconstruct.AdapterSmelteryTableCasting;
 
 import static hellfirepvp.modularmachinery.common.registry.RegistryRecipeAdapters.registerAdapter;
 

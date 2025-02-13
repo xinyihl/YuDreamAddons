@@ -1,4 +1,4 @@
-package com.yudream.yudreamaddons.common.crafttweaker;
+package com.yudream.yudreamaddons.common.integration.crafttweaker;
 
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.minecraft.CraftTweakerMC;
