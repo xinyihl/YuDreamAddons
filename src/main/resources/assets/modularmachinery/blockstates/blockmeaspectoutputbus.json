@@ -1,0 +1,9 @@
+{
+    "defaults": {
+      "model": "modularmachinery:blockmeaspectoutputbus"
+    },
+    "variants": {
+      "inventory": { "model": "modularmachinery:blockmeaspectoutputbus" },
+      "normal": { "model": "modularmachinery:blockmeaspectoutputbus"}
+    }
+  }

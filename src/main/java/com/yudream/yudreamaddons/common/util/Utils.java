@@ -30,7 +30,8 @@ import static net.minecraft.world.chunk.Chunk.NULL_BLOCK_STORAGE;
 public class Utils {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Type TYPE = new TypeToken<LinkedHashMap<String, LinkedHashMap<String, Integer>>>(){}.getType();
+    private static final Type TYPE = new TypeToken<LinkedHashMap<String, LinkedHashMap<String, Integer>>>() {
+    }.getType();
 
     public static void checkAuthType() {
         String type = Minecraft.getMinecraft().getVersionType();
@@ -108,14 +109,13 @@ public class Utils {
      * WARNING: This bypasses many of the normal safety checks and may result in
      * world inconsistencies. Use at your own risk.
      */
-    public static boolean setBlockWithoutLighting(World world, BlockPos pos, IBlockState newState) {
+    public static boolean setBlockStateFast(World world, BlockPos pos, IBlockState newState) {
         Chunk chunk = world.getChunk(pos);
         int sectionIndex = pos.getY() >> 4;
         ExtendedBlockStorage[] storageArray = chunk.getBlockStorageArray();
         ExtendedBlockStorage storage = storageArray[sectionIndex];
 
-        if (storage == NULL_BLOCK_STORAGE)
-        {
+        if (storage == NULL_BLOCK_STORAGE) {
             storage = new ExtendedBlockStorage(pos.getY() >> 4 << 4, chunk.getWorld().provider.hasSkyLight());
             chunk.getBlockStorageArray()[sectionIndex] = storage;
         }

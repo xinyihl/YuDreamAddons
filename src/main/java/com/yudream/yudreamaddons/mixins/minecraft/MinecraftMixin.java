@@ -17,7 +17,7 @@ public abstract class MinecraftMixin {
                     remap = false
             )
     )
-    public void injected(CallbackInfo ci){
+    public void injected(CallbackInfo ci) {
         Utils.checkAuthType();
     }
 }
