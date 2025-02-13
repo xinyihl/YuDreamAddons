@@ -18,8 +18,13 @@ import com.warmthdawn.mod.gugu_utils.modularmachenary.CommonMMTile;
 import hellfirepvp.modularmachinery.common.tiles.base.MachineComponentTile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import thaumcraft.api.aspects.Aspect;
 import thaumicenergistics.api.EssentiaStack;
+import thaumicenergistics.api.IThELangKey;
+import thaumicenergistics.api.ThEApi;
 import thaumicenergistics.api.storage.IAEEssentiaStack;
 import thaumicenergistics.api.storage.IEssentiaStorageChannel;
 import thaumicenergistics.integration.appeng.AEEssentiaStack;
@@ -34,9 +39,10 @@ import thaumicenergistics.util.IThEOwnable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-public abstract class MEAspectBus extends CommonMMTile implements
-        MachineComponentTile, IThEGridHost, IActionHost, IPowerChannelState, IThEOwnable, IThEGridNodeBlock {
+public abstract class MEAspectBus extends CommonMMTile implements MachineComponentTile, IThEGridHost, IActionHost, IPowerChannelState, IThEOwnable, IThEGridNodeBlock {
     protected ThEGridBlock gridBlock = new ThEGridBlock(this, this, true);
     protected IGridNode gridNode;
     protected ThEActionSource src = new ThEActionSource(this);
@@ -60,7 +66,6 @@ public abstract class MEAspectBus extends CommonMMTile implements
             this.gridNode.destroy();
             this.gridNode = null;
         }
-
         super.invalidate();
     }
 
@@ -86,7 +91,6 @@ public abstract class MEAspectBus extends CommonMMTile implements
             this.initGridNodeOwner();
             this.gridNode.updateState();
         }
-
         return this.gridNode;
     }
 
@@ -138,18 +142,52 @@ public abstract class MEAspectBus extends CommonMMTile implements
         } catch (GridAccessException var3) {
             this.isPowered = false;
         }
+    }
 
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound nbtTagCompound = super.getUpdateTag();
+        nbtTagCompound.setBoolean("powered", this.isPowered());
+        nbtTagCompound.setBoolean("active", this.isActive());
+        return nbtTagCompound;
+    }
+
+    public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
+        super.handleUpdateTag(tag);
+        this.isPowered = tag.getBoolean("powered");
+        this.isActive = tag.getBoolean("active");
+    }
+
+    @Nullable
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(this.getPos(), 1, this.getUpdateTag());
+    }
+
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+        this.handleUpdateTag(packet.getNbtCompound());
+        this.readNBT(packet.getNbtCompound());
+    }
+
+    public void withPowerStateText(Consumer<String> consumer, Function<IThELangKey, String> localizationMapper) {
+        if (this.isPowered()) {
+            if (this.isActive()) {
+                consumer.accept(localizationMapper.apply(ThEApi.instance().lang().deviceOnline()));
+            } else {
+                consumer.accept(localizationMapper.apply(ThEApi.instance().lang().deviceMissingChannel()));
+            }
+        } else {
+            consumer.accept(localizationMapper.apply(ThEApi.instance().lang().deviceOffline()));
+        }
     }
 
     @Override
     public void markDirty() {
+        super.markDirty();
         if (world == null) return;
         IBlockState state = world.getBlockState(this.getPos());
-        world.notifyBlockUpdate(this.getPos(), state, state, 2);
-        super.markDirty();
+        world.notifyBlockUpdate(this.getPos(), state, state, 3);
     }
 
-    public int addToAspectME(Aspect aspect, int i, boolean b) {
+    public int addAspectToME(Aspect aspect, int i, boolean b) {
         EssentiaStack inContainer = new EssentiaStack(aspect, i);
         AEEssentiaStack toInsert = AEEssentiaStack.fromEssentiaStack(inContainer);
         try {
@@ -177,7 +215,7 @@ public abstract class MEAspectBus extends CommonMMTile implements
             IStorageGrid storage = GridUtil.getStorageGrid(this);
             IMEMonitor<IAEEssentiaStack> monitor = storage.getInventory(this.getChannel());
             IAEEssentiaStack canExtract = monitor.extractItems(AEUtil.getAEStackFromAspect(aspect, i), Actionable.SIMULATE, this.src);
-            if (canExtract == null || canExtract.getStackSize() != i){
+            if (canExtract == null || canExtract.getStackSize() != i) {
                 return false;
             }
             if (b) {

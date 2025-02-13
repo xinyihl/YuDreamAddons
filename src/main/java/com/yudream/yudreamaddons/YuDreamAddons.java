@@ -33,6 +33,7 @@ public class YuDreamAddons {
         configDir = event.getModConfigurationDirectory();
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Tags.MOD_ID);
         networkWrapper.registerMessage(PacketWandOops.Handler.class, PacketWandOops.class, 0, Side.SERVER);
+        PROXY.preInit();
     }
 
     @Mod.EventHandler

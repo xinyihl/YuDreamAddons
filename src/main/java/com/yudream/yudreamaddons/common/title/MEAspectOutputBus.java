@@ -24,7 +24,7 @@ public class MEAspectOutputBus extends MEAspectBus implements IGeneratable<Requi
             rt.setError("ME机械源质输出总线未连接ME网络");
             return false;
         }
-        int i = addToAspectME(rt.getAspect(), rt.getAmount(), b);
+        int i = addAspectToME(rt.getAspect(), rt.getAmount(), b);
         rt.setAmount(rt.getAmount() - i);
         return true;
     }
