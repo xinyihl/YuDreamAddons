@@ -3,7 +3,7 @@ package com.yudream.yudreamaddons.common.proxy;
 import com.yudream.yudreamaddons.common.server.ServerEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 
-public abstract class CommonProxy {
+public class CommonProxy {
     public void preInit() {
     }
 
