@@ -161,6 +161,7 @@ dependencies {
     //implementation(rfg.deobf("curse.maven:cofhworld-271384:2920434"))
     //implementation(rfg.deobf("curse.maven:thermalfoundation-222880:2926428"))
     //implementation(rfg.deobf("curse.maven:thermalexpansion-69163:2926431"))
+    //implementation(rfg.deobf("curse.maven:resourceloader-226447:2477566"))
 }
 
 if (project.use_access_transformer.toBoolean()) {

@@ -16,11 +16,7 @@ import appeng.api.util.DimensionalCoord;
 import appeng.me.GridAccessException;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.CommonMMTile;
 import hellfirepvp.modularmachinery.common.tiles.base.MachineComponentTile;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import thaumcraft.api.aspects.Aspect;
 import thaumicenergistics.api.EssentiaStack;
 import thaumicenergistics.api.IThELangKey;
@@ -144,29 +140,6 @@ public abstract class MEAspectBus extends CommonMMTile implements MachineCompone
         }
     }
 
-    public NBTTagCompound getUpdateTag() {
-        NBTTagCompound nbtTagCompound = super.getUpdateTag();
-        nbtTagCompound.setBoolean("powered", this.isPowered());
-        nbtTagCompound.setBoolean("active", this.isActive());
-        return nbtTagCompound;
-    }
-
-    public void handleUpdateTag(@Nonnull NBTTagCompound tag) {
-        super.handleUpdateTag(tag);
-        this.isPowered = tag.getBoolean("powered");
-        this.isActive = tag.getBoolean("active");
-    }
-
-    @Nullable
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        return new SPacketUpdateTileEntity(this.getPos(), 1, this.getUpdateTag());
-    }
-
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        this.handleUpdateTag(packet.getNbtCompound());
-        this.readNBT(packet.getNbtCompound());
-    }
-
     public void withPowerStateText(Consumer<String> consumer, Function<IThELangKey, String> localizationMapper) {
         if (this.isPowered()) {
             if (this.isActive()) {
@@ -177,14 +150,6 @@ public abstract class MEAspectBus extends CommonMMTile implements MachineCompone
         } else {
             consumer.accept(localizationMapper.apply(ThEApi.instance().lang().deviceOffline()));
         }
-    }
-
-    @Override
-    public void markDirty() {
-        super.markDirty();
-        if (world == null) return;
-        IBlockState state = world.getBlockState(this.getPos());
-        world.notifyBlockUpdate(this.getPos(), state, state, 3);
     }
 
     public int addAspectToME(Aspect aspect, int i, boolean b) {
