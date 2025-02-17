@@ -8,5 +8,11 @@ key.yudreamaddons.getItemIdListOut=导出物品ID列表
 
 tile.modularmachinery.blockmeaspectinputbus.name=ME机械源质输入总线
 tile.modularmachinery.blockmeaspectoutputbus.name=ME机械源质输出总线
-tile.modularmachinery.blockparallelcontroller.yudream_a.name=极限并行控制器
-tile.modularmachinery.blockparallelcontroller.yudream_b.name=无尽并行控制器
+tile.modularmachinery.blockparallelcontroller.yudream_a.name=§d极限并行控制器
+tile.modularmachinery.blockparallelcontroller.yudream_b.name=§1无尽并行控制器
+
+component.missing.gugu-utils:aspect.input=缺少源质输入仓！
+component.missing.gugu-utils:aspect.output=缺少源质输出仓！
+
+craftcheck.failure.gugu-utils:aspect.input=缺少源质输入！
+craftcheck.failure.gugu-utils:aspect.output.space=没有足够的空间用于源质输出！

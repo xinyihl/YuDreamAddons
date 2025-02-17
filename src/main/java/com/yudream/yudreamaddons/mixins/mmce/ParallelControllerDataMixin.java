@@ -24,6 +24,10 @@ public abstract class ParallelControllerDataMixin {
     @Unique
     private static ParallelControllerData YUDREAM_B;
 
+    @Final
+    @Shadow
+    public static ParallelControllerData ULTIMATE = invokeNew("ULTIMATE", $VALUES.length - 1, 1024);
+
     @Invoker(value = "<init>", remap = false)
     private static ParallelControllerData invokeNew(String name, int ordinal, int defaultMaxParallelism) {
         return null;
@@ -37,11 +41,12 @@ public abstract class ParallelControllerDataMixin {
     private static void injectNewEnum(CallbackInfo ci) {
         int nextOrdinal = $VALUES.length;
 
-        YUDREAM_A = invokeNew("YUDREAM_A", nextOrdinal, 1024);
-        YUDREAM_B = invokeNew("YUDREAM_B", ++nextOrdinal, 2048);
+        YUDREAM_A = invokeNew("YUDREAM_A", nextOrdinal, 4096);
+        YUDREAM_B = invokeNew("YUDREAM_B", ++nextOrdinal, 16384);
 
         List<ParallelControllerData> newValues = new ArrayList<>(Arrays.asList($VALUES));
 
+        newValues.set(4, ULTIMATE);
         newValues.add(YUDREAM_A);
         newValues.add(YUDREAM_B);
 
