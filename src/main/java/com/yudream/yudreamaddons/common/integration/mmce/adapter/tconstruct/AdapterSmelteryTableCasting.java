@@ -72,6 +72,7 @@ public class AdapterSmelteryTableCasting extends RecipeAdapter {
                     if (!inputMainList1.isEmpty()) {
                         RequirementIngredientArray requirementIngredientArray = new RequirementIngredientArray(inputMainList1);
                         requirementIngredientArray.setChance(0);
+                        requirementIngredientArray.setParallelizeUnaffected(true);
                         machineRecipe.addRequirement(requirementIngredientArray);
                     }
                 }

@@ -3,14 +3,13 @@ package com.yudream.yudreamaddons.common.title;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.MMCompoments;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.components.GenericMachineCompoment;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.RequirementAspect;
-import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.basic.ICraftNotifier;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.basic.IGeneratable;
 import com.yudream.yudreamaddons.common.title.base.MEAspectBus;
 import hellfirepvp.modularmachinery.common.crafting.ComponentType;
 
 import javax.annotation.Nullable;
 
-public class MEAspectOutputBus extends MEAspectBus implements IGeneratable<RequirementAspect.RT>, ICraftNotifier<RequirementAspect.RT> {
+public class MEAspectOutputBus extends MEAspectBus implements IGeneratable<RequirementAspect.RT> {
 
     @Nullable
     @Override
@@ -24,8 +23,8 @@ public class MEAspectOutputBus extends MEAspectBus implements IGeneratable<Requi
             rt.setError("ME机械源质输出总线未连接ME网络");
             return false;
         }
-        int i = addAspectToME(rt.getAspect(), rt.getAmount(), b);
-        rt.setAmount(rt.getAmount() - i);
+        int canAdd = addAspectToME(rt.getAspect(), rt.getAmount(), b);
+        rt.setAmount(rt.getAmount() - canAdd);
         return true;
     }
 }

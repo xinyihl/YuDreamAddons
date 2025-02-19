@@ -175,22 +175,29 @@ public abstract class MEAspectBus extends CommonMMTile implements MachineCompone
         return 0;
     }
 
-    public boolean takeAspectFromME(Aspect aspect, int i, boolean b) {
+    public int takeAspectFromME(Aspect aspect, int i, boolean b) {
         try {
             IStorageGrid storage = GridUtil.getStorageGrid(this);
             IMEMonitor<IAEEssentiaStack> monitor = storage.getInventory(this.getChannel());
             IAEEssentiaStack canExtract = monitor.extractItems(AEUtil.getAEStackFromAspect(aspect, i), Actionable.SIMULATE, this.src);
-            if (canExtract == null || canExtract.getStackSize() != i) {
-                return false;
+
+            if (canExtract == null){
+                return 0;
             }
+
+            if (canExtract.getStackSize() != i) {
+                return (int) canExtract.getStackSize();
+            }
+
             if (b) {
                 monitor.extractItems(canExtract, Actionable.MODULATE, this.src);
             }
+
             this.markDirty();
-            return true;
+            return (int) canExtract.getStackSize();
         } catch (GridAccessException e) {
             //Ignore
         }
-        return false;
+        return 0;
     }
 }

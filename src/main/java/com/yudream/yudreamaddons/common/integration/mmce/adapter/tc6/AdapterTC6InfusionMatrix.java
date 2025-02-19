@@ -1,6 +1,8 @@
 package com.yudream.yudreamaddons.common.integration.mmce.adapter.tc6;
 
+import com.warmthdawn.mod.gugu_utils.modularmachenary.MMRequirements;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.RequirementAspect;
+import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.types.RequirementTypeAspect;
 import crafttweaker.util.IEventHandler;
 import github.kasuminova.mmce.common.event.recipe.RecipeEvent;
 import github.kasuminova.mmce.common.itemtype.ChancedIngredientStack;
@@ -76,7 +78,13 @@ public class AdapterTC6InfusionMatrix extends RecipeAdapter {
                     .forEach(machineRecipe::addRequirement);
 
             // Aspect Inputs
-            recipe.getAspects().aspects.forEach((aspect, amount) -> machineRecipe.addRequirement(RequirementAspect.createInput(amount, aspect)));
+            recipe.getAspects().aspects.forEach((aspect, amount) -> {
+                int inAmounta = Math.round(RecipeModifier.applyModifiers(modifiers, (RequirementTypeAspect) MMRequirements.REQUIREMENT_TYPE_ASPECT, IOType.INPUT, amount, false));
+                if (inAmounta <= 0) {
+                    return;
+                }
+                machineRecipe.addRequirement(RequirementAspect.createInput(inAmounta, aspect));
+            });
 
             // Outputs
             Object output = recipe.recipeOutput;

@@ -4,18 +4,17 @@ import com.warmthdawn.mod.gugu_utils.modularmachenary.MMCompoments;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.components.GenericMachineCompoment;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.RequirementAspect;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.basic.IConsumable;
-import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.basic.ICraftNotifier;
 import com.yudream.yudreamaddons.common.title.base.MEAspectBus;
 import hellfirepvp.modularmachinery.common.crafting.ComponentType;
 
 import javax.annotation.Nullable;
 
-public class MEAspectInputBus extends MEAspectBus implements IConsumable<RequirementAspect.RT>, ICraftNotifier<RequirementAspect.RT> {
+public class MEAspectInputBus extends MEAspectBus implements IConsumable<RequirementAspect.RT> {
 
     @Nullable
     @Override
     public GenericMachineCompoment<RequirementAspect.RT> provideComponent() {
-        return new GenericMachineCompoment<>(this, this, (ComponentType) MMCompoments.COMPONENT_ASPECT);
+        return new GenericMachineCompoment<>(this, (ComponentType) MMCompoments.COMPONENT_ASPECT);
     }
 
     @Override
@@ -24,6 +23,8 @@ public class MEAspectInputBus extends MEAspectBus implements IConsumable<Require
             rt.setError("ME机械源质输入总线未连接ME网络");
             return false;
         }
-        return takeAspectFromME(rt.getAspect(), rt.getAmount(), b);
+        int canTake = takeAspectFromME(rt.getAspect(), rt.getAmount(), b);
+        rt.setAmount(rt.getAmount() - canTake);
+        return true;
     }
 }
