@@ -44,7 +44,7 @@ public class AdapterTC6Crucible extends RecipeAdapter {
             if (recipe.getCatalyst() == null) {
                 return;
             }
-            if (recipe.getRecipeOutput() == null) {
+            if (recipe.getRecipeOutput() == null || recipe.getRecipeOutput().isEmpty()) {
                 return;
             }
             int inAmount = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.INPUT, 1, false));

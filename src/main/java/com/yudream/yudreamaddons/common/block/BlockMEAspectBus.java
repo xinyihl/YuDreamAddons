@@ -1,6 +1,6 @@
 package com.yudream.yudreamaddons.common.block;
 
-import com.yudream.yudreamaddons.common.title.base.MEAspectBus;
+import com.yudream.yudreamaddons.common.title.base.TitleMEAspectBus;
 import github.kasuminova.mmce.common.block.appeng.BlockMEMachineComponent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,8 +27,8 @@ public abstract class BlockMEAspectBus extends BlockMEMachineComponent {
         super.onBlockPlacedBy(world, pos, state, placer, stack);
         if (!world.isRemote) {
             TileEntity te = world.getTileEntity(pos);
-            if (te instanceof MEAspectBus && placer instanceof EntityPlayer) {
-                MEAspectBus tn = (MEAspectBus) te;
+            if (te instanceof TitleMEAspectBus && placer instanceof EntityPlayer) {
+                TitleMEAspectBus tn = (TitleMEAspectBus) te;
                 tn.setOwner((EntityPlayer) placer);
                 tn.getActionableNode();
             }

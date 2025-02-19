@@ -1,9 +1,13 @@
 {
-    "defaults": {
+  "defaults": {
+    "model": "modularmachinery:blockmeaspectinputbus"
+  },
+  "variants": {
+    "inventory": {
       "model": "modularmachinery:blockmeaspectinputbus"
     },
-    "variants": {
-      "inventory": { "model": "modularmachinery:blockmeaspectinputbus" },
-      "normal": { "model": "modularmachinery:blockmeaspectinputbus"}
+    "normal": {
+      "model": "modularmachinery:blockmeaspectinputbus"
     }
   }
+}

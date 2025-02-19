@@ -17,16 +17,13 @@ public abstract class ParallelControllerDataMixin {
     @Final
     @Mutable
     private static ParallelControllerData[] $VALUES;
-
-    @Unique
-    private static ParallelControllerData YUDREAM_A;
-
-    @Unique
-    private static ParallelControllerData YUDREAM_B;
-
     @Final
     @Shadow
     public static ParallelControllerData ULTIMATE = invokeNew("ULTIMATE", $VALUES.length - 1, 1024);
+    @Unique
+    private static ParallelControllerData YUDREAM_A;
+    @Unique
+    private static ParallelControllerData YUDREAM_B;
 
     @Invoker(value = "<init>", remap = false)
     private static ParallelControllerData invokeNew(String name, int ordinal, int defaultMaxParallelism) {

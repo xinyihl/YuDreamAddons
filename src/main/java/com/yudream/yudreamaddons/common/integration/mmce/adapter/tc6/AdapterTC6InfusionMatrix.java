@@ -87,26 +87,29 @@ public class AdapterTC6InfusionMatrix extends RecipeAdapter {
             });
 
             // Outputs
+            boolean type = true;
             Object output = recipe.recipeOutput;
             if (output != null) {
                 if (output instanceof ItemStack) {
                     int outAmount = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.OUTPUT, ((ItemStack) output).getCount(), false));
                     if (outAmount > 0) {
                         machineRecipe.addRequirement(new RequirementItem(IOType.OUTPUT, ItemUtils.copyStackWithSize((ItemStack) output, outAmount)));
+                        type = false;
                     }
                 } else {
                     Object[] objects = (Object[]) output;
                     for (ItemStack stack : recipe.getRecipeInput().getMatchingStacks()) {
-                        if (stack == null) {
+                        if (stack == null || stack.isEmpty()) {
                             continue;
                         }
                         ItemStack copied = stack.copy();
                         copied.setTagInfo((String) objects[0], (NBTBase) objects[1]);
                         machineRecipe.addRequirement(new RequirementItem(IOType.OUTPUT, copied));
+                        type = false;
                     }
                 }
             }
-
+            if (type) return;
             machineRecipeList.add(machineRecipe);
             incId++;
         });

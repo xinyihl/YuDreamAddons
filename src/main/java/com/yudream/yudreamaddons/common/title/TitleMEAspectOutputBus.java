@@ -4,12 +4,12 @@ import com.warmthdawn.mod.gugu_utils.modularmachenary.MMCompoments;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.components.GenericMachineCompoment;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.RequirementAspect;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.basic.IGeneratable;
-import com.yudream.yudreamaddons.common.title.base.MEAspectBus;
+import com.yudream.yudreamaddons.common.title.base.TitleMEAspectBus;
 import hellfirepvp.modularmachinery.common.crafting.ComponentType;
 
 import javax.annotation.Nullable;
 
-public class MEAspectOutputBus extends MEAspectBus implements IGeneratable<RequirementAspect.RT> {
+public class TitleMEAspectOutputBus extends TitleMEAspectBus implements IGeneratable<RequirementAspect.RT> {
 
     @Nullable
     @Override

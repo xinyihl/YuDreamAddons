@@ -3,8 +3,8 @@ package com.yudream.yudreamaddons.mixins.mmce;
 import com.yudream.yudreamaddons.common.ModBlocksAndItem;
 import com.yudream.yudreamaddons.common.block.BlockMEAspectInputBus;
 import com.yudream.yudreamaddons.common.block.BlockMEAspectOutputBus;
-import com.yudream.yudreamaddons.common.title.MEAspectInputBus;
-import com.yudream.yudreamaddons.common.title.MEAspectOutputBus;
+import com.yudream.yudreamaddons.common.title.TitleMEAspectInputBus;
+import com.yudream.yudreamaddons.common.title.TitleMEAspectOutputBus;
 import hellfirepvp.modularmachinery.common.registry.RegistryBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -46,7 +46,7 @@ public abstract class RegistryBlocksMixin {
         ModBlocksAndItem.itemMEAspectInputBus = prepareItemBlockRegister(blockMEAspectInputBus);
         blockMEAspectOutputBus = prepareRegister(new BlockMEAspectOutputBus());
         ModBlocksAndItem.itemMEAspectOutputBus = prepareItemBlockRegister(blockMEAspectOutputBus);
-        registerTileWithModID(MEAspectInputBus.class);
-        registerTileWithModID(MEAspectOutputBus.class);
+        registerTileWithModID(TitleMEAspectInputBus.class);
+        registerTileWithModID(TitleMEAspectOutputBus.class);
     }
 }

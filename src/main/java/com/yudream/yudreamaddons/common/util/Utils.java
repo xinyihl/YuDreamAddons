@@ -32,7 +32,8 @@ import static net.minecraft.world.chunk.Chunk.NULL_BLOCK_STORAGE;
 public class Utils {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final Type TYPE = new TypeToken<LinkedHashMap<String, LinkedHashMap<String, Integer>>>(){}.getType();
+    private static final Type TYPE = new TypeToken<LinkedHashMap<String, LinkedHashMap<String, Integer>>>() {
+    }.getType();
 
     public static void checkAuthType() {
         String type = Minecraft.getMinecraft().getVersionType();
@@ -46,7 +47,7 @@ public class Utils {
 
     public static Set<ItemStack> getAllItemStacks() {
         Set<ItemStack> itemStacks = new HashSet<>();
-        for (Block block : ForgeRegistries.BLOCKS){
+        for (Block block : ForgeRegistries.BLOCKS) {
             NonNullList<ItemStack> subItems = NonNullList.create();
             block.getSubBlocks(CreativeTabs.SEARCH, subItems);
             if (subItems.isEmpty()) {

@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public abstract class MEAspectBus extends CommonMMTile implements MachineComponentTile, IThEGridHost, IActionHost, IPowerChannelState, IThEOwnable, IThEGridNodeBlock {
+public abstract class TitleMEAspectBus extends CommonMMTile implements MachineComponentTile, IThEGridHost, IActionHost, IPowerChannelState, IThEOwnable, IThEGridNodeBlock {
     protected ThEGridBlock gridBlock = new ThEGridBlock(this, this, true);
     protected IGridNode gridNode;
     protected ThEActionSource src = new ThEActionSource(this);
@@ -46,7 +46,7 @@ public abstract class MEAspectBus extends CommonMMTile implements MachineCompone
     protected boolean isPowered = false;
     protected boolean isActive = false;
 
-    public MEAspectBus() {
+    public TitleMEAspectBus() {
     }
 
     public ThEGridBlock getGridBlock() {
@@ -181,7 +181,7 @@ public abstract class MEAspectBus extends CommonMMTile implements MachineCompone
             IMEMonitor<IAEEssentiaStack> monitor = storage.getInventory(this.getChannel());
             IAEEssentiaStack canExtract = monitor.extractItems(AEUtil.getAEStackFromAspect(aspect, i), Actionable.SIMULATE, this.src);
 
-            if (canExtract == null){
+            if (canExtract == null) {
                 return 0;
             }
 
