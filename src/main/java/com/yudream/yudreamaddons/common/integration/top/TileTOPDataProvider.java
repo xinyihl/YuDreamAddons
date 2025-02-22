@@ -1,6 +1,7 @@
 package com.yudream.yudreamaddons.common.integration.top;
 
 import com.yudream.yudreamaddons.Tags;
+import com.yudream.yudreamaddons.common.title.TitleShareInfHandler;
 import com.yudream.yudreamaddons.common.title.base.TitleMEAspectBus;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
@@ -25,10 +26,17 @@ public class TileTOPDataProvider implements IProbeInfoProvider {
         return "{*" + key.getUnlocalizedKey() + "*}";
     }
 
+    protected String getYudreamKey(String key) {
+        return "{*tooltip.yudreamaddons." + key + "*}";
+    }
+
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
         if (te instanceof TitleMEAspectBus) {
             ((TitleMEAspectBus) te).withPowerStateText(probeInfo::text, this::getLocalizedKey);
+        }
+        if (te instanceof TitleShareInfHandler){
+            ((TitleShareInfHandler) te).withLinkStateText(probeInfo::text, this::getYudreamKey);
         }
     }
 }

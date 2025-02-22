@@ -2,14 +2,23 @@
 yudreamaddons.tooltip.pattern_encoder.name=由 %s 编码
 
 key.yudreamaddons.desc=余梦附加
+itemGroup.yudream_tab=余梦附加
 key.yudreamaddons.getItemId=获取物品ID
 key.yudreamaddons.getItemIdList=获取物品ID列表
 key.yudreamaddons.getItemIdListOut=导出物品ID列表
+
+item.yudreamaddons.link_card.name=闪存卡
 
 tile.modularmachinery.blockmeaspectinputbus.name=ME机械源质输入总线
 tile.modularmachinery.blockmeaspectoutputbus.name=ME机械源质输出总线
 tile.modularmachinery.blockparallelcontroller.yudream_a.name=极限并行控制器
 tile.modularmachinery.blockparallelcontroller.yudream_b.name=无尽并行控制器
+
+tile.modularmachinery.blockshareinfhandler.name=库存共享总线
+
+tooltip.yudreamaddons.blockshareinfhandler.error=连接错误
+tooltip.yudreamaddons.blockshareinfhandler.online=未连接
+tooltip.yudreamaddons.blockshareinfhandler.offline=已连接
 
 component.missing.gugu-utils:aspect.input=缺少源质输入仓！
 component.missing.gugu-utils:aspect.output=缺少源质输出仓！

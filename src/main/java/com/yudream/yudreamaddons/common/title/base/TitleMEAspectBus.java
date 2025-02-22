@@ -14,8 +14,8 @@ import appeng.api.util.AECableType;
 import appeng.api.util.AEPartLocation;
 import appeng.api.util.DimensionalCoord;
 import appeng.me.GridAccessException;
-import com.warmthdawn.mod.gugu_utils.modularmachenary.CommonMMTile;
 import hellfirepvp.modularmachinery.common.tiles.base.MachineComponentTile;
+import hellfirepvp.modularmachinery.common.tiles.base.TileColorableMachineComponent;
 import net.minecraft.entity.player.EntityPlayer;
 import thaumcraft.api.aspects.Aspect;
 import thaumicenergistics.api.EssentiaStack;
@@ -38,7 +38,7 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public abstract class TitleMEAspectBus extends CommonMMTile implements MachineComponentTile, IThEGridHost, IActionHost, IPowerChannelState, IThEOwnable, IThEGridNodeBlock {
+public abstract class TitleMEAspectBus extends TileColorableMachineComponent implements MachineComponentTile, IThEGridHost, IActionHost, IPowerChannelState, IThEOwnable, IThEGridNodeBlock {
     protected ThEGridBlock gridBlock = new ThEGridBlock(this, this, true);
     protected IGridNode gridNode;
     protected ThEActionSource src = new ThEActionSource(this);

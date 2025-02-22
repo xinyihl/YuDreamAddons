@@ -1,0 +1,13 @@
+{
+  "defaults": {
+    "model": "modularmachinery:blockshareinfhandler"
+  },
+  "variants": {
+    "inventory": {
+      "model": "modularmachinery:blockshareinfhandler"
+    },
+    "normal": {
+      "model": "modularmachinery:blockshareinfhandler"
+    }
+  }
+}

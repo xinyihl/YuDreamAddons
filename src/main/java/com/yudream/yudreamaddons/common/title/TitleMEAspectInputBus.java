@@ -29,15 +29,14 @@ public class TitleMEAspectInputBus extends TitleMEAspectBus implements IAspectSo
         return new GenericMachineCompoment<>(this, this, (ComponentType) MMCompoments.COMPONENT_ASPECT);
     }
 
-    @Override
-    public void readNBT(NBTTagCompound compound) {
-        super.readNBT(compound);
+    public void readCustomNBT(NBTTagCompound compound) {
+        super.readCustomNBT(compound);
         this.essentia.readFromNBT(compound);
     }
 
     @Override
-    public void writeNBT(NBTTagCompound compound) {
-        super.writeNBT(compound);
+    public void writeCustomNBT(NBTTagCompound compound) {
+        super.writeCustomNBT(compound);
         this.essentia.writeToNBT(compound);
     }
 

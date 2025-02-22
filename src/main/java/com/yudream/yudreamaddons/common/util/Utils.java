@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -43,6 +44,18 @@ public class Utils {
                 FMLCommonHandler.instance().exitJava(0, true);
             }
         }
+    }
+
+    public static NBTTagCompound getBlockPosNbt(BlockPos blockPos){
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setInteger("x", blockPos.getX());
+        nbt.setInteger("y", blockPos.getY());
+        nbt.setInteger("z", blockPos.getZ());
+        return nbt;
+    }
+
+    public static BlockPos getNbtBlockPos(NBTTagCompound nbt){
+        return new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
     }
 
     public static Set<ItemStack> getAllItemStacks() {
