@@ -1,4 +1,4 @@
-package com.yudream.yudreamaddons.common.client;
+package com.yudream.yudreamaddons.common.event;
 
 import com.yudream.yudreamaddons.YuDreamAddons;
 import com.yudream.yudreamaddons.common.network.PacketWandOops;

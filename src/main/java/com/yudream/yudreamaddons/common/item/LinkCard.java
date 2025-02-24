@@ -25,12 +25,12 @@ import javax.annotation.Nullable;
 
 import java.util.List;
 
-import static com.yudream.yudreamaddons.common.item.ItemRegistry.EXAMPLE_CREATIVE_TAB;
+import static com.yudream.yudreamaddons.common.registry.ItemRegistry.CREATIVE_TAB;
 
 public class LinkCard extends Item {
 
     public LinkCard(){
-        this.setCreativeTab(EXAMPLE_CREATIVE_TAB);
+        this.setCreativeTab(CREATIVE_TAB);
         this.setRegistryName(new ResourceLocation(Tags.MOD_ID,"link_card"));
         this.setTranslationKey(Tags.MOD_ID + ".link_card");
     }
@@ -54,7 +54,7 @@ public class LinkCard extends Item {
             }
         }else {
             if (!(tileEntity instanceof TitleShareInfHandler)){
-                player.sendMessage(new TextComponentString("§c设置失败，目标不是库存共享总线！"));
+                //player.sendMessage(new TextComponentString("§c设置失败，目标不是库存共享总线！"));
             } else {
                 NBTTagCompound nbtpos = itemStack.getTagCompound();
                 if (nbtpos == null) {

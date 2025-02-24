@@ -32,7 +32,7 @@ public class YuDreamAddons {
     public void preInit(FMLPreInitializationEvent event) {
         configDir = event.getModConfigurationDirectory();
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Tags.MOD_ID);
-        networkWrapper.registerMessage(PacketWandOops.Handler.class, PacketWandOops.class, 0, Side.SERVER);
+        networkWrapper.registerMessage(PacketWandOops.class, PacketWandOops.class, 0, Side.SERVER);
         PROXY.preInit();
     }
 

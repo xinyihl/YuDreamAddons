@@ -1,4 +1,4 @@
-package com.yudream.yudreamaddons.common.server;
+package com.yudream.yudreamaddons.common.event;
 
 import blusunrize.immersiveengineering.common.util.IEDamageSources.ElectricDamageSource;
 import com.yudream.yudreamaddons.Configurations;

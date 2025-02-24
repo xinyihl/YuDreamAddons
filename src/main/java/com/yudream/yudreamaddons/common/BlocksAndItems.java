@@ -7,7 +7,7 @@ import com.yudream.yudreamaddons.common.item.LinkCard;
 import net.minecraft.item.Item;
 
 
-public class ModBlocksAndItem {
+public class BlocksAndItems {
     //源质输入输出总线
     public static BlockMEAspectInputBus blockMEAspectInputBus;
     public static BlockMEAspectOutputBus blockMEAspectOutputBus;

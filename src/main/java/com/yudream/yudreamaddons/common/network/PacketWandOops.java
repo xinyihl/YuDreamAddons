@@ -18,7 +18,7 @@ import portablejim.bbw.shims.BasicPlayerShim;
 
 import java.util.ArrayList;
 
-public class PacketWandOops implements IMessage {
+public class PacketWandOops implements IMessage, IMessageHandler<PacketWandOops, IMessage> {
 
     @Override
     public void fromBytes(ByteBuf buf) {
@@ -28,52 +28,50 @@ public class PacketWandOops implements IMessage {
     public void toBytes(ByteBuf buf) {
     }
 
-    public static class Handler implements IMessageHandler<PacketWandOops, IMessage> {
-        @Override
-        public IMessage onMessage(PacketWandOops packetWandOops, MessageContext context) {
-            EntityPlayerMP player = context.getServerHandler().player;
-            player.getServerWorld().addScheduledTask(() -> {
-                ItemStack currentItemstack = BasicPlayerShim.getHeldWandIfAny(player);
-                if (currentItemstack != null && currentItemstack.getItem() instanceof IWandItem) {
-                    NBTTagCompound tagComponent = currentItemstack.getTagCompound();
-                    if (tagComponent != null && tagComponent.hasKey("bbw", 10) && tagComponent.getCompoundTag("bbw").hasKey("lastPlaced", 11)) {
-                        NBTTagCompound bbwCompound = tagComponent.getCompoundTag("bbw");
-                        ArrayList<Point3d> pointList = this.unpackNbt(bbwCompound.getIntArray("lastPlaced"));
-                        for (Point3d point : pointList) {
-                            IBlockState pointState = player.getEntityWorld().getBlockState(new BlockPos(point.x, point.y, point.z));
-                            String pointStateString = pointState.toString();
-                            if (pointStateString != null && bbwCompound.hasKey("lastBlock") && pointStateString.equals(bbwCompound.getString("lastBlock"))) {
-                                BlockPos blockPos = new BlockPos(point.x, point.y, point.z);
-                                IBlockState iBlockState = player.getEntityWorld().getBlockState(blockPos);
-                                ItemStack item = iBlockState.getBlock().getPickBlock(iBlockState, new RayTraceResult(player), player.getEntityWorld(), blockPos, player);
-                                boolean isSetAir = player.getEntityWorld().setBlockToAir(blockPos);
-                                if (isSetAir && !player.isCreative())
-                                    player.getServerWorld().spawnEntity(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, item));
-                            }
+    @Override
+    public IMessage onMessage(PacketWandOops packetWandOops, MessageContext context) {
+        EntityPlayerMP player = context.getServerHandler().player;
+        player.getServerWorld().addScheduledTask(() -> {
+            ItemStack currentItemstack = BasicPlayerShim.getHeldWandIfAny(player);
+            if (currentItemstack != null && currentItemstack.getItem() instanceof IWandItem) {
+                NBTTagCompound tagComponent = currentItemstack.getTagCompound();
+                if (tagComponent != null && tagComponent.hasKey("bbw", 10) && tagComponent.getCompoundTag("bbw").hasKey("lastPlaced", 11)) {
+                    NBTTagCompound bbwCompound = tagComponent.getCompoundTag("bbw");
+                    ArrayList<Point3d> pointList = this.unpackNbt(bbwCompound.getIntArray("lastPlaced"));
+                    for (Point3d point : pointList) {
+                        IBlockState pointState = player.getEntityWorld().getBlockState(new BlockPos(point.x, point.y, point.z));
+                        String pointStateString = pointState.toString();
+                        if (pointStateString != null && bbwCompound.hasKey("lastBlock") && pointStateString.equals(bbwCompound.getString("lastBlock"))) {
+                            BlockPos blockPos = new BlockPos(point.x, point.y, point.z);
+                            IBlockState iBlockState = player.getEntityWorld().getBlockState(blockPos);
+                            ItemStack item = iBlockState.getBlock().getPickBlock(iBlockState, new RayTraceResult(player), player.getEntityWorld(), blockPos, player);
+                            boolean isSetAir = player.getEntityWorld().setBlockToAir(blockPos);
+                            if (isSetAir && !player.isCreative())
+                                player.getServerWorld().spawnEntity(new EntityItem(player.getEntityWorld(), player.posX, player.posY, player.posZ, item));
                         }
-                        bbwCompound.removeTag("lastPlaced");
-                        bbwCompound.removeTag("lastBlock");
-                        bbwCompound.removeTag("lastItemBlock");
-                        bbwCompound.removeTag("lastBlockMeta");
-                        bbwCompound.removeTag("lastPerBlock");
-                    } else {
-                        player.sendMessage(new TextComponentTranslation("bbw.chat.error.noundo"));
                     }
+                    bbwCompound.removeTag("lastPlaced");
+                    bbwCompound.removeTag("lastBlock");
+                    bbwCompound.removeTag("lastItemBlock");
+                    bbwCompound.removeTag("lastBlockMeta");
+                    bbwCompound.removeTag("lastPerBlock");
                 } else {
-                    player.sendMessage(new TextComponentTranslation("bbw.chat.error.nowand"));
+                    player.sendMessage(new TextComponentTranslation("bbw.chat.error.noundo"));
                 }
-            });
-            return null;
-        }
-
-        protected ArrayList<Point3d> unpackNbt(int[] placedBlocks) {
-            ArrayList<Point3d> output = new ArrayList<>();
-            int countPoints = placedBlocks.length / 3;
-            for (int i = 0; i < countPoints * 3; i += 3) {
-                output.add(new Point3d(placedBlocks[i], placedBlocks[i + 1], placedBlocks[i + 2]));
+            } else {
+                player.sendMessage(new TextComponentTranslation("bbw.chat.error.nowand"));
             }
-            return output;
+        });
+        return null;
+    }
+
+    private ArrayList<Point3d> unpackNbt(int[] placedBlocks) {
+        ArrayList<Point3d> output = new ArrayList<>();
+        int countPoints = placedBlocks.length / 3;
+        for (int i = 0; i < countPoints * 3; i += 3) {
+            output.add(new Point3d(placedBlocks[i], placedBlocks[i + 1], placedBlocks[i + 2]));
         }
+        return output;
     }
 
 }

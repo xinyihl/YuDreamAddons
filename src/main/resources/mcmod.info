@@ -1,7 +1,7 @@
 [
   {
     "modid": "yudreamaddons",
-    "name": "余梦附加",
+    "name": "YuDreamAddons",
     "description": "专为余梦服务器编写，未经允许禁止引用。",
     "version": "${version}",
     "mcversion": "${mcversion}",

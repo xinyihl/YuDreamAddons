@@ -1,4 +1,4 @@
-package com.yudream.yudreamaddons.common.client;
+package com.yudream.yudreamaddons.common.event;
 
 import com.yudream.yudreamaddons.common.util.Utils;
 import net.minecraft.client.Minecraft;
@@ -18,7 +18,7 @@ import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientEventHandler {
+public class GetItemKeyEventHandler {
 
     public static final KeyBinding KEY_GET_ITEM_ID = new KeyBinding("key.yudreamaddons.getItemId", Keyboard.KEY_K, "key.yudreamaddons.desc");
     public static final KeyBinding KEY_GET_ITEM_ID_LIST = new KeyBinding("key.yudreamaddons.getItemIdList", Keyboard.KEY_L, "key.yudreamaddons.desc");
@@ -27,7 +27,7 @@ public class ClientEventHandler {
     private static boolean keyDown1 = false;
     private static boolean keyDown2 = false;
 
-    public ClientEventHandler() {
+    public GetItemKeyEventHandler() {
         ClientRegistry.registerKeyBinding(KEY_GET_ITEM_ID);
         ClientRegistry.registerKeyBinding(KEY_GET_ITEM_ID_LIST);
         ClientRegistry.registerKeyBinding(KEY_GET_ITEM_ID_LIST_OUT);

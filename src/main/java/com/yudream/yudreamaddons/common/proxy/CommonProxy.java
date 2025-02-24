@@ -1,7 +1,7 @@
 package com.yudream.yudreamaddons.common.proxy;
 
 import com.yudream.yudreamaddons.common.integration.TheOneProbe;
-import com.yudream.yudreamaddons.common.server.ServerEventHandler;
+import com.yudream.yudreamaddons.common.event.ServerEventHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 

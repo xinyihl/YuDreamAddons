@@ -1,6 +1,6 @@
 package com.yudream.yudreamaddons.mixins.mmce;
 
-import com.yudream.yudreamaddons.common.ModBlocksAndItem;
+import com.yudream.yudreamaddons.common.BlocksAndItems;
 import com.yudream.yudreamaddons.common.block.BlockMEAspectInputBus;
 import com.yudream.yudreamaddons.common.block.BlockMEAspectOutputBus;
 import com.yudream.yudreamaddons.common.block.BlockShareInfHandler;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.yudream.yudreamaddons.common.ModBlocksAndItem.*;
+import static com.yudream.yudreamaddons.common.BlocksAndItems.*;
 
 @Mixin(value = RegistryBlocks.class, remap = false)
 public abstract class RegistryBlocksMixin {
@@ -44,11 +44,11 @@ public abstract class RegistryBlocksMixin {
     )
     private static void injected(CallbackInfo ci) {
         blockMEAspectInputBus = prepareRegister(new BlockMEAspectInputBus());
-        ModBlocksAndItem.itemMEAspectInputBus = prepareItemBlockRegister(blockMEAspectInputBus);
+        BlocksAndItems.itemMEAspectInputBus = prepareItemBlockRegister(blockMEAspectInputBus);
         blockMEAspectOutputBus = prepareRegister(new BlockMEAspectOutputBus());
-        ModBlocksAndItem.itemMEAspectOutputBus = prepareItemBlockRegister(blockMEAspectOutputBus);
+        BlocksAndItems.itemMEAspectOutputBus = prepareItemBlockRegister(blockMEAspectOutputBus);
         blockShareInfHandler = prepareRegister(new BlockShareInfHandler());
-        ModBlocksAndItem.itemShareInfHandler = prepareItemBlockRegister(blockShareInfHandler);
+        BlocksAndItems.itemShareInfHandler = prepareItemBlockRegister(blockShareInfHandler);
         registerTileWithModID(TitleMEAspectInputBus.class);
         registerTileWithModID(TitleMEAspectOutputBus.class);
         registerTileWithModID(TitleShareInfHandler.class);
