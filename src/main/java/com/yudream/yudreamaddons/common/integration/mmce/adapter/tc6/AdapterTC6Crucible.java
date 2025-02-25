@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.crafting.CrucibleRecipe;
+import thaumcraft.api.crafting.IThaumcraftRecipe;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -36,57 +37,56 @@ public class AdapterTC6Crucible extends RecipeAdapter {
     public Collection<MachineRecipe> createRecipesFor(ResourceLocation owningMachineName, List<RecipeModifier> modifiers, List<ComponentRequirement<?, ?>> additionalRequirements, Map<Class<?>, List<IEventHandler<RecipeEvent>>> eventHandlers, List<String> recipeTooltips) {
         List<MachineRecipe> machineRecipeList = new ArrayList<>();
 
-        ThaumcraftApi.getCraftingRecipes().forEach((recipeName, tcRecipe) -> {
-            if (!(tcRecipe instanceof CrucibleRecipe)) {
-                return;
-            }
-            CrucibleRecipe recipe = (CrucibleRecipe) tcRecipe;
-            if (recipe.getCatalyst() == null) {
-                return;
-            }
-            if (recipe.getRecipeOutput() == null || recipe.getRecipeOutput().isEmpty()) {
-                return;
-            }
-            int inAmount = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.INPUT, 1, false));
-            if (inAmount <= 0) {
-                return;
-            }
-
-            MachineRecipe machineRecipe = createRecipeShell(
-                    new ResourceLocation("thaumcraft", "yudream_auto_crucible" + incId),
-                    owningMachineName,
-                    OTHER_CONFIG.crucibleTime,
-                    incId, false);
-
-            // Item Input
-            ItemStack[] inputMain = recipe.getCatalyst().getMatchingStacks();
-            List<ChancedIngredientStack> inputMainList = Arrays.stream(inputMain)
-                    .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, inAmount)))
-                    .collect(Collectors.toList());
-            if (!inputMainList.isEmpty()) {
-                machineRecipe.addRequirement(new RequirementIngredientArray(inputMainList));
-            }
-
-            // Aspect Inputs
-            recipe.getAspects().aspects.forEach((aspect, amount) -> {
-                int inAmounta = Math.round(RecipeModifier.applyModifiers(modifiers, (RequirementTypeAspect) MMRequirements.REQUIREMENT_TYPE_ASPECT, IOType.INPUT, amount, false));
-                if (inAmounta <= 0) {
-                    return;
+        for(ResourceLocation string : ThaumcraftApi.getCraftingRecipes().keySet()) {
+            IThaumcraftRecipe tcRecipe = ThaumcraftApi.getCraftingRecipes().get(string);
+            if (tcRecipe instanceof CrucibleRecipe) {
+                CrucibleRecipe recipe = (CrucibleRecipe) tcRecipe;
+                if (recipe.getCatalyst() == null) {
+                    continue;
                 }
-                machineRecipe.addRequirement(RequirementAspect.createInput(inAmounta, aspect));
-            });
+                if (recipe.getRecipeOutput() == null || recipe.getRecipeOutput().isEmpty()) {
+                    continue;
+                }
+                int inAmount = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.INPUT, 1, false));
+                if (inAmount <= 0) {
+                    continue;
+                }
 
-            // Output
-            ItemStack output = recipe.getRecipeOutput();
-            int outAmount = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.OUTPUT, output.getCount(), false));
-            if (outAmount > 0) {
-                machineRecipe.addRequirement(new RequirementItem(IOType.OUTPUT, ItemUtils.copyStackWithSize(output, outAmount)));
+                MachineRecipe machineRecipe = createRecipeShell(
+                        new ResourceLocation("thaumcraft", "yudream_auto_crucible" + incId),
+                        owningMachineName,
+                        OTHER_CONFIG.crucibleTime,
+                        incId, false);
+
+                // Item Input
+                ItemStack[] inputMain = recipe.getCatalyst().getMatchingStacks();
+                List<ChancedIngredientStack> inputMainList = Arrays.stream(inputMain)
+                        .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, inAmount)))
+                        .collect(Collectors.toList());
+                if (!inputMainList.isEmpty()) {
+                    machineRecipe.addRequirement(new RequirementIngredientArray(inputMainList));
+                }
+
+                // Aspect Inputs
+                recipe.getAspects().aspects.forEach((aspect, amount) -> {
+                    int inAmounta = Math.round(RecipeModifier.applyModifiers(modifiers, (RequirementTypeAspect) MMRequirements.REQUIREMENT_TYPE_ASPECT, IOType.INPUT, amount, false));
+                    if (inAmounta <= 0) {
+                        return;
+                    }
+                    machineRecipe.addRequirement(RequirementAspect.createInput(inAmounta, aspect));
+                });
+
+                // Output
+                ItemStack output = recipe.getRecipeOutput();
+                int outAmount = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.OUTPUT, output.getCount(), false));
+                if (outAmount > 0) {
+                    machineRecipe.addRequirement(new RequirementItem(IOType.OUTPUT, ItemUtils.copyStackWithSize(output, outAmount)));
+                }
+
+                machineRecipeList.add(machineRecipe);
+                incId++;
             }
-
-            machineRecipeList.add(machineRecipe);
-            incId++;
-        });
-
+        }
         return machineRecipeList;
     }
 }

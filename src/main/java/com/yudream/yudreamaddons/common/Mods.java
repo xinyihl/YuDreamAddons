@@ -21,15 +21,16 @@ public enum Mods {
     TC6("thaumcraft", false),
     IE("immersiveengineering", false),
     GUGU("gugu-utils", true),
-    FORESTRY("forestry", false);
+    FORESTRY("forestry", false),
+    NOVECORE("novaeng_core", true);
     public final String modid;
     private final boolean mixin;
     private final boolean loaded;
 
-    Mods(String modid, boolean mixin) {
+    Mods(String modid, boolean isMixin) {
         this.modid = modid;
         this.loaded = Loader.isModLoaded(this.modid);
-        this.mixin = mixin;
+        this.mixin = isMixin;
     }
 
     public boolean isLoaded() {
