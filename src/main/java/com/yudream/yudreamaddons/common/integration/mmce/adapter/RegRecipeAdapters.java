@@ -1,6 +1,8 @@
 package com.yudream.yudreamaddons.common.integration.mmce.adapter;
 
 import com.yudream.yudreamaddons.common.Mods;
+import com.yudream.yudreamaddons.common.integration.mmce.adapter.forestry.AdapterCentrifuge;
+import com.yudream.yudreamaddons.common.integration.mmce.adapter.forestry.AdapterSqueezer;
 import com.yudream.yudreamaddons.common.integration.mmce.adapter.ie.AdapterIEArcFurnace;
 import com.yudream.yudreamaddons.common.integration.mmce.adapter.tc6.AdapterTC6Crucible;
 import com.yudream.yudreamaddons.common.integration.mmce.adapter.tc6.AdapterTC6InfusionMatrix;
@@ -23,6 +25,10 @@ public class RegRecipeAdapters {
         if (Mods.TCO.isLoaded()) {
             registerAdapter(new AdapterSmelteryBasinCasting());
             registerAdapter(new AdapterSmelteryTableCasting());
+        }
+        if (Mods.FORESTRY.isLoaded()) {
+            registerAdapter(new AdapterCentrifuge());
+            registerAdapter(new AdapterSqueezer());
         }
     }
 }

@@ -160,7 +160,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:teelf-983976:5423183")
     implementation rfg.deobf("curse.maven:codechickenlib-242818:2779848")
     implementation rfg.deobf("curse.maven:mcjtylib-233105:2745846")
-    //implementation rfg.deobf("curse.maven:forestry-59751:6104316")
+    implementation rfg.deobf("curse.maven:forestry-59751:6104316")
     //implementation(rfg.deobf("curse.maven:cofhcore-69162:2920433"))
     //implementation(rfg.deobf("curse.maven:cofhworld-271384:2920434"))
     //implementation(rfg.deobf("curse.maven:thermalfoundation-222880:2926428"))
