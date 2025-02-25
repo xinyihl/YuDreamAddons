@@ -44,7 +44,7 @@ public class TitleMEAspectInputBus extends TitleMEAspectBus implements IAspectSo
     public void update() {
         if (!this.world.isRemote) {
             this.existTime++;
-            if (this.existTime % 5 == 0 && this.recipeEssentia.size() > 0) {
+            if (this.recipeEssentia.size() > 0) {
                 if (isPowered() && isActive()) {
                     for (Aspect aspect : this.recipeEssentia.getAspectsSortedByName()) {
                         int a = this.recipeEssentia.getAmount(aspect) - this.essentia.getAmount(aspect);

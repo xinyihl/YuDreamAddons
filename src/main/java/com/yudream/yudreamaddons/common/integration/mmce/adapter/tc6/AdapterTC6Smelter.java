@@ -48,9 +48,7 @@ public class AdapterTC6Smelter extends RecipeAdapter {
     public Collection<MachineRecipe> createRecipesFor(ResourceLocation owningMachineName, List<RecipeModifier> modifiers, List<ComponentRequirement<?, ?>> additionalRequirements, Map<Class<?>, List<IEventHandler<RecipeEvent>>> eventHandlers, List<String> recipeTooltips) {
         File file = new File(YuDreamAddons.instance.configDir, "thaumicjei_itemstack_aspects.json");
         List<MachineRecipe> machineRecipeList = new ArrayList<>();
-
         this.optimizedMethod(file);
-
         if (!itemAspectListMap.isEmpty()) {
             itemAspectListMap.forEach((itemStack, aspectList) -> {
                 if (itemStack.isEmpty()) {
@@ -144,18 +142,6 @@ public class AdapterTC6Smelter extends RecipeAdapter {
         if (tag.get()) {
             AspectList aspectList = itemAspectListMap.computeIfAbsent(keyStack, k -> new AspectList());
             aspectList.add(aspect, stack.getCount());
-        }
-    }
-
-    private static class AspectCache {
-        private String aspect;
-        private List<String> items;
-        public AspectCache() {
-            this.items = new ArrayList<>();
-        }
-        public AspectCache(String aspect) {
-            this();
-            this.aspect = aspect;
         }
     }
 }
