@@ -28,5 +28,6 @@ build
 
 # other
 run
+libs
 .DS_Store
 Thumbs.db
