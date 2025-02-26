@@ -75,9 +75,11 @@ public class LinkCard extends Item {
         NBTTagCompound nbtpos = stack.getTagCompound();
         if (nbtpos != null) {
             NBTTagCompound nbt = (NBTTagCompound) nbtpos.getTag("link_card_pos");
-            tooltip.add("Pos: " + nbt.getInteger("x") + "/" + nbt.getInteger("y") + "/" + nbt.getInteger("z"));
-        } else {
-            tooltip.add("Pos: 未保存坐标");
+            if(nbt != null){
+                tooltip.add("Pos: " + nbt.getInteger("x") + "/" + nbt.getInteger("y") + "/" + nbt.getInteger("z"));
+                return;
+            }
         }
+        tooltip.add("Pos: 未保存坐标");
     }
 }
