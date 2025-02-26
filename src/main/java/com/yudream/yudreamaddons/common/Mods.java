@@ -22,7 +22,8 @@ public enum Mods {
     IE("immersiveengineering", false),
     GUGU("gugu-utils", true),
     FORESTRY("forestry", false),
-    NOVECORE("novaeng_core", true);
+    NOVECORE("novaeng_core", true),
+    IC2("ic2", true);
     public final String modid;
     private final boolean mixin;
     private final boolean loaded;
