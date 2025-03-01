@@ -2,6 +2,7 @@ package com.yudream.yudreamaddons.common;
 
 import com.yudream.yudreamaddons.common.block.BlockMEAspectInputBus;
 import com.yudream.yudreamaddons.common.block.BlockMEAspectOutputBus;
+import com.yudream.yudreamaddons.common.block.BlockNetworkHub;
 import com.yudream.yudreamaddons.common.block.BlockShareInfHandler;
 import com.yudream.yudreamaddons.common.item.LinkCard;
 import net.minecraft.item.Item;
@@ -18,4 +19,7 @@ public class BlocksAndItems {
     public static Item itemShareInfHandler;
 
     public static LinkCard linkCard;
+
+    public static BlockNetworkHub blockNetworkHub;
+    public static Item itemNetworkHub;
 }

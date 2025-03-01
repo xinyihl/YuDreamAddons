@@ -5,7 +5,7 @@ import com.yudream.yudreamaddons.Configurations;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class ServerEventHandler {
+public class EventHandler {
     @SubscribeEvent
     public void onHurt(LivingAttackEvent event) {
         if (!Configurations.GENERAL_CONFIG.doElectricUnground && event.getSource() instanceof ElectricDamageSource && !event.getEntity().onGround) {

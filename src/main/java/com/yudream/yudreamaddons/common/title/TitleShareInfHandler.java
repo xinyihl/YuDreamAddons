@@ -1,6 +1,5 @@
 package com.yudream.yudreamaddons.common.title;
 
-import com.yudream.yudreamaddons.common.util.Utils;
 import github.kasuminova.mmce.common.tile.MEPatternProvider;
 import github.kasuminova.mmce.common.util.InfItemFluidHandler;
 import hellfirepvp.modularmachinery.common.crafting.ComponentType;
@@ -43,7 +42,7 @@ public class TitleShareInfHandler extends TileColorableMachineComponent implemen
     public void readCustomNBT(NBTTagCompound compound) {
         super.readCustomNBT(compound);
         if(compound.hasKey("share_inf_handler_bp")){
-            this.bp = Utils.getNbtBlockPos(compound.getCompoundTag("share_inf_handler_bp"));
+            this.bp = BlockPos.fromLong(compound.getLong("share_inf_handler_bp"));
         }
     }
 
@@ -51,7 +50,7 @@ public class TitleShareInfHandler extends TileColorableMachineComponent implemen
     public void writeCustomNBT(NBTTagCompound compound) {
         super.writeCustomNBT(compound);
         if (bp != null){
-            compound.setTag("share_inf_handler_bp", Utils.getBlockPosNbt(bp));
+            compound.setLong("share_inf_handler_bp", bp.toLong());
         }
     }
 

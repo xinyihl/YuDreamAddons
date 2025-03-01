@@ -1,7 +1,7 @@
 package com.yudream.yudreamaddons.common.proxy;
 
-import com.yudream.yudreamaddons.common.event.GetItemKeyEventHandler;
-import com.yudream.yudreamaddons.common.event.WandKeyEventHandler;
+import com.yudream.yudreamaddons.client.event.GetItemKeyHandler;
+import com.yudream.yudreamaddons.client.event.WandKeyHandler;
 import net.minecraftforge.common.MinecraftForge;
 
 @SuppressWarnings("unused")
@@ -15,7 +15,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init() {
         super.init();
-        MinecraftForge.EVENT_BUS.register(new WandKeyEventHandler());
-        MinecraftForge.EVENT_BUS.register(new GetItemKeyEventHandler());
+        MinecraftForge.EVENT_BUS.register(new WandKeyHandler());
+        MinecraftForge.EVENT_BUS.register(new GetItemKeyHandler());
     }
 }

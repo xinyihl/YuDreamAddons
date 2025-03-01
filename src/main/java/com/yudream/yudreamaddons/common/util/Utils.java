@@ -3,7 +3,6 @@ package com.yudream.yudreamaddons.common.util;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -11,7 +10,7 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.Objects;
 
 import static net.minecraft.world.chunk.Chunk.NULL_BLOCK_STORAGE;
 
@@ -25,18 +24,6 @@ public class Utils {
                 FMLCommonHandler.instance().exitJava(0, true);
             }
         }
-    }
-
-    public static NBTTagCompound getBlockPosNbt(BlockPos blockPos){
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setInteger("x", blockPos.getX());
-        nbt.setInteger("y", blockPos.getY());
-        nbt.setInteger("z", blockPos.getZ());
-        return nbt;
-    }
-
-    public static BlockPos getNbtBlockPos(NBTTagCompound nbt){
-        return new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
     }
 
     public static String getItemId(ItemStack itemStack) {

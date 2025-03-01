@@ -2,7 +2,6 @@ package com.yudream.yudreamaddons.common.item;
 
 import com.yudream.yudreamaddons.Tags;
 import com.yudream.yudreamaddons.common.title.TitleShareInfHandler;
-import com.yudream.yudreamaddons.common.util.Utils;
 import github.kasuminova.mmce.common.tile.MEPatternProvider;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,10 +21,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.List;
 
-import static com.yudream.yudreamaddons.common.registry.ItemRegistry.CREATIVE_TAB;
+import static com.yudream.yudreamaddons.common.registry.Registry.CREATIVE_TAB;
 
 public class LinkCard extends Item {
 
@@ -48,20 +46,21 @@ public class LinkCard extends Item {
                 player.sendMessage(new TextComponentString("§a清除坐标成功！"));
             } else {
                 NBTTagCompound nbtpos = new NBTTagCompound();
-                nbtpos.setTag("link_card_pos", Utils.getBlockPosNbt(pos));
+                nbtpos.setLong("link_card_pos", pos.toLong());
                 itemStack.setTagCompound(nbtpos);
                 player.sendMessage(new TextComponentString("§a保存坐标成功！"));
             }
         }else {
             if (!(tileEntity instanceof TitleShareInfHandler)){
-                //player.sendMessage(new TextComponentString("§c设置失败，目标不是库存共享总线！"));
+                String zwf;
+                // player.sendMessage(new TextComponentString("§c设置失败，目标不是库存共享总线！"));
             } else {
                 NBTTagCompound nbtpos = itemStack.getTagCompound();
                 if (nbtpos == null) {
                     player.sendMessage(new TextComponentString("§c设置失败，未保存坐标！"));
                 } else {
-                    NBTTagCompound nbt = (NBTTagCompound) nbtpos.getTag("link_card_pos");
-                    ((TitleShareInfHandler) tileEntity).setBlockPos(player, Utils.getNbtBlockPos(nbt));
+                    BlockPos blockPos = BlockPos.fromLong(nbtpos.getLong("link_card_pos"));
+                    ((TitleShareInfHandler) tileEntity).setBlockPos(player, blockPos);
                 }
             }
         }

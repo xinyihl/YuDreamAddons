@@ -39,6 +39,11 @@ public class Configurations {
         public int crucibleTime = 100;
         @Config.Comment("神秘源质配方耗时")
         public int smelterTime = 100;
+        @Config.Comment("Power use = PowerBase + PowerDistanceMultiplier * Distance * ln(Distance^2 + 3) (AE/t)")
+        public double powerBase = 1D;
+        @Config.Comment("")
+        public double powerDistanceMultiplier = 0.1D;
+        public double powerHeadBase = 1000D;
     }
 
     public static class ElectromagneticGeneratorConfig {

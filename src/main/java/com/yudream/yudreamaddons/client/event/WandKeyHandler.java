@@ -1,4 +1,4 @@
-package com.yudream.yudreamaddons.common.event;
+package com.yudream.yudreamaddons.client.event;
 
 import com.yudream.yudreamaddons.YuDreamAddons;
 import com.yudream.yudreamaddons.common.network.PacketWandOops;
@@ -14,11 +14,11 @@ import org.lwjgl.input.Keyboard;
 import portablejim.bbw.core.items.IWandItem;
 import portablejim.bbw.shims.BasicPlayerShim;
 
-public class WandKeyEventHandler {
+public class WandKeyHandler {
 
     public static final KeyBinding KEY_OOPS = new KeyBinding("bbw.key.oops", KeyConflictContext.IN_GAME, KeyModifier.CONTROL, Keyboard.KEY_Z, "bbw.key.category");
 
-    public WandKeyEventHandler() {
+    public WandKeyHandler() {
         ClientRegistry.registerKeyBinding(KEY_OOPS);
     }
 

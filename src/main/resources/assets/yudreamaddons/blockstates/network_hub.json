@@ -1,0 +1,14 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "yudreamaddons:network_hub_on"
+  },
+  "variants": {
+    "connect=true": {
+      "model": "yudreamaddons:network_hub_on"
+    },
+    "connect=false": {
+      "model": "yudreamaddons:network_hub_off"
+    }
+  }
+}
