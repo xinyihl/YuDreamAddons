@@ -22,6 +22,7 @@ public class NetworkStatus {
     private String networkName = "Unknown";
     private boolean isPublic = false;
     private int dimensionId = 0;
+    private int surplusChannels = 0;
     @Nonnull
     private BlockPos pos = new BlockPos(0, 0, 0);
 
@@ -45,6 +46,7 @@ public class NetworkStatus {
         networkStatus.isPublic = tag.getBoolean("i");
         networkStatus.dimensionId = tag.getInteger("d");
         networkStatus.pos = BlockPos.fromLong(tag.getLong("p"));
+        networkStatus.surplusChannels = tag.getInteger("sc");
 
         NBTTagList list = tag.getTagList("tp", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.tagCount(); i++) {
@@ -61,6 +63,7 @@ public class NetworkStatus {
         tag.setBoolean("i", this.isPublic);
         tag.setInteger("d", this.dimensionId);
         tag.setLong("p", this.pos.toLong());
+        tag.setInteger("sc", this.surplusChannels);
         NBTTagList list = new NBTTagList();
         for (BlockPos pos : targetPos) {
             NBTTagCompound nbt = new NBTTagCompound();
@@ -131,7 +134,7 @@ public class NetworkStatus {
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        return Objects.hash(targetPos, uuid, owner, networkName, isPublic, dimensionId, surplusChannels, pos);
     }
 
     @Override
@@ -144,5 +147,13 @@ public class NetworkStatus {
                 ", dimensionId=" + dimensionId +
                 ", pos=" + pos +
                 '}';
+    }
+
+    public int getSurplusChannels() {
+        return surplusChannels;
+    }
+
+    public void setSurplusChannels(int surplusChannels) {
+        this.surplusChannels = surplusChannels;
     }
 }

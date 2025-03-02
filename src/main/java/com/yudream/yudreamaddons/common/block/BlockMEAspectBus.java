@@ -1,5 +1,6 @@
 package com.yudream.yudreamaddons.common.block;
 
+import com.yudream.yudreamaddons.Tags;
 import com.yudream.yudreamaddons.common.title.base.TitleMEAspectBus;
 import github.kasuminova.mmce.common.block.appeng.BlockMEMachineComponent;
 import net.minecraft.block.state.IBlockState;
@@ -14,8 +15,14 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
+import static com.yudream.yudreamaddons.common.registry.Registry.CREATIVE_TAB;
+
 public abstract class BlockMEAspectBus extends BlockMEMachineComponent {
-    public BlockMEAspectBus() {
+    public BlockMEAspectBus(String name) {
+        super();
+        this.setCreativeTab(CREATIVE_TAB);
+        this.setRegistryName(Tags.MOD_ID, name);
+        this.setTranslationKey(Tags.MOD_ID + "." + name);
     }
 
     @Override

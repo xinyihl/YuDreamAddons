@@ -38,7 +38,6 @@ public class PacketNHStorage implements IMessage, IMessageHandler<PacketNHStorag
             WorldClient world = Minecraft.getMinecraft().world;
             NetworkHubDataStorage storage = NetworkHubDataStorage.get(world);
             storage.readFromNBT(message.tag);
-            storage.markDirty();
         });
         return null;
     }

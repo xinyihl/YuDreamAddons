@@ -16,6 +16,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class BlockMEAspectInputBus extends BlockMEAspectBus {
+
+    public BlockMEAspectInputBus() {
+        super("blockmeaspectinputbus");
+    }
+
     @Nullable
     @Override
     public TileEntity createTileEntity(World world, IBlockState iBlockState) {

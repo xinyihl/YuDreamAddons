@@ -1,5 +1,6 @@
 package com.yudream.yudreamaddons.common.block;
 
+import com.yudream.yudreamaddons.Tags;
 import com.yudream.yudreamaddons.common.title.TitleShareInfHandler;
 import github.kasuminova.mmce.common.block.appeng.BlockMEMachineComponent;
 import net.minecraft.block.state.IBlockState;
@@ -13,7 +14,16 @@ import net.minecraft.world.World;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static com.yudream.yudreamaddons.common.registry.Registry.CREATIVE_TAB;
+
 public class BlockShareInfHandler extends BlockMEMachineComponent {
+    public BlockShareInfHandler() {
+        super();
+        this.setCreativeTab(CREATIVE_TAB);
+        this.setRegistryName(Tags.MOD_ID, "blockshareinfhandler");
+        this.setTranslationKey(Tags.MOD_ID + ".blockshareinfhandler");
+    }
+
     @Override
     public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos blockPos, @Nonnull IBlockState iBlockState, @Nonnull EntityPlayer entityPlayer, @Nonnull EnumHand enumHand, @Nonnull EnumFacing enumFacing, float v, float v1, float v2) {
         return false;

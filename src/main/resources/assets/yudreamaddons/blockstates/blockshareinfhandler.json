@@ -1,0 +1,13 @@
+{
+  "defaults": {
+    "model": "yudreamaddons:blockshareinfhandler"
+  },
+  "variants": {
+    "inventory": {
+      "model": "yudreamaddons:blockshareinfhandler"
+    },
+    "normal": {
+      "model": "yudreamaddons:blockshareinfhandler"
+    }
+  }
+}

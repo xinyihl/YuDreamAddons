@@ -4,8 +4,11 @@ import appeng.api.AEApi;
 import appeng.api.exceptions.FailedConnectionException;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridConnection;
+import appeng.api.networking.pathing.IPathingGrid;
 import appeng.api.util.AECableType;
 import appeng.api.util.AEPartLocation;
+import appeng.core.AEConfig;
+import appeng.me.cache.PathGridCache;
 import com.yudream.yudreamaddons.Configurations;
 import com.yudream.yudreamaddons.common.BlocksAndItems;
 import com.yudream.yudreamaddons.common.api.NetworkHubDataStorage;
@@ -76,13 +79,15 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
                 if (this.isHead) {
                     this.setConnected(!network.getTargetPos().isEmpty());
                     this.getProxy().setIdlePowerUsage(Configurations.OTHER_CONFIG.powerHeadBase * network.getTargetPos().size());
+                    PathGridCache cache = this.getActionableNode().getGrid().getCache(IPathingGrid.class);
+                    int surplusChannels = AEConfig.instance().getDenseChannelCapacity() - cache.getChannelsInUse();
+                    network.setSurplusChannels(Math.max(surplusChannels, 0));
                 } else {
                     if (this.getPos().equals(network.getPos())) {
                         this.setHead(true);
                     } else {
                         if (!this.isConnected) {
                             setupConnection(network);
-                            storage.markDirty();
                         }
                     }
                 }
@@ -151,7 +156,6 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
                 that.breakConnection();
             }
             storage.removeNetwork(networkUuid);
-            storage.markDirty();
             this.networkUuid = new UUID(0, 0);
             this.isConnected = false;
         } else {
@@ -200,9 +204,6 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     }
 
     public void setNetworkUuid(UUID networkUuid) {
-        if (!this.networkUuid.equals(networkUuid)) {
-            breakConnection();
-        }
         this.networkUuid = networkUuid;
     }
 }

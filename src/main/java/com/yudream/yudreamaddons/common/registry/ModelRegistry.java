@@ -10,8 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Objects;
 
-import static com.yudream.yudreamaddons.common.BlocksAndItems.itemNetworkHub;
-import static com.yudream.yudreamaddons.common.BlocksAndItems.linkCard;
+import static com.yudream.yudreamaddons.common.BlocksAndItems.*;
 
 @Mod.EventBusSubscriber(modid = Tags.MOD_ID, value = Side.CLIENT)
 public class ModelRegistry {
@@ -20,5 +19,9 @@ public class ModelRegistry {
     public static void registerModel(ModelRegistryEvent event) {
         ModelLoader.setCustomModelResourceLocation(linkCard, 0, new ModelResourceLocation(Objects.requireNonNull(linkCard.getRegistryName()), "inventory"));
         ModelLoader.setCustomModelResourceLocation(itemNetworkHub, 0, new ModelResourceLocation(Objects.requireNonNull(itemNetworkHub.getRegistryName()), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(itemMEAspectInputBus, 0, new ModelResourceLocation(Objects.requireNonNull(itemMEAspectInputBus.getRegistryName()), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(itemMEAspectOutputBus, 0, new ModelResourceLocation(Objects.requireNonNull(itemMEAspectOutputBus.getRegistryName()), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(itemShareInfHandler, 0, new ModelResourceLocation(Objects.requireNonNull(itemShareInfHandler.getRegistryName()), "inventory"));
+
     }
 }

@@ -53,6 +53,7 @@ public class EventHandler {
             }
             tag.setTag("networks", list);
             YuDreamAddons.instance.networkWrapper.sendTo(new PacketNHStorage(tag), player);
+            storage.markDirty();
         }
     }
 }

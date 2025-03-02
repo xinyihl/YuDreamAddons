@@ -1,6 +1,9 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_bottom_top",
   "textures": {
-    "all": "yudreamaddons:blocks/network_hub_on"
+    "particle": "blocks/dirt",
+    "bottom": "yudreamaddons:blocks/network_hub_side",
+    "top": "yudreamaddons:blocks/network_hub_side",
+    "side": "yudreamaddons:blocks/network_hub_side_on"
   }
 }

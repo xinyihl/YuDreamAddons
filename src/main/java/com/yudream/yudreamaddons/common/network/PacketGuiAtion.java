@@ -69,6 +69,9 @@ public class PacketGuiAtion implements IMessage, IMessageHandler<PacketGuiAtion,
                         break;
                     }
                     case SET_NETWORK_UUID: {
+                        if (!networkHub.getNetworkUuid().equals(message.tag.getUniqueId("networkUuid"))) {
+                            networkHub.breakConnection();
+                        }
                         networkHub.setNetworkUuid(message.tag.getUniqueId("networkUuid"));
                         networkHub.sync();
                         syncNetworks(world, player);
@@ -85,7 +88,6 @@ public class PacketGuiAtion implements IMessage, IMessageHandler<PacketGuiAtion,
                         if (network != null) {
                             network.setPublic(message.tag.getBoolean("public"));
                         }
-                        storage.markDirty();
                         networkHub.sync();
                         syncNetworks(world, player);
                         break;

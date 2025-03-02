@@ -1,10 +1,16 @@
 package com.yudream.yudreamaddons.common.registry;
 
 import com.yudream.yudreamaddons.Tags;
+import com.yudream.yudreamaddons.common.block.BlockMEAspectInputBus;
+import com.yudream.yudreamaddons.common.block.BlockMEAspectOutputBus;
 import com.yudream.yudreamaddons.common.block.BlockNetworkHub;
+import com.yudream.yudreamaddons.common.block.BlockShareInfHandler;
 import com.yudream.yudreamaddons.common.item.LinkCard;
 import com.yudream.yudreamaddons.common.item.MyItemBlock;
 import com.yudream.yudreamaddons.common.title.TileNetworkHub;
+import com.yudream.yudreamaddons.common.title.TitleMEAspectInputBus;
+import com.yudream.yudreamaddons.common.title.TitleMEAspectOutputBus;
+import com.yudream.yudreamaddons.common.title.TitleShareInfHandler;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -34,15 +40,24 @@ public class Registry {
     public static void registerItem(RegistryEvent.Register<Item> event) {
         event.getRegistry().registerAll(
                 linkCard = new LinkCard(),
-                itemNetworkHub = new MyItemBlock(blockNetworkHub)
+                itemNetworkHub = new MyItemBlock(blockNetworkHub),
+                itemMEAspectInputBus = new MyItemBlock(blockMEAspectInputBus),
+                itemMEAspectOutputBus = new MyItemBlock(blockMEAspectOutputBus),
+                itemShareInfHandler = new MyItemBlock(blockShareInfHandler)
         );
     }
 
     @SubscribeEvent
     public static void registerBlock(RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(
-                blockNetworkHub = new BlockNetworkHub()
+                blockNetworkHub = new BlockNetworkHub(),
+                blockMEAspectInputBus = new BlockMEAspectInputBus(),
+                blockMEAspectOutputBus = new BlockMEAspectOutputBus(),
+                blockShareInfHandler = new BlockShareInfHandler()
         );
         GameRegistry.registerTileEntity(TileNetworkHub.class, new ResourceLocation(Tags.MOD_ID, "tile_network_hub"));
+        GameRegistry.registerTileEntity(TitleMEAspectInputBus.class, new ResourceLocation(Tags.MOD_ID, "tile_measpectinputbus"));
+        GameRegistry.registerTileEntity(TitleMEAspectOutputBus.class, new ResourceLocation(Tags.MOD_ID, "tile_measpectoutputbus"));
+        GameRegistry.registerTileEntity(TitleShareInfHandler.class, new ResourceLocation(Tags.MOD_ID, "tile_shareinfhandler"));
     }
 }

@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import mezz.jei.config.Config;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -61,9 +62,25 @@ public class NetworkHubGuiContainer extends GuiContainer {
         this.selectedNetwork = networkHubContainer.networks.stream().filter(p -> p.getUuid().equals(networkHubContainer.networkHub.getNetworkUuid())).findFirst().orElse(new NetworkStatus(new UUID(0, 0), "null", true, 0, new BlockPos(0, 0, 0)));
     }
 
+    private boolean closeJei = false;
+
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+        if(closeJei){
+            Config.toggleOverlayEnabled();
+        }
+    }
+
     @Override
     public void initGui() {
         super.initGui();
+
+        if(Config.isOverlayEnabled()){
+            Config.toggleOverlayEnabled();
+            closeJei = true;
+        }
+
         this.createButton = new GuiButton(995, guiLeft + 26, guiTop + 110, 70, 18, "创建");
         this.deleteButton = new GuiButton(996, guiLeft + 26, guiTop + 135, 70, 18, "删除");
         this.connectButton = new GuiButton(997, guiLeft + 103, guiTop + 110, 70, 18, "连接");
@@ -163,7 +180,7 @@ public class NetworkHubGuiContainer extends GuiContainer {
 
         if (maxScroll > 0) {
             this.scrollBarHeight = (int) ((float) visibleHeight / listHeight * visibleHeight);
-            this.scrollBarY = guiTop + 18 + (int) ((float) scrollOffset / maxScroll * (visibleHeight - scrollBarHeight));
+            this.scrollBarY = guiTop + 17 + (int) ((float) scrollOffset / maxScroll * (visibleHeight - scrollBarHeight));
             drawRect(guiLeft + SCROLL_BAR_LEFT, scrollBarY, guiLeft + SCROLL_BAR_LEFT + SCROLL_BAR_WIDTH, scrollBarY + scrollBarHeight, 0xFF404040);
         }
 
@@ -178,7 +195,7 @@ public class NetworkHubGuiContainer extends GuiContainer {
         int rightPanelY = 19;
         this.fontRenderer.drawString("无线连接器", 7, 5, 0xFF404040);
         this.fontRenderer.drawString("名称: " + selectedNetwork.getNetworkName(), rightPanelX, rightPanelY, 0xFFFFFF);
-        this.fontRenderer.drawString("剩余频道: ?" /*+ (64 - selectedNetwork.getTargetPos().size())*/, rightPanelX, rightPanelY + 15, 0xFFFFFF);
+        this.fontRenderer.drawString("剩余频道: " + selectedNetwork.getSurplusChannels(), rightPanelX, rightPanelY + 15, 0xFFFFFF);
         this.fontRenderer.drawString("维度ID: " + selectedNetwork.getDimensionId(), rightPanelX, rightPanelY + 30, 0xFFFFFF);
         this.fontRenderer.drawString("是否公开: " + (selectedNetwork.isPublic() ? "是" : "否"), rightPanelX, rightPanelY + 45, 0xFFFFFF);
         this.fontRenderer.drawString("连接状态: " + (networkHubContainer.networkHub.isConnected() ? "已连接" : "未连接"), rightPanelX, rightPanelY + 60, 0xFFFFFF);
@@ -286,7 +303,7 @@ public class NetworkHubGuiContainer extends GuiContainer {
     @Override
     protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
         if (this.isScrolling) {
-            float normalized = (float) (mouseY - guiTop - 18) / 80;
+            float normalized = (float) (mouseY - guiTop - 17) / 80;
             this.scrollOffset = (int) (normalized * maxScroll);
             this.scrollOffset = MathHelper.clamp(scrollOffset, 0, maxScroll);
         }
