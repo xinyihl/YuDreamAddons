@@ -14,22 +14,14 @@ import com.yudream.yudreamaddons.common.title.base.TitleMeBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class TileNetworkHub extends TitleMeBase implements ITickable {
-    @SideOnly(Side.CLIENT)
-    private final List<NetworkStatus> networks = new ArrayList<>();
     private boolean isHead = false;
     private UUID networkUuid = new UUID(0, 0);
     private UUID owner = new UUID(0, 0);
@@ -73,23 +65,25 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     public void update() {
         if (world.isRemote) return;
         this.tickCounter = (this.tickCounter + 1) % 20;
-        if (this.tickCounter % 20 == 0 && !this.networkUuid.equals(new UUID(0, 0))) {
-            NetworkHubDataStorage storage = NetworkHubDataStorage.get(world);
-            NetworkStatus network = storage.getNetwork(owner, this.networkUuid);
-            if (network == null) {
-                unsetAll();
-                return;
-            }
-            if (this.isHead) {
-                this.setConnected(!network.getTargetPos().isEmpty());
-                this.getProxy().setIdlePowerUsage(Configurations.OTHER_CONFIG.powerHeadBase * network.getTargetPos().size());
-            } else {
-                if (this.getPos().equals(network.getPos())) {
-                    this.setHead(true);
+        if (this.tickCounter % 20 == 0) {
+            if (!this.networkUuid.equals(new UUID(0, 0))) {
+                NetworkHubDataStorage storage = NetworkHubDataStorage.get(world);
+                NetworkStatus network = storage.getNetwork(owner, this.networkUuid);
+                if (network == null) {
+                    unsetAll();
+                    return;
+                }
+                if (this.isHead) {
+                    this.setConnected(!network.getTargetPos().isEmpty());
+                    this.getProxy().setIdlePowerUsage(Configurations.OTHER_CONFIG.powerHeadBase * network.getTargetPos().size());
                 } else {
-                    if (!this.isConnected) {
-                        setupConnection(network);
-                        storage.markDirty();
+                    if (this.getPos().equals(network.getPos())) {
+                        this.setHead(true);
+                    } else {
+                        if (!this.isConnected) {
+                            setupConnection(network);
+                            storage.markDirty();
+                        }
                     }
                 }
             }
@@ -104,14 +98,6 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
         this.networkUuid = tag.getUniqueId("networkUuid");
         this.owner = tag.getUniqueId("owner");
         this.isConnected = tag.getBoolean("isConnected");
-        if (world.isRemote) {
-            this.networks.clear();
-            NBTTagList list = tag.getTagList("networks", Constants.NBT.TAG_COMPOUND);
-            for (int i = 0; i < list.tagCount(); i++) {
-                NBTTagCompound nbt = list.getCompoundTagAt(i);
-                this.networks.add(NetworkStatus.readFromNBT(nbt));
-            }
-        }
     }
 
     @Nonnull
@@ -122,16 +108,6 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
         tag.setUniqueId("networkUuid", networkUuid);
         tag.setUniqueId("owner", owner);
         tag.setBoolean("isConnected", isConnected);
-        if (!world.isRemote) {
-            NetworkHubDataStorage storage = NetworkHubDataStorage.get(world);
-            List<NetworkStatus> networks = storage.getAllNetworks(this.owner);
-            NBTTagList list = new NBTTagList();
-            for (NetworkStatus network : networks) {
-                NBTTagCompound nbt = new NBTTagCompound();
-                list.appendTag(network.writeToNBT(nbt));
-            }
-            tag.setTag("networks", list);
-        }
         return tag;
     }
 
@@ -139,7 +115,10 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
         if (world.isRemote) return;
         BlockPos pos = network.getPos();
         TileEntity tile = world.getTileEntity(pos);
-        if (!(tile instanceof TileNetworkHub)) return;
+        if (!(tile instanceof TileNetworkHub)) {
+            NetworkHubDataStorage.get(world).removeNetwork(networkUuid);
+            return;
+        }
         TileNetworkHub that = (TileNetworkHub) tile;
         int dx = this.getPos().getX() - that.getPos().getX();
         int dy = this.getPos().getY() - that.getPos().getY();
@@ -171,9 +150,8 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
                 TileNetworkHub that = (TileNetworkHub) tile;
                 that.breakConnection();
             }
-            network.getTargetPos().clear();
+            storage.removeNetwork(networkUuid);
             storage.markDirty();
-            storage.removeNetwork(owner, networkUuid);
             this.networkUuid = new UUID(0, 0);
             this.isConnected = false;
         } else {
@@ -198,9 +176,7 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     @Override
     public void invalidate() {
         super.invalidate();
-        if (isConnected) {
-            breakConnection();
-        }
+        breakConnection();
     }
 
     public boolean isConnected() {
@@ -224,23 +200,9 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     }
 
     public void setNetworkUuid(UUID networkUuid) {
-        this.networkUuid = networkUuid;
-    }
-
-    @SideOnly(Side.CLIENT)
-    public List<NetworkStatus> getNetworks() {
-        return networks;
-    }
-
-    public void test(EntityPlayer player, boolean isHead) {
-        if (world.isRemote) return;
-        NetworkHubDataStorage storage = NetworkHubDataStorage.get(world);
-        if (isHead) {
-            storage.addNetwork(new NetworkStatus(player.getGameProfile().getId(), "TEST", true, world.provider.getDimension(), this.pos));
-            storage.getAllNetworks().get(0).setPos(this.getPos());
-            this.setHead(true);
+        if (!this.networkUuid.equals(networkUuid)) {
+            breakConnection();
         }
-        this.setNetworkUuid(storage.getAllNetworks().get(0).getUuid());
-        this.sync();
+        this.networkUuid = networkUuid;
     }
 }

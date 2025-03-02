@@ -17,7 +17,7 @@ public class NetworkStatus {
     @Nonnull
     private UUID uuid = new UUID(0, 0);
     @Nonnull
-    private UUID owner = new UUID(0, 0);  //placer.getGameProfile().getId()
+    private UUID owner = new UUID(0, 0);
     @Nonnull
     private String networkName = "Unknown";
     private boolean isPublic = false;
@@ -68,7 +68,6 @@ public class NetworkStatus {
             list.appendTag(nbt);
         }
         tag.setTag("tp", list);
-
         return tag;
     }
 
@@ -85,10 +84,6 @@ public class NetworkStatus {
     @Nonnull
     public String getNetworkName() {
         return networkName;
-    }
-
-    public void setNetworkName(@Nonnull String networkName) {
-        this.networkName = networkName;
     }
 
     public boolean isPublic() {
@@ -136,7 +131,7 @@ public class NetworkStatus {
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(uuid);
+        return uuid.hashCode();
     }
 
     @Override

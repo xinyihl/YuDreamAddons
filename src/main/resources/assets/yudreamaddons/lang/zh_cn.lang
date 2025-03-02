@@ -9,6 +9,8 @@ key.yudreamaddons.getItemIdListOut=导出物品ID列表
 
 item.yudreamaddons.link_card.name=闪存卡
 
+tile.yudreamaddons.network_hub.name=无线连接器
+
 tile.modularmachinery.blockmeaspectinputbus.name=ME机械源质输入总线
 tile.modularmachinery.blockmeaspectoutputbus.name=ME机械源质输出总线
 tile.modularmachinery.blockparallelcontroller.yudream_a.name=§d极限并行控制器

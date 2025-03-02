@@ -1,5 +1,6 @@
 package com.yudream.yudreamaddons.common.api;
 
+import com.yudream.yudreamaddons.Configurations;
 import com.yudream.yudreamaddons.Tags;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,23 +18,43 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class NetworkHubDataStorage extends WorldSavedData {
-    private static final String DATA_NAME = Tags.MOD_NAME + "_NetworkHubDataStorage";
+    private static final String DATA_NAME = Tags.MOD_NAME + "_NHDS";
+    private static final String DATA_NAME_DIM = Tags.MOD_NAME + "_NHDS_DIM";
     private final List<NetworkStatus> networks = new ArrayList<>();
 
     public NetworkHubDataStorage(String name) {
         super(name);
     }
 
-    public static NetworkHubDataStorage get(World world) {
-        NetworkHubDataStorage instance = null;
+    public static NetworkHubDataStorage getDim(World world) {
+        NetworkHubDataStorage data = (NetworkHubDataStorage) world.getPerWorldStorage().getOrLoadData(NetworkHubDataStorage.class, DATA_NAME_DIM);
+        if (data == null) {
+            data = new NetworkHubDataStorage(DATA_NAME_DIM);
+            world.getPerWorldStorage().setData(DATA_NAME_DIM, data);
+        }
+        return data;
+    }
+
+    public static NetworkHubDataStorage getGlobal(World world) {
+        NetworkHubDataStorage data = null;
         if (world.getMapStorage() != null) {
-            instance = (NetworkHubDataStorage) world.getMapStorage().getOrLoadData(NetworkHubDataStorage.class, DATA_NAME);
-            if (instance == null) {
-                instance = new NetworkHubDataStorage(DATA_NAME);
-                world.getMapStorage().setData(DATA_NAME, instance);
+            data = (NetworkHubDataStorage) world.getMapStorage().getOrLoadData(NetworkHubDataStorage.class, DATA_NAME);
+        }
+        if (data == null) {
+            data = new NetworkHubDataStorage(DATA_NAME);
+            if (world.getMapStorage() != null) {
+                world.getMapStorage().setData(DATA_NAME, data);
             }
         }
-        return instance;
+        return data;
+    }
+
+    public static NetworkHubDataStorage get(World world) {
+        if (Configurations.GENERAL_CONFIG.canRDimension) {
+            return getGlobal(world);
+        } else {
+            return getDim(world);
+        }
     }
 
     @Override
@@ -58,9 +79,10 @@ public class NetworkHubDataStorage extends WorldSavedData {
         return nbt;
     }
 
-    public void addNetwork(NetworkStatus network) {
+    public NetworkStatus addNetwork(NetworkStatus network) {
         networks.add(network);
         markDirty();
+        return network;
     }
 
     public void removeNetwork(EntityPlayer player, UUID netId) {
@@ -69,6 +91,11 @@ public class NetworkHubDataStorage extends WorldSavedData {
 
     public void removeNetwork(UUID player, UUID netId) {
         boolean removed = networks.removeIf(p -> p.getOwner().equals(player) && p.getUuid().equals(netId));
+        if (removed) markDirty();
+    }
+
+    public void removeNetwork(UUID netId) {
+        boolean removed = networks.removeIf(p -> p.getUuid().equals(netId));
         if (removed) markDirty();
     }
 
@@ -115,7 +142,7 @@ public class NetworkHubDataStorage extends WorldSavedData {
 
     @Nonnull
     public List<NetworkStatus> getAllNetworks() {
-        return new ArrayList<>(networks);
+        return networks;
     }
 
     @Nonnull

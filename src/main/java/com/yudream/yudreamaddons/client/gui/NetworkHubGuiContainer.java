@@ -5,17 +5,22 @@ import com.yudream.yudreamaddons.YuDreamAddons;
 import com.yudream.yudreamaddons.common.api.NetworkStatus;
 import com.yudream.yudreamaddons.common.container.NetworkHubContainer;
 import com.yudream.yudreamaddons.common.network.PacketGuiAtion;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLockIconButton;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -30,7 +35,6 @@ public class NetworkHubGuiContainer extends GuiContainer {
     private static final int SCROLL_BAR_WIDTH = 6;
     private static final int SCROLL_BAR_LEFT = 96;
     private final List<NetButton> networkButtons = new ArrayList<>();
-    private final List<NetworkStatus> networks;
     private int scrollOffset;
     private int maxScroll;
     private int lastScrollOffset = -1;
@@ -43,66 +47,114 @@ public class NetworkHubGuiContainer extends GuiContainer {
     private GuiButton disConnectButton;
     private NetworkStatus selectedNetwork;
     private boolean isScrolling;
+    private final NetworkHubContainer networkHubContainer;
+    private int oldNetworksHash;
 
-    public NetworkHubGuiContainer(NetworkHubContainer inventorySlotsIn) {
-        super(inventorySlotsIn);
-        this.networks = inventorySlotsIn.networkHub.getNetworks();
-        this.xSize = 256;
+    private GuiTextField textField;
+    private boolean isCreating = false;
+
+    public NetworkHubGuiContainer(NetworkHubContainer networkHubContainer) {
+        super(networkHubContainer);
+        this.xSize = 200;
         this.ySize = 166;
-        selectedNetwork = networks.stream().filter(p -> p.getUuid().equals(((NetworkHubContainer) inventorySlots).networkHub.getNetworkUuid())).findFirst().orElse(new NetworkStatus(new UUID(0, 0), "null", true, 0, new BlockPos(0, 0, 0)));
+        this.networkHubContainer = networkHubContainer;
+        this.selectedNetwork = networkHubContainer.networks.stream().filter(p -> p.getUuid().equals(networkHubContainer.networkHub.getNetworkUuid())).findFirst().orElse(new NetworkStatus(new UUID(0, 0), "null", true, 0, new BlockPos(0, 0, 0)));
     }
 
     @Override
     public void initGui() {
         super.initGui();
-        networkButtons.clear();
-        this.createButton = new GuiButton(995, guiLeft + 8, guiTop + 110, 70, 18, "创建");
-        this.deleteButton = new GuiButton(996, guiLeft + 8, guiTop + 135, 70, 18, "删除");
-        this.connectButton = new GuiButton(997, guiLeft + 85, guiTop + 110, 70, 18, "连接");
-        this.disConnectButton = new GuiButton(998, guiLeft + 85, guiTop + 135, 70, 18, "断开");
-        this.lockButton = new GuiLockIconButton(999, guiLeft + 200, guiTop + 18);
+        this.createButton = new GuiButton(995, guiLeft + 26, guiTop + 110, 70, 18, "创建");
+        this.deleteButton = new GuiButton(996, guiLeft + 26, guiTop + 135, 70, 18, "删除");
+        this.connectButton = new GuiButton(997, guiLeft + 103, guiTop + 110, 70, 18, "连接");
+        this.disConnectButton = new GuiButton(998, guiLeft + 103, guiTop + 135, 70, 18, "断开");
+        this.lockButton = new GuiLockIconButton(999, guiLeft + 201, guiTop + 12) {
+            @Override
+            public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+                super.drawButton(mc, mouseX, mouseY, partialTicks);
+                if (this.visible) {
+                    int relx = mouseX - this.x, rely = mouseY - this.y;
+                    if (relx >= 0 && rely >= 0 && relx < this.width && rely < this.height) {
+                        mc.fontRenderer.drawString("切换网络是否公开", mouseX + 5, mouseY + 5, 0xFFFFFF);
+                    }
+                }
+            }
+        };
+        this.textField = new GuiTextField(1000, this.fontRenderer, guiLeft + 26, guiTop + 110, 70, 18);
 
-        if (((NetworkHubContainer) inventorySlots).networkHub.isConnected()) {
-            createButton.enabled = false;
+        if (this.networkHubContainer.networkHub.isConnected()) {
+            this.createButton.enabled = false;
         }
 
-        if (((NetworkHubContainer) inventorySlots).networkHub.isHead()) {
-            createButton.enabled = false;
+        if (this.networkHubContainer.networkHub.isHead()) {
+            this.createButton.enabled = false;
+            this.connectButton.enabled = false;
+            this.disConnectButton.enabled = false;
         }
+
+        this.lockButton.setLocked(!selectedNetwork.isPublic());
+        this.textField.setVisible(false);
+        this.textField.setMaxStringLength(10);
 
         this.buttonList.add(this.createButton);
         this.buttonList.add(this.deleteButton);
         this.buttonList.add(this.connectButton);
         this.buttonList.add(this.disConnectButton);
         this.buttonList.add(this.lockButton);
-        updateButtons();
+
+        updateNetworksButtons();
     }
 
-    private void updateButtons() {
-        if (scrollOffset == lastScrollOffset) return;
-        networkButtons.clear();
-        int visibleRows = 4;
-        int startIndex = scrollOffset / 20;
-        for (int i = 0; i < visibleRows; i++) {
-            int index = startIndex + i;
-            if (index >= networks.size()) break;
-            NetButton btn = new NetButton(index, guiLeft + 8, guiTop + 18 + i * 20 - scrollOffset % 20, 85, 18, networks.get(index).getNetworkName(), networks.get(index));
-            networkButtons.add(btn);
+    private boolean isButUpdate() {
+        int newNetworksHash = this.networkHubContainer.networks.hashCode();
+        if (this.oldNetworksHash != newNetworksHash) {
+            this.oldNetworksHash = newNetworksHash;
+            return true;
         }
-        lastScrollOffset = scrollOffset;
+        return false;
+    }
+
+    private void updateNetworksButtons() {
+        if (!this.isButUpdate() && scrollOffset == lastScrollOffset) return;
+        this.networkButtons.clear();
+        for (int i = 0; i < 4; i++) {
+            int index = scrollOffset / 20 + i;
+            if (index >= networkHubContainer.networks.size()) break;
+            NetButton btn = new NetButton(index, guiLeft + 8, guiTop + 18 + i * 20 - scrollOffset % 20, 85, 18, networkHubContainer.networks.get(index).getNetworkName(), networkHubContainer.networks.get(index));
+            this.networkButtons.add(btn);
+        }
+        this.lastScrollOffset = scrollOffset;
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
         this.mc.getTextureManager().bindTexture(new ResourceLocation(Tags.MOD_ID, "textures/gui/network_hub.png"));
         this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-        int listHeight = networks.size() * 20;
-        int visibleHeight = 80;
-        maxScroll = Math.max(0, listHeight - visibleHeight);
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
+    }
 
-        updateButtons();
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+
+        GlStateManager.disableRescaleNormal();
+        RenderHelper.disableStandardItemLighting();
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+
+        int listHeight = this.networkHubContainer.networks.size() * 20;
+        int visibleHeight = 80;
+        this.maxScroll = Math.max(0, listHeight - visibleHeight);
+
+        updateNetworksButtons();
+
         ScissorHelper.enableScissor(mc, guiLeft + 8, guiTop + 15, 110, visibleHeight + 2);
         for (NetButton btn : networkButtons) {
             btn.drawButton(mc, mouseX, mouseY, partialTicks);
@@ -110,40 +162,44 @@ public class NetworkHubGuiContainer extends GuiContainer {
         ScissorHelper.disableScissor();
 
         if (maxScroll > 0) {
-            scrollBarHeight = (int) ((float) visibleHeight / listHeight * visibleHeight);
-            scrollBarY = guiTop + 18 + (int) ((float) scrollOffset / maxScroll * (visibleHeight - scrollBarHeight));
+            this.scrollBarHeight = (int) ((float) visibleHeight / listHeight * visibleHeight);
+            this.scrollBarY = guiTop + 18 + (int) ((float) scrollOffset / maxScroll * (visibleHeight - scrollBarHeight));
             drawRect(guiLeft + SCROLL_BAR_LEFT, scrollBarY, guiLeft + SCROLL_BAR_LEFT + SCROLL_BAR_WIDTH, scrollBarY + scrollBarHeight, 0xFF404040);
         }
 
-        lockButton.drawButton(mc, mouseX, mouseY, partialTicks);
+        if (isCreating) {
+            this.textField.drawTextBox();
+        }
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        this.fontRenderer.drawString("网络设置", 7, 5, 0xFF404040); // 100 15
         int rightPanelX = 110;
-        int rightPanelY = 18;
-        fontRenderer.drawString("名称: " + selectedNetwork.getNetworkName(), rightPanelX, rightPanelY, 0xFFFFFF);
-        fontRenderer.drawString("剩余频道: ?" /*+ (64 - selectedNetwork.getTargetPos().size())*/, rightPanelX, rightPanelY + 15, 0xFFFFFF);
-        fontRenderer.drawString("维度ID: " + selectedNetwork.getDimensionId(), rightPanelX, rightPanelY + 30, 0xFFFFFF);
-        fontRenderer.drawString("是否公开: " + (selectedNetwork.isPublic() ? "是" : "否"), rightPanelX, rightPanelY + 45, 0xFFFFFF);
-        fontRenderer.drawString("连接状态: " + (((NetworkHubContainer) inventorySlots).networkHub.isConnected() ? "已连接" : "未连接"), rightPanelX, rightPanelY + 60, 0xFFFFFF);
+        int rightPanelY = 19;
+        this.fontRenderer.drawString("无线连接器", 7, 5, 0xFF404040);
+        this.fontRenderer.drawString("名称: " + selectedNetwork.getNetworkName(), rightPanelX, rightPanelY, 0xFFFFFF);
+        this.fontRenderer.drawString("剩余频道: ?" /*+ (64 - selectedNetwork.getTargetPos().size())*/, rightPanelX, rightPanelY + 15, 0xFFFFFF);
+        this.fontRenderer.drawString("维度ID: " + selectedNetwork.getDimensionId(), rightPanelX, rightPanelY + 30, 0xFFFFFF);
+        this.fontRenderer.drawString("是否公开: " + (selectedNetwork.isPublic() ? "是" : "否"), rightPanelX, rightPanelY + 45, 0xFFFFFF);
+        this.fontRenderer.drawString("连接状态: " + (networkHubContainer.networkHub.isConnected() ? "已连接" : "未连接"), rightPanelX, rightPanelY + 60, 0xFFFFFF);
     }
 
     @Override
     protected void actionPerformed(@Nonnull GuiButton ba) {
-        //System.out.println("点击了按钮：" + ba.displayString);
         if (ba instanceof NetButton) {
             NetButton button = (NetButton) ba;
             if (networkButtons.contains(button)) {
-                selectedNetwork = button.networkStatus;
+                this.selectedNetwork = button.networkStatus;
                 this.lockButton.setLocked(!selectedNetwork.isPublic());
+                return;
             }
         }
         if (createButton.id == ba.id) {
-            NBTTagCompound tag = new NBTTagCompound();
-            tag.setString("name", "Button Create");
-            YuDreamAddons.instance.networkWrapper.sendToServer(new PacketGuiAtion(CREATE_NETWORK, tag));
+            this.createButton.enabled = false;
+            this.createButton.visible = false;
+            this.isCreating = true;
+            this.textField.setVisible(true);
+            this.textField.setFocused(true);
         }
         if (selectedNetwork.getUuid().equals(new UUID(0, 0))) {
             return;
@@ -159,7 +215,7 @@ public class NetworkHubGuiContainer extends GuiContainer {
         }
         if (lockButton.id == ba.id) {
             NBTTagCompound tag = new NBTTagCompound();
-            tag.setBoolean("public", !lockButton.isLocked());
+            tag.setBoolean("public", lockButton.isLocked());
             tag.setUniqueId("networkUuid", selectedNetwork.getUuid());
             YuDreamAddons.instance.networkWrapper.sendToServer(new PacketGuiAtion(SET_NETWORK_PUBLIC, tag));
             this.lockButton.setLocked(!lockButton.isLocked());
@@ -168,7 +224,32 @@ public class NetworkHubGuiContainer extends GuiContainer {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setUniqueId("networkUuid", selectedNetwork.getUuid());
             YuDreamAddons.instance.networkWrapper.sendToServer(new PacketGuiAtion(DELETE_NETWORK, tag));
-            selectedNetwork = new NetworkStatus(new UUID(0, 0), "null", true, 0, new BlockPos(0, 0, 0));
+            this.selectedNetwork = new NetworkStatus(new UUID(0, 0), "null", true, 0, new BlockPos(0, 0, 0));
+            if (this.networkHubContainer.networkHub.isHead()) {
+                this.createButton.enabled = true;
+                this.connectButton.enabled = true;
+                this.disConnectButton.enabled = true;
+            }
+        }
+    }
+
+    @Override
+    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+        if (isCreating) {
+            this.textField.textboxKeyTyped(typedChar, keyCode);
+            if (keyCode == Keyboard.KEY_RETURN || keyCode == Keyboard.KEY_NUMPADENTER) {
+                this.connectButton.enabled = false;
+                this.disConnectButton.enabled = false;
+                this.createButton.visible = true;
+                this.isCreating = false;
+                this.textField.setVisible(false);
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setString("name", textField.getText());
+                YuDreamAddons.instance.networkWrapper.sendToServer(new PacketGuiAtion(CREATE_NETWORK, tag));
+                this.textField.setText("");
+            }
+        } else {
+            super.keyTyped(typedChar, keyCode);
         }
     }
 
@@ -177,39 +258,49 @@ public class NetworkHubGuiContainer extends GuiContainer {
         super.handleMouseInput();
         int mouseWheel = Mouse.getEventDWheel();
         if (mouseWheel != 0) {
-            scrollOffset = (int) MathHelper.clamp(scrollOffset - (Math.signum(mouseWheel) * 20), 0, maxScroll);
+            this.scrollOffset = (int) MathHelper.clamp(scrollOffset - (Math.signum(mouseWheel) * 20), 0, maxScroll);
         }
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if (isCreating && !isMouseOverTextField(this.textField, mouseX, mouseY)) {
+            this.createButton.enabled = true;
+            this.createButton.visible = true;
+            this.isCreating = false;
+            this.textField.setVisible(false);
+            return;
+        }
         for (NetButton btn : networkButtons) {
             if (btn.mousePressed(mc, mouseX, mouseY)) {
                 btn.playPressSound(mc.getSoundHandler());
-                actionPerformed(btn);
-                return;
+                this.actionPerformed(btn);
             }
         }
         if (mouseButton == 0 && isMouseOverScrollBar(mouseX, mouseY)) {
-            isScrolling = true;
+            this.isScrolling = true;
         }
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
     protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
-        if (isScrolling) {
+        if (this.isScrolling) {
             float normalized = (float) (mouseY - guiTop - 18) / 80;
-            scrollOffset = (int) (normalized * maxScroll);
-            scrollOffset = MathHelper.clamp(scrollOffset, 0, maxScroll);
+            this.scrollOffset = (int) (normalized * maxScroll);
+            this.scrollOffset = MathHelper.clamp(scrollOffset, 0, maxScroll);
         }
         super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
     }
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
-        isScrolling = false;
+        this.isScrolling = false;
         super.mouseReleased(mouseX, mouseY, state);
+    }
+
+    private boolean isMouseOverTextField(GuiTextField textField, int mouseX, int mouseY) {
+        return mouseX >= textField.x && mouseX < textField.x + textField.width && mouseY >= textField.y && mouseY < textField.y + textField.height;
     }
 
     private boolean isMouseOverScrollBar(int mouseX, int mouseY) {
@@ -218,7 +309,6 @@ public class NetworkHubGuiContainer extends GuiContainer {
 
     public static class NetButton extends GuiButton {
         public NetworkStatus networkStatus;
-
         public NetButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, NetworkStatus networkStatus) {
             super(buttonId, x, y, widthIn, heightIn, buttonText);
             this.networkStatus = networkStatus;

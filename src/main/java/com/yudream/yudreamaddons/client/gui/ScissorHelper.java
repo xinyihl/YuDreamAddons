@@ -9,11 +9,7 @@ public class ScissorHelper {
         ScaledResolution res = new ScaledResolution(mc);
         int scaleFactor = res.getScaleFactor();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GL11.glScissor(
-                x * scaleFactor,
-                mc.displayHeight - (y + height) * scaleFactor,
-                width * scaleFactor,
-                height * scaleFactor);
+        GL11.glScissor(x * scaleFactor, mc.displayHeight - (y + height) * scaleFactor, width * scaleFactor, height * scaleFactor);
     }
 
     public static void disableScissor() {

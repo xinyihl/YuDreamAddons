@@ -32,6 +32,8 @@ public class Configurations {
         public boolean doElectricUnground = false;
         @Config.Comment("彩虹发电机发电量")
         public int rainbowGeneratorEnergy = 2500000;
+        @Config.Comment("无线连接器是否可以跨维度")
+        public boolean canRDimension = false;
     }
 
     public static class OtherConfig {
@@ -39,11 +41,11 @@ public class Configurations {
         public int crucibleTime = 100;
         @Config.Comment("神秘源质配方耗时")
         public int smelterTime = 100;
-        @Config.Comment("Power use = PowerBase + PowerDistanceMultiplier * Distance * ln(Distance^2 + 3) (AE/t)")
-        public double powerBase = 1D;
-        @Config.Comment("")
-        public double powerDistanceMultiplier = 0.1D;
-        public double powerHeadBase = 1000D;
+        @Config.Comment("子节点能量消耗 = powerBase + powerDistanceMultiplier * Distance * ln(Distance^2 + 3) (AE/t)")
+        public double powerBase = 1000D;
+        public double powerDistanceMultiplier = 0.5D;
+        @Config.Comment("主节点能量消耗 = powerHeadBase * size (子节点个数)")
+        public double powerHeadBase = 10000D;
     }
 
     public static class ElectromagneticGeneratorConfig {

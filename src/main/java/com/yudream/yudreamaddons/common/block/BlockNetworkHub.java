@@ -17,7 +17,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -42,18 +41,18 @@ public class BlockNetworkHub extends Block {
     @Nonnull
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(CONNECT, meta == 1);  // 从元数据获取状态
+        return this.getDefaultState().withProperty(CONNECT, meta == 1);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(CONNECT) ? 1 : 0;  // 返回元数据表示方块是否工作
+        return state.getValue(CONNECT) ? 1 : 0;
     }
 
     @Nonnull
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, CONNECT);  // 允许方块具有工作状态属性
+        return new BlockStateContainer(this, CONNECT);
     }
 
     @Nonnull
@@ -70,48 +69,14 @@ public class BlockNetworkHub extends Block {
 
     @Override
     public boolean onBlockActivated(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityPlayer playerIn, @Nonnull EnumHand hand, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (!worldIn.isRemote && !playerIn.getHeldItem(hand).isEmpty()) {
-            //NetworkHubDataStorage storage = NetworkHubDataStorage.get(worldIn);
-            //storage.getAllNetworks().forEach(network -> {
-            //    playerIn.sendMessage(new TextComponentString(network.getUuid().toString()));
-            //});
-            // 打开GUI
-            playerIn.openGui(YuDreamAddons.instance, GUIHandler.GUI_NETWORK_HUB, worldIn, pos.getX(), pos.getY(), pos.getZ());
-        }
-
-        if (!worldIn.isRemote && playerIn.getHeldItem(hand).isEmpty()) {
+        if (!worldIn.isRemote) {
             TileEntity te = worldIn.getTileEntity(pos);
             if (te instanceof TileNetworkHub) {
-                TileNetworkHub tn = (TileNetworkHub) te;
-                tn.sync();
-                tn.test(playerIn, playerIn.isSneaking());
-            }
-        }
-
-        if (worldIn.isRemote && playerIn.getHeldItem(hand).isEmpty()) {
-            TileEntity te = worldIn.getTileEntity(pos);
-            if (te instanceof TileNetworkHub) {
-                TileNetworkHub tn = (TileNetworkHub) te;
-                //tn.test(playerIn, playerIn.isSneaking());
-                playerIn.sendMessage(new TextComponentString("客户端NETUUID: " + tn.getNetworkUuid().toString()));
-                playerIn.sendMessage(new TextComponentString("客户端保存的NET列表: "));
-                tn.getNetworks().forEach(networkStatus -> playerIn.sendMessage(new TextComponentString(networkStatus.getUuid().toString())));
+                playerIn.openGui(YuDreamAddons.instance, GUIHandler.GUI_NETWORK_HUB, worldIn, pos.getX(), pos.getY(), pos.getZ());
             }
         }
         return true;
     }
-
-//    @Override
-//    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-//        super.onBlockAdded(worldIn, pos, state);
-//        if (worldIn.isRemote) return;
-//
-//        // 更新状态 - 假设根据某种条件判断是否工作
-//
-//
-//
-//        //worldIn.setBlockState(pos, state.withProperty(IS_WORKING, isWorking), 2);
-//    }
 
     @Override
     public void onBlockPlacedBy(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityLivingBase placer, @Nonnull ItemStack stack) {
