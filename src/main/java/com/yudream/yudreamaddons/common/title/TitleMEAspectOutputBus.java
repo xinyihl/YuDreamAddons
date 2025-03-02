@@ -6,10 +6,16 @@ import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.RequirementAs
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.basic.IGeneratable;
 import com.yudream.yudreamaddons.common.title.base.TitleMEAspectBus;
 import hellfirepvp.modularmachinery.common.crafting.ComponentType;
+import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 
 public class TitleMEAspectOutputBus extends TitleMEAspectBus implements IGeneratable<RequirementAspect.RT> {
+
+    @Override
+    public ItemStack getVisualItemStack() {
+        return null;
+    }
 
     @Nullable
     @Override
@@ -19,7 +25,7 @@ public class TitleMEAspectOutputBus extends TitleMEAspectBus implements IGenerat
 
     @Override
     public boolean generate(RequirementAspect.RT rt, boolean b) {
-        if (!isPowered() && !isActive()) {
+        if (!this.getProxy().isPowered() && !this.getProxy().isActive()) {
             rt.setError("ME机械源质输出总线未连接ME网络");
             return false;
         }

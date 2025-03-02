@@ -36,7 +36,7 @@ public abstract class TitleMeBase extends TileEntity implements IActionHost, IGr
 
     public TitleMeBase() {
         this.source = new MachineSource(this);
-        this.proxy.setIdlePowerUsage(1.0D);
+        this.proxy.setIdlePowerUsage(100.0D);
         //this.proxy.setFlags(GridFlags.REQUIRE_CHANNEL);
     }
 
@@ -47,7 +47,7 @@ public abstract class TitleMeBase extends TileEntity implements IActionHost, IGr
             try {
                 this.proxy.getTick().wakeDevice(this.proxy.getNode());
             } catch (GridAccessException e) {
-                // :P
+                //Ignore
             }
             Platform.notifyBlocksOfNeighbors(this.getWorld(), this.getPos());
         }
@@ -65,7 +65,7 @@ public abstract class TitleMeBase extends TileEntity implements IActionHost, IGr
             try {
                 proxy.readFromNBT(tag);
             } catch (IllegalStateException e) {
-                // Prevent loading data after part of a grid.
+                //Ignore
             }
         }
     }

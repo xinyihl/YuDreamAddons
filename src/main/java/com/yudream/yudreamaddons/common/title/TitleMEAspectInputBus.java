@@ -8,6 +8,7 @@ import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.basic.ICraftN
 import com.yudream.yudreamaddons.common.title.base.TitleMEAspectBus;
 import hellfirepvp.modularmachinery.common.crafting.ComponentType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import thaumcraft.api.aspects.Aspect;
@@ -15,6 +16,7 @@ import thaumcraft.api.aspects.AspectList;
 import thaumcraft.api.aspects.IAspectSource;
 import thaumcraft.api.aura.AuraHelper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class TitleMEAspectInputBus extends TitleMEAspectBus implements IAspectSource, ITickable, IConsumable<RequirementAspect.RT>, ICraftNotifier<RequirementAspect.RT> {
@@ -23,21 +25,28 @@ public class TitleMEAspectInputBus extends TitleMEAspectBus implements IAspectSo
     public AspectList essentia = new AspectList();
     private int existTime;
 
+    @Override
+    public ItemStack getVisualItemStack() {
+        return null;
+    }
+
     @Nullable
     @Override
     public GenericMachineCompoment<RequirementAspect.RT> provideComponent() {
         return new GenericMachineCompoment<>(this, this, (ComponentType) MMCompoments.COMPONENT_ASPECT);
     }
 
-    public void readCustomNBT(NBTTagCompound compound) {
-        super.readCustomNBT(compound);
+    public void readFromNBT(@Nonnull NBTTagCompound compound) {
+        super.readFromNBT(compound);
         this.essentia.readFromNBT(compound);
     }
 
+    @Nonnull
     @Override
-    public void writeCustomNBT(NBTTagCompound compound) {
-        super.writeCustomNBT(compound);
+    public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound compound) {
+        super.writeToNBT(compound);
         this.essentia.writeToNBT(compound);
+        return compound;
     }
 
     @Override
@@ -45,7 +54,7 @@ public class TitleMEAspectInputBus extends TitleMEAspectBus implements IAspectSo
         if (!this.world.isRemote) {
             this.existTime++;
             if (this.recipeEssentia.size() > 0) {
-                if (isPowered() && isActive()) {
+                if (this.getProxy().isPowered() && this.getProxy().isActive()) {
                     for (Aspect aspect : this.recipeEssentia.getAspectsSortedByName()) {
                         int a = this.recipeEssentia.getAmount(aspect) - this.essentia.getAmount(aspect);
                         if (a > 0) {
