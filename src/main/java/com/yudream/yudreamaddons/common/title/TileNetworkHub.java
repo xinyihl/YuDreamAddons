@@ -10,9 +10,11 @@ import appeng.api.util.AEPartLocation;
 import appeng.core.AEConfig;
 import appeng.me.cache.PathGridCache;
 import com.yudream.yudreamaddons.Configurations;
+import com.yudream.yudreamaddons.YuDreamAddons;
 import com.yudream.yudreamaddons.common.BlocksAndItems;
 import com.yudream.yudreamaddons.common.api.NetworkHubDataStorage;
 import com.yudream.yudreamaddons.common.api.NetworkStatus;
+import com.yudream.yudreamaddons.common.network.PacketServerToClient;
 import com.yudream.yudreamaddons.common.title.base.TitleMeBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -23,6 +25,8 @@ import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
+
+import static com.yudream.yudreamaddons.common.network.PacketServerToClient.ServerToClient.DELETE_NETWORK;
 
 public class TileNetworkHub extends TitleMeBase implements ITickable {
     private boolean isHead = false;
@@ -62,11 +66,6 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     }
 
     @Override
-    public void onChunkUnload() {
-        breakConnection();
-    }
-
-    @Override
     public void update() {
         if (this.world.isRemote) return;
         this.tickCounter = (this.tickCounter + 1) % 20;
@@ -75,14 +74,14 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
                 NetworkHubDataStorage storage = NetworkHubDataStorage.get(this.world);
                 NetworkStatus network = storage.getNetwork(this.networkUuid);
                 if (network == null) {
-                    unsetAll();
+                    this.unsetAll();
                     return;
                 }
                 if (this.isHead) {
                     this.setConnected(!network.getTargetPos().isEmpty());
                     this.getProxy().setIdlePowerUsage(Configurations.OTHER_CONFIG.powerHeadBase * network.getTargetPos().size());
                     PathGridCache cache = this.getActionableNode().getGrid().getCache(IPathingGrid.class);
-                    int surplusChannels = Math.max(AEConfig.instance().getDenseChannelCapacity() - cache.getChannelsInUse(), 0);
+                    int surplusChannels = Math.max(AEConfig.instance().getDenseChannelCapacity() - cache.getChannelsInUse() + 2, 0); // 不知道为什么这玩意儿获取到的就是少2个频道
                     if (this.lastSurplusChannels != surplusChannels) {
                         this.lastSurplusChannels = surplusChannels;
                         network.setSurplusChannels(surplusChannels);
@@ -93,7 +92,7 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
                         this.setHead(true);
                     } else {
                         if (!this.isConnected) {
-                            setupConnection(network);
+                            this.setupConnection(network);
                         }
                     }
                 }
@@ -157,19 +156,20 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
         if (this.isHead) {
             for (BlockPos pos : network.getTargetPos()) {
                 TileEntity tile = this.world.getTileEntity(pos);
-                if (!(tile instanceof TileNetworkHub)) continue;
-                TileNetworkHub that = (TileNetworkHub) tile;
-                that.breakConnection();
+                if (tile instanceof TileNetworkHub) {
+                    ((TileNetworkHub) tile).breakConnection();
+                }
             }
             storage.removeNetwork(this.networkUuid);
-            this.networkUuid = new UUID(0, 0);
-            this.isConnected = false;
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setUniqueId("networkUuid", this.networkUuid);
+            YuDreamAddons.instance.networkWrapper.sendToAll(new PacketServerToClient(DELETE_NETWORK, tag));
         } else {
             network.removeTargetPos(this.getPos());
             this.getProxy().setIdlePowerUsage(1D);
-            unsetAll();
         }
-        this.sync();
+        storage.markDirty();
+        this.unsetAll();
     }
 
     private void unsetAll() {
@@ -186,7 +186,7 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     @Override
     public void invalidate() {
         super.invalidate();
-        breakConnection();
+        this.breakConnection();
     }
 
     public boolean isConnected() {

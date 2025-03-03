@@ -38,7 +38,7 @@ public class PacketClientToServer implements IMessage, IMessageHandler<PacketCli
     @Override
     public IMessage onMessage(PacketClientToServer message, MessageContext ctx) {
         EntityPlayerMP player = ctx.getServerHandler().player;
-        player.getServerWorld().addScheduledTask(() -> {
+        player.server.addScheduledTask(() -> {
             switch (ClientToServer.valueOf(message.type)) {
                 case BUTTON_ACTION: {
                     if (player.openContainer instanceof IInputHandler) {

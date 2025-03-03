@@ -169,7 +169,12 @@ public class NetworkHubGuiContainer extends GuiContainer {
         GlStateManager.disableLighting();
         GlStateManager.disableDepth();
 
+        boolean isHead = this.networkHubContainer.networkHub.isHead();
         this.lockButton.setLocked(!showInfo().isPublic());
+        this.createButton.enabled = !isHead && this.networkHubContainer.networkHub.isConnected();
+        this.disConnectButton.enabled = !isHead;
+        this.connectButton.enabled = !isHead;
+
 
         int listHeight = this.networkHubContainer.networks.size() * 20;
         int visibleHeight = 80;
@@ -219,8 +224,6 @@ public class NetworkHubGuiContainer extends GuiContainer {
         if (ba instanceof NetButton) {
             NetButton button = (NetButton) ba;
             if (networkButtons.contains(button)) {
-                //this.networkHubContainer.selectedNetwork = button.networkStatus.getUuid();
-                //this.lockButton.setLocked(!button.networkStatus.isPublic());
                 NBTTagCompound tag = new NBTTagCompound();
                 tag.setInteger("button", 0);
                 tag.setUniqueId("networkUuid", button.networkStatus.getUuid());
@@ -236,17 +239,6 @@ public class NetworkHubGuiContainer extends GuiContainer {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setInteger("button", ba.id);
             YuDreamAddons.instance.networkWrapper.sendToServer(new PacketClientToServer(BUTTON_ACTION, tag));
-        }
-
-        if (lockButton.id == ba.id) {
-            this.lockButton.setLocked(!lockButton.isLocked());
-        }
-        if (deleteButton.id == ba.id) {
-            if (this.networkHubContainer.networkHub.isHead()) {
-                this.createButton.enabled = true;
-                this.connectButton.enabled = true;
-                this.disConnectButton.enabled = true;
-            }
         }
     }
 

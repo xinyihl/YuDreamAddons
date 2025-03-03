@@ -101,4 +101,10 @@ public class BlockNetworkHub extends Block {
     public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState iBlockState) {
         return new TileNetworkHub();
     }
+
+    @Override
+    public void breakBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        super.breakBlock(world, pos, state);
+
+    }
 }

@@ -12,13 +12,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class NetworkHubDataStorage extends WorldSavedData {
     private static final String DATA_NAME = Tags.MOD_NAME + "_NHDS";
     private static final String DATA_NAME_DIM = Tags.MOD_NAME + "_NHDS_DIM";
-    private final LinkedHashMap<UUID, NetworkStatus> networks = new LinkedHashMap<>();
+    private final Map<UUID, NetworkStatus> networks = new LinkedHashMap<>();
 
     public NetworkHubDataStorage(String name) {
         super(name);
@@ -82,7 +83,7 @@ public class NetworkHubDataStorage extends WorldSavedData {
         NBTTagList list = nbt.getTagList("networks", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.tagCount(); i++) {
             NBTTagCompound tag = list.getCompoundTagAt(i);
-            UUID uuid = UUID.fromString(tag.getString("u"));
+            UUID uuid = tag.getUniqueId("u");
             NetworkStatus net = networks.get(uuid);
             if (net != null) {
                 net.updateFromNBT(tag);
@@ -109,12 +110,12 @@ public class NetworkHubDataStorage extends WorldSavedData {
     }
 
     @Nonnull
-    public LinkedHashMap<UUID, NetworkStatus> getAllNetworks() {
+    public Map<UUID, NetworkStatus> getNetworks() {
         return networks;
     }
 
     @Nonnull
-    public List<NetworkStatus> getAllNetworks(UUID player) {
+    public List<NetworkStatus> getNeedUpdateNetworks(UUID player) {
         return networks.values().stream().filter(p -> {
             if (p.isPublic() || p.getOwner().equals(player)) {
                 return p.isNeedTellClient();
