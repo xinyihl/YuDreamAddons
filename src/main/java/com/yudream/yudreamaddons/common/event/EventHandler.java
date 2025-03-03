@@ -5,7 +5,7 @@ import com.yudream.yudreamaddons.Configurations;
 import com.yudream.yudreamaddons.YuDreamAddons;
 import com.yudream.yudreamaddons.common.api.NetworkHubDataStorage;
 import com.yudream.yudreamaddons.common.api.NetworkStatus;
-import com.yudream.yudreamaddons.common.network.PacketNHStorage;
+import com.yudream.yudreamaddons.common.network.PacketServerToClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -15,10 +15,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
+import static com.yudream.yudreamaddons.common.network.PacketServerToClient.ServerToClient.UPDATE_NETWORKS;
 
 public class EventHandler {
     @SubscribeEvent
@@ -30,8 +29,6 @@ public class EventHandler {
         }
     }
 
-    private final Map<UUID, Integer> oldNetworks = new HashMap<>();
-
     @SubscribeEvent
     public void onPlayerTick(PlayerTickEvent event) {
         if (event.side.isClient()) return;
@@ -41,19 +38,17 @@ public class EventHandler {
         World world = event.player.world;
         EntityPlayerMP player = (EntityPlayerMP) event.player;
         NetworkHubDataStorage storage = NetworkHubDataStorage.get(world);
-        List<NetworkStatus> networks = storage.getAllNetworks(player);
-        int newHash = networks.hashCode();
-        int oldHash = oldNetworks.getOrDefault(player.getGameProfile().getId(), 0);
-        if (oldHash != newHash) {
-            oldNetworks.put(player.getGameProfile().getId(), newHash);
+        List<NetworkStatus> networks = storage.getAllNetworks(player.getGameProfile().getId());
+        if (!networks.isEmpty()) {
             NBTTagCompound tag = new NBTTagCompound();
             NBTTagList list = new NBTTagList();
             for (NetworkStatus network : networks) {
                 list.appendTag(network.writeToNBT(new NBTTagCompound()));
+                network.setNeedTellClient(false);
             }
             tag.setTag("networks", list);
-            YuDreamAddons.instance.networkWrapper.sendTo(new PacketNHStorage(tag), player);
-            storage.markDirty();
+            YuDreamAddons.instance.networkWrapper.sendTo(new PacketServerToClient(UPDATE_NETWORKS, tag), player);
         }
     }
 }
+

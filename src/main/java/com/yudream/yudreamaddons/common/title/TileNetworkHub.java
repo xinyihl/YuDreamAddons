@@ -29,8 +29,10 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     private UUID networkUuid = new UUID(0, 0);
     private UUID owner = new UUID(0, 0);
     private boolean isConnected = false;
+    //无需同步&保存
     private IGridConnection connection;
     private int tickCounter = 0;
+    private int lastSurplusChannels;
 
     public TileNetworkHub() {
         super();
@@ -56,7 +58,7 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
 
     @Override
     public void onLoad() {
-        isConnected = connection != null;
+        this.isConnected = this.connection != null;
     }
 
     @Override
@@ -66,12 +68,12 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
 
     @Override
     public void update() {
-        if (world.isRemote) return;
+        if (this.world.isRemote) return;
         this.tickCounter = (this.tickCounter + 1) % 20;
         if (this.tickCounter % 20 == 0) {
             if (!this.networkUuid.equals(new UUID(0, 0))) {
-                NetworkHubDataStorage storage = NetworkHubDataStorage.get(world);
-                NetworkStatus network = storage.getNetwork(owner, this.networkUuid);
+                NetworkHubDataStorage storage = NetworkHubDataStorage.get(this.world);
+                NetworkStatus network = storage.getNetwork(this.networkUuid);
                 if (network == null) {
                     unsetAll();
                     return;
@@ -80,8 +82,12 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
                     this.setConnected(!network.getTargetPos().isEmpty());
                     this.getProxy().setIdlePowerUsage(Configurations.OTHER_CONFIG.powerHeadBase * network.getTargetPos().size());
                     PathGridCache cache = this.getActionableNode().getGrid().getCache(IPathingGrid.class);
-                    int surplusChannels = AEConfig.instance().getDenseChannelCapacity() - cache.getChannelsInUse();
-                    network.setSurplusChannels(Math.max(surplusChannels, 0));
+                    int surplusChannels = Math.max(AEConfig.instance().getDenseChannelCapacity() - cache.getChannelsInUse(), 0);
+                    if (this.lastSurplusChannels != surplusChannels) {
+                        this.lastSurplusChannels = surplusChannels;
+                        network.setSurplusChannels(surplusChannels);
+                        network.setNeedTellClient(true);
+                    }
                 } else {
                     if (this.getPos().equals(network.getPos())) {
                         this.setHead(true);
@@ -109,19 +115,19 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     @Override
     public NBTTagCompound writeToNBT(@Nonnull NBTTagCompound tag) {
         super.writeToNBT(tag);
-        tag.setBoolean("isHead", isHead);
-        tag.setUniqueId("networkUuid", networkUuid);
-        tag.setUniqueId("owner", owner);
-        tag.setBoolean("isConnected", isConnected);
+        tag.setBoolean("isHead", this.isHead);
+        tag.setUniqueId("networkUuid", this.networkUuid);
+        tag.setUniqueId("owner", this.owner);
+        tag.setBoolean("isConnected", this.isConnected);
         return tag;
     }
 
     public void setupConnection(NetworkStatus network) {
-        if (world.isRemote) return;
+        if (this.world.isRemote) return;
         BlockPos pos = network.getPos();
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = this.world.getTileEntity(pos);
         if (!(tile instanceof TileNetworkHub)) {
-            NetworkHubDataStorage.get(world).removeNetwork(networkUuid);
+            NetworkHubDataStorage.get(this.world).removeNetwork(this.networkUuid);
             return;
         }
         TileNetworkHub that = (TileNetworkHub) tile;
@@ -131,7 +137,7 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
         double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
         double power = Configurations.OTHER_CONFIG.powerBase + Configurations.OTHER_CONFIG.powerDistanceMultiplier * dist * Math.log(dist * dist + 3);
         try {
-            connection = AEApi.instance().grid().createGridConnection(this.getActionableNode(), that.getActionableNode());
+            this.connection = AEApi.instance().grid().createGridConnection(this.getActionableNode(), that.getActionableNode());
             this.setConnected(true);
             this.getProxy().setIdlePowerUsage(power);
             network.addTargetPos(this.getPos());
@@ -141,21 +147,21 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     }
 
     public void breakConnection() {
-        if (world.isRemote) return;
-        NetworkHubDataStorage storage = NetworkHubDataStorage.get(world);
-        NetworkStatus network = storage.getNetwork(owner, this.networkUuid);
+        if (this.world.isRemote) return;
+        NetworkHubDataStorage storage = NetworkHubDataStorage.get(this.world);
+        NetworkStatus network = storage.getNetwork(this.networkUuid);
         if (network == null) {
             unsetAll();
             return;
         }
-        if (isHead) {
+        if (this.isHead) {
             for (BlockPos pos : network.getTargetPos()) {
-                TileEntity tile = world.getTileEntity(pos);
+                TileEntity tile = this.world.getTileEntity(pos);
                 if (!(tile instanceof TileNetworkHub)) continue;
                 TileNetworkHub that = (TileNetworkHub) tile;
                 that.breakConnection();
             }
-            storage.removeNetwork(networkUuid);
+            storage.removeNetwork(this.networkUuid);
             this.networkUuid = new UUID(0, 0);
             this.isConnected = false;
         } else {
@@ -171,8 +177,8 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
         this.setConnected(false);
         this.setNetworkUuid(new UUID(0, 0));
         if (this.connection != null) {
-            connection.destroy();
-            connection = null;
+            this.connection.destroy();
+            this.connection = null;
         }
         this.sync();
     }
@@ -184,23 +190,23 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     }
 
     public boolean isConnected() {
-        return isConnected;
+        return this.isConnected;
     }
 
     public void setConnected(boolean connected) {
-        isConnected = connected;
+        this.isConnected = connected;
     }
 
     public boolean isHead() {
-        return isHead;
+        return this.isHead;
     }
 
     public void setHead(boolean head) {
-        isHead = head;
+        this.isHead = head;
     }
 
     public UUID getNetworkUuid() {
-        return networkUuid;
+        return this.networkUuid;
     }
 
     public void setNetworkUuid(UUID networkUuid) {

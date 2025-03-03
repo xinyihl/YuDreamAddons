@@ -20,6 +20,7 @@ public class NetworkStatus {
     private UUID owner = new UUID(0, 0);
     @Nonnull
     private String networkName = "Unknown";
+    private boolean needTellClient = true;
     private boolean isPublic = false;
     private int dimensionId = 0;
     private int surplusChannels = 0;
@@ -54,6 +55,19 @@ public class NetworkStatus {
             networkStatus.addTargetPos(BlockPos.fromLong(nbt.getLong("t")));
         }
         return networkStatus;
+    }
+
+    public void updateFromNBT(NBTTagCompound tag) {
+        this.networkName = tag.getString("n");
+        this.isPublic = tag.getBoolean("i");
+        this.surplusChannels = tag.getInteger("sc");
+
+        this.targetPos.clear();
+        NBTTagList list = tag.getTagList("tp", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < list.tagCount(); i++) {
+            NBTTagCompound nbt = list.getCompoundTagAt(i);
+            this.addTargetPos(BlockPos.fromLong(nbt.getLong("t")));
+        }
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
@@ -123,6 +137,10 @@ public class NetworkStatus {
         targetPos.remove(pos);
     }
 
+    public boolean hasPermission(@Nonnull UUID player) {
+        return this.isPublic || player.equals(this.owner);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof NetworkStatus) {
@@ -155,5 +173,13 @@ public class NetworkStatus {
 
     public void setSurplusChannels(int surplusChannels) {
         this.surplusChannels = surplusChannels;
+    }
+
+    public boolean isNeedTellClient() {
+        return needTellClient;
+    }
+
+    public void setNeedTellClient(boolean needTellClient) {
+        this.needTellClient = needTellClient;
     }
 }
