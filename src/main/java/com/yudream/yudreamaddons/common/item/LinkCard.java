@@ -43,21 +43,20 @@ public class LinkCard extends Item {
         if(player.isSneaking()){
             if (!(tileEntity instanceof MEPatternProvider)){
                 itemStack.setTagCompound(null);
-                player.sendMessage(new TextComponentString("§a清除坐标成功！"));
+                player.sendStatusMessage(new TextComponentString("§a清除坐标成功！"), true);
             } else {
                 NBTTagCompound nbtpos = new NBTTagCompound();
                 nbtpos.setLong("link_card_pos", pos.toLong());
                 itemStack.setTagCompound(nbtpos);
-                player.sendMessage(new TextComponentString("§a保存坐标成功！"));
+                player.sendStatusMessage(new TextComponentString("§a保存坐标成功！"), true);
             }
         }else {
             if (!(tileEntity instanceof TitleShareInfHandler)){
-                String zwf;
-                // player.sendMessage(new TextComponentString("§c设置失败，目标不是库存共享总线！"));
+                player.sendStatusMessage(new TextComponentString("§c设置失败，目标不是库存共享总线！"), true);
             } else {
                 NBTTagCompound nbtpos = itemStack.getTagCompound();
                 if (nbtpos == null) {
-                    player.sendMessage(new TextComponentString("§c设置失败，未保存坐标！"));
+                    player.sendStatusMessage(new TextComponentString("§c设置失败，未保存坐标！"), true);
                 } else {
                     BlockPos blockPos = BlockPos.fromLong(nbtpos.getLong("link_card_pos"));
                     ((TitleShareInfHandler) tileEntity).setBlockPos(player, blockPos);

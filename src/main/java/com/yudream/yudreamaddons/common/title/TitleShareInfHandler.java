@@ -56,9 +56,9 @@ public class TitleShareInfHandler extends TileColorableMachineComponent implemen
 
     public void setBlockPos(EntityPlayer player, BlockPos blockPos){
         if (!(this.world.getTileEntity(blockPos) instanceof MEPatternProvider)){
-            player.sendMessage(new TextComponentString("§c设置失败，闪存卡保存坐标不是样板总线！"));
+            player.sendStatusMessage(new TextComponentString("§c设置失败，闪存卡保存坐标不是样板总线！"), true);
         } else {
-            player.sendMessage(new TextComponentString("§a设置成功！"));
+            player.sendStatusMessage(new TextComponentString("§a设置成功！"), true);
             this.bp = blockPos;
         }
     }
@@ -73,5 +73,9 @@ public class TitleShareInfHandler extends TileColorableMachineComponent implemen
                 consumer.accept(loc.apply("blockshareinfhandler.online"));
             }
         }
+    }
+
+    public BlockPos getBp() {
+        return bp;
     }
 }

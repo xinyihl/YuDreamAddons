@@ -17,8 +17,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class NetworkHubDataStorage extends WorldSavedData {
-    private static final String DATA_NAME = Tags.MOD_NAME + "_NHDS";
-    private static final String DATA_NAME_DIM = Tags.MOD_NAME + "_NHDS_DIM";
+    private static final String DATA_NAME = Tags.MOD_ID + "_NHDS";
+    private static final String DATA_NAME_DIM = Tags.MOD_ID + "_NHDS_DIM";
     private final Map<UUID, NetworkStatus> networks = new LinkedHashMap<>();
 
     public NetworkHubDataStorage(String name) {

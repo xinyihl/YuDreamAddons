@@ -42,6 +42,7 @@ public class TileTOPDataProvider implements IProbeInfoProvider {
         }
         if (te instanceof TitleShareInfHandler){
             ((TitleShareInfHandler) te).withLinkStateText(probeInfo::text, this::getYudreamKey);
+            probeInfo.text("连接至: " + ((TitleShareInfHandler) te).getBp().toString());
         }
         if (te instanceof TileNetworkHub) {
             probeInfo.text("连接状态: " + (((TileNetworkHub) te).isConnected() ? "已连接" : "未连接"));
