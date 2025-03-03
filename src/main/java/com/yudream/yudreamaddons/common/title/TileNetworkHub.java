@@ -26,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
+import static com.yudream.yudreamaddons.common.block.BlockNetworkHub.CONNECT;
 import static com.yudream.yudreamaddons.common.network.PacketServerToClient.ServerToClient.DELETE_NETWORK;
 
 public class TileNetworkHub extends TitleMeBase implements ITickable {
@@ -62,7 +63,7 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
 
     @Override
     public void onLoad() {
-        this.isConnected = this.connection != null;
+        this.setConnected(this.connection != null);
     }
 
     @Override
@@ -150,14 +151,14 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
         NetworkHubDataStorage storage = NetworkHubDataStorage.get(this.world);
         NetworkStatus network = storage.getNetwork(this.networkUuid);
         if (network == null) {
-            unsetAll();
+            this.unsetAll();
             return;
         }
         if (this.isHead) {
             for (BlockPos pos : network.getTargetPos()) {
                 TileEntity tile = this.world.getTileEntity(pos);
                 if (tile instanceof TileNetworkHub) {
-                    ((TileNetworkHub) tile).breakConnection();
+                    ((TileNetworkHub) tile).unsetAll();
                 }
             }
             storage.removeNetwork(this.networkUuid);
@@ -166,13 +167,12 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
             YuDreamAddons.instance.networkWrapper.sendToAll(new PacketServerToClient(DELETE_NETWORK, tag));
         } else {
             network.removeTargetPos(this.getPos());
-            this.getProxy().setIdlePowerUsage(1D);
         }
         storage.markDirty();
         this.unsetAll();
     }
 
-    private void unsetAll() {
+    public void unsetAll() {
         this.setHead(false);
         this.setConnected(false);
         this.setNetworkUuid(new UUID(0, 0));
@@ -180,6 +180,7 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
             this.connection.destroy();
             this.connection = null;
         }
+        this.getProxy().setIdlePowerUsage(100.0D);
         this.sync();
     }
 
@@ -194,6 +195,7 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     }
 
     public void setConnected(boolean connected) {
+        this.world.notifyBlockUpdate(pos, this.world.getBlockState(pos), this.world.getBlockState(pos).withProperty(CONNECT, connected), 3);
         this.isConnected = connected;
     }
 

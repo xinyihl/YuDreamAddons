@@ -31,6 +31,7 @@ import java.util.UUID;
 
 import static com.yudream.yudreamaddons.common.network.PacketClientToServer.ClientToServer.BUTTON_ACTION;
 
+/* 由魔法数字组成的 GUI （；´д｀）ゞ */
 @SideOnly(Side.CLIENT)
 public class NetworkHubGuiContainer extends GuiContainer {
     private static final int SCROLL_BAR_WIDTH = 6;
@@ -39,14 +40,11 @@ public class NetworkHubGuiContainer extends GuiContainer {
     private int scrollOffset;
     private int maxScroll;
     private int lastScrollOffset = -1;
-    private int scrollBarHeight;
-    private int scrollBarY;
     private GuiLockIconButton lockButton;
     private GuiButton createButton;
     private GuiButton deleteButton;
     private GuiButton connectButton;
     private GuiButton disConnectButton;
-    private boolean isScrolling;
     private final NetworkHubContainer networkHubContainer;
     private int oldNetworksHash;
 
@@ -175,24 +173,30 @@ public class NetworkHubGuiContainer extends GuiContainer {
         this.disConnectButton.enabled = !isHead;
         this.connectButton.enabled = !isHead;
 
-
         int listHeight = this.networkHubContainer.networks.size() * 20;
         int visibleHeight = 80;
         this.maxScroll = Math.max(0, listHeight - visibleHeight);
 
         updateNetworksButtons();
-
-        ScissorHelper.enableScissor(mc, guiLeft + 8, guiTop + 15, 110, visibleHeight + 2);
+        ScissorHelper.enableScissor(mc, guiLeft + 8, guiTop + 16, 110, visibleHeight + 2);
         for (NetButton btn : networkButtons) {
             btn.drawButton(mc, mouseX, mouseY, partialTicks);
         }
         ScissorHelper.disableScissor();
 
-        if (maxScroll > 0) {
-            this.scrollBarHeight = (int) ((float) visibleHeight / listHeight * visibleHeight);
-            this.scrollBarY = guiTop + 17 + (int) ((float) scrollOffset / maxScroll * (visibleHeight - scrollBarHeight));
-            drawRect(guiLeft + SCROLL_BAR_LEFT, scrollBarY, guiLeft + SCROLL_BAR_LEFT + SCROLL_BAR_WIDTH, scrollBarY + scrollBarHeight, 0xFF404040);
+        int scrollBarHeight;
+        if (maxScroll <= 0) {
+            scrollBarHeight = visibleHeight;
+        } else {
+            scrollBarHeight = (int) ((float) visibleHeight / listHeight * visibleHeight);
+            scrollBarHeight = Math.max(10, scrollBarHeight);
         }
+        int scrollBarY = guiTop + 15;
+        if (maxScroll > 0) {
+            scrollBarY += (int) ((float) scrollOffset / maxScroll * (visibleHeight - scrollBarHeight));
+        }
+        drawRect(guiLeft + SCROLL_BAR_LEFT, guiTop + 15, guiLeft + SCROLL_BAR_LEFT + SCROLL_BAR_WIDTH, guiTop + 19 + visibleHeight, 0xFF9c9c9c);
+        drawRect(guiLeft + SCROLL_BAR_LEFT, scrollBarY, guiLeft + SCROLL_BAR_LEFT + SCROLL_BAR_WIDTH, scrollBarY + scrollBarHeight + 4, 0xFF373737);
 
         if (isCreating) {
             this.textField.drawTextBox();
@@ -288,34 +292,11 @@ public class NetworkHubGuiContainer extends GuiContainer {
                 this.actionPerformed(btn);
             }
         }
-        if (mouseButton == 0 && isMouseOverScrollBar(mouseX, mouseY)) {
-            this.isScrolling = true;
-        }
         super.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    @Override
-    protected void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
-        if (this.isScrolling) {
-            float normalized = (float) (mouseY - guiTop - 17) / 80;
-            this.scrollOffset = (int) (normalized * maxScroll);
-            this.scrollOffset = MathHelper.clamp(scrollOffset, 0, maxScroll);
-        }
-        super.mouseClickMove(mouseX, mouseY, clickedMouseButton, timeSinceLastClick);
-    }
-
-    @Override
-    protected void mouseReleased(int mouseX, int mouseY, int state) {
-        this.isScrolling = false;
-        super.mouseReleased(mouseX, mouseY, state);
     }
 
     private boolean isMouseOverTextField(GuiTextField textField, int mouseX, int mouseY) {
         return mouseX >= textField.x && mouseX < textField.x + textField.width && mouseY >= textField.y && mouseY < textField.y + textField.height;
-    }
-
-    private boolean isMouseOverScrollBar(int mouseX, int mouseY) {
-        return mouseX >= guiLeft + SCROLL_BAR_LEFT && mouseY >= scrollBarY && mouseX <= guiLeft + SCROLL_BAR_LEFT + SCROLL_BAR_WIDTH && mouseY <= scrollBarY + scrollBarHeight;
     }
 
     public static class NetButton extends GuiButton {
