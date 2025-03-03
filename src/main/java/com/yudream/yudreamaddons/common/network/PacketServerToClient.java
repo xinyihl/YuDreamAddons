@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-
 public class PacketServerToClient implements IMessage, IMessageHandler<PacketServerToClient, IMessage> {
     private String type;
     private NBTTagCompound compound;
@@ -66,7 +65,7 @@ public class PacketServerToClient implements IMessage, IMessageHandler<PacketSer
         return null;
     }
 
-    public enum ServerToClient {
+    public static enum ServerToClient {
         UPDATE_NETWORKS,
         DELETE_NETWORK,
         UPDATE_GUI_SELECTED_NETWORK

@@ -171,7 +171,7 @@ public class NetworkHubGuiContainer extends GuiContainer {
 
         boolean isHead = this.networkHubContainer.networkHub.isHead();
         this.lockButton.setLocked(!showInfo().isPublic());
-        this.createButton.enabled = !isHead && this.networkHubContainer.networkHub.isConnected();
+        this.createButton.enabled = !isHead && !this.networkHubContainer.networkHub.isConnected();
         this.disConnectButton.enabled = !isHead;
         this.connectButton.enabled = !isHead;
 
