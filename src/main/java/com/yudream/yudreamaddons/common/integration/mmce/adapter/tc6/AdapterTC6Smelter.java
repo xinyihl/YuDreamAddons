@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
 import static com.yudream.yudreamaddons.Configurations.OTHER_CONFIG;
@@ -37,7 +36,7 @@ import static com.yudream.yudreamaddons.Configurations.OTHER_CONFIG;
 public class AdapterTC6Smelter extends RecipeAdapter {
 
     private static final Logger log = LogManager.getLogger(AdapterTC6Smelter.class);
-    private static final Map<ItemStack, AspectList> itemAspectListMap = new HashMap<>();
+    private static final Map<NBTTagCompound, AspectList> itemAspectListMap = new HashMap<>();
     private static final Gson GSON = new Gson();
 
     public AdapterTC6Smelter() {
@@ -50,7 +49,8 @@ public class AdapterTC6Smelter extends RecipeAdapter {
         List<MachineRecipe> machineRecipeList = new ArrayList<>();
         this.optimizedMethod(file);
         if (!itemAspectListMap.isEmpty()) {
-            itemAspectListMap.forEach((itemStack, aspectList) -> {
+            itemAspectListMap.forEach((compound, aspectList) -> {
+                ItemStack itemStack = new ItemStack(compound);
                 if (itemStack.isEmpty()) {
                     return;
                 }
@@ -103,8 +103,6 @@ public class AdapterTC6Smelter extends RecipeAdapter {
         }
         aspectCache.items.stream()
                 .flatMap(this::safeParseNBT)
-                .flatMap(this::processCompound)
-                .filter(stack -> !stack.isEmpty())
                 .forEach(stack -> updateAspectMap(aspect, stack));
     }
 
@@ -116,32 +114,17 @@ public class AdapterTC6Smelter extends RecipeAdapter {
         }
     }
 
-    private Stream<ItemStack> processCompound(NBTTagCompound compound) {
-        try {
-            short trueCount = compound.getShort("Count");
-            if (trueCount <= 0) {
-                return Stream.empty();
-            }
-            ItemStack stack = new ItemStack(compound);
-            return Stream.of(stack);
-        } catch (ClassCastException e) {
-            return Stream.empty();
+    private void updateAspectMap(Aspect aspect, NBTTagCompound compound) {
+        short count = compound.getShort("Count");
+        if (count <= 0) {
+            return;
         }
-    }
-
-    private void updateAspectMap(Aspect aspect, ItemStack stack) {
-        ItemStack keyStack = stack.copy();
-        keyStack.setCount(1);
-        AtomicBoolean tag = new AtomicBoolean(true);
-        itemAspectListMap.forEach((machineRecipe, aspectList) -> {
-            if(ItemStack.areItemStacksEqual(machineRecipe, keyStack)){
-                aspectList.add(aspect, stack.getCount());
-                tag.set(false);
-            }
-        });
-        if (tag.get()) {
-            AspectList aspectList = itemAspectListMap.computeIfAbsent(keyStack, k -> new AspectList());
-            aspectList.add(aspect, stack.getCount());
+        compound.setShort("Count", (short) 1);
+        AspectList aspectList = itemAspectListMap.get(compound);
+        if (aspectList == null) {
+            itemAspectListMap.computeIfAbsent(compound, k -> new AspectList()).add(aspect, count);
+        } else {
+            aspectList.add(aspect, count);
         }
     }
 }
