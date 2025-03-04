@@ -4,16 +4,14 @@ import appeng.api.AEApi;
 import appeng.api.exceptions.FailedConnectionException;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridConnection;
-import appeng.api.networking.pathing.IPathingGrid;
 import appeng.api.util.AECableType;
 import appeng.api.util.AEPartLocation;
 import appeng.core.AEConfig;
-import appeng.me.cache.PathGridCache;
 import com.yudream.yudreamaddons.Configurations;
 import com.yudream.yudreamaddons.YuDreamAddons;
 import com.yudream.yudreamaddons.common.BlocksAndItems;
-import com.yudream.yudreamaddons.common.api.NetworkHubDataStorage;
-import com.yudream.yudreamaddons.common.api.NetworkStatus;
+import com.yudream.yudreamaddons.common.api.data.NetworkHubDataStorage;
+import com.yudream.yudreamaddons.common.api.data.NetworkStatus;
 import com.yudream.yudreamaddons.common.network.PacketServerToClient;
 import com.yudream.yudreamaddons.common.title.base.TitleMeBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +23,8 @@ import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.yudream.yudreamaddons.common.block.BlockNetworkHub.CONNECT;
 import static com.yudream.yudreamaddons.common.network.PacketServerToClient.ServerToClient.DELETE_NETWORK;
@@ -81,8 +81,11 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
                 if (this.isHead) {
                     this.setConnected(!network.getTargetPos().isEmpty());
                     this.getProxy().setIdlePowerUsage(Configurations.OTHER_CONFIG.powerHeadBase * network.getTargetPos().size());
-                    PathGridCache cache = this.getActionableNode().getGrid().getCache(IPathingGrid.class);
-                    int surplusChannels = Math.max(AEConfig.instance().getDenseChannelCapacity() - cache.getChannelsInUse() + 2, 0); // 不知道为什么这玩意儿获取到的就是少2个频道
+                    int howMany = 0;
+                    for (IGridConnection gc : this.getActionableNode().getConnections()) {
+                        howMany = Math.max(gc.getUsedChannels(), howMany);
+                    }
+                    int surplusChannels = Math.max(AEConfig.instance().getDenseChannelCapacity() - howMany, 0);
                     if (this.lastSurplusChannels != surplusChannels) {
                         this.lastSurplusChannels = surplusChannels;
                         network.setSurplusChannels(surplusChannels);
@@ -91,6 +94,7 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
                 } else {
                     if (this.getPos().equals(network.getPos())) {
                         this.setHead(true);
+                        this.sync();
                     } else {
                         if (!this.isConnected) {
                             this.setupConnection(network);
@@ -98,7 +102,6 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
                     }
                 }
             }
-            this.sync();
         }
     }
 
@@ -122,6 +125,15 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
         return tag;
     }
 
+    @Override
+    public void addProbeInfo(Consumer<String> consumer, Function<String, String> loc) {
+        super.addProbeInfo(consumer, loc);
+        consumer.accept(loc.apply("tile_network_hub.state." + this.isConnected()));
+        if (Configurations.GENERAL_CONFIG.doNetworkUUIDShow) {
+            consumer.accept(loc.apply("tile_network_hub.network") + " " + this.getNetworkUuid().toString());
+        }
+    }
+
     public void setupConnection(NetworkStatus network) {
         if (this.world.isRemote) return;
         BlockPos pos = network.getPos();
@@ -142,7 +154,7 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
             this.getProxy().setIdlePowerUsage(power);
             network.addTargetPos(this.getPos());
         } catch (FailedConnectionException e) {
-            throw new RuntimeException(e);
+            this.unsetAll();
         }
     }
 
@@ -197,6 +209,10 @@ public class TileNetworkHub extends TitleMeBase implements ITickable {
     public void setConnected(boolean connected) {
         this.world.notifyBlockUpdate(pos, this.world.getBlockState(pos), this.world.getBlockState(pos).withProperty(CONNECT, connected), 3);
         this.isConnected = connected;
+    }
+
+    public UUID getOwner() {
+        return owner;
     }
 
     public boolean isHead() {

@@ -34,6 +34,8 @@ public class Configurations {
         public int rainbowGeneratorEnergy = 2500000;
         @Config.Comment("无线连接器是否可以跨维度")
         public boolean canRDimension = false;
+        @Config.Comment("是否在TOP上显示网络UUID")
+        public boolean doNetworkUUIDShow = false;
     }
 
     public static class OtherConfig {

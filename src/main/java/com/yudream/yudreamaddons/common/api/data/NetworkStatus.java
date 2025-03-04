@@ -1,5 +1,7 @@
-package com.yudream.yudreamaddons.common.api;
+package com.yudream.yudreamaddons.common.api.data;
 
+import com.yudream.yudreamaddons.common.util.Utils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
@@ -94,11 +96,6 @@ public class NetworkStatus {
     }
 
     @Nonnull
-    public UUID getOwner() {
-        return owner;
-    }
-
-    @Nonnull
     public String getNetworkName() {
         return networkName;
     }
@@ -137,8 +134,18 @@ public class NetworkStatus {
         targetPos.remove(pos);
     }
 
-    public boolean hasPermission(@Nonnull UUID player) {
-        return this.isPublic || player.equals(this.owner);
+    public boolean hasPermission(@Nonnull EntityPlayer player, int level) {
+        //todo 权限系统
+        boolean isOp = Utils.isPlayerOp(player);
+        switch (level) {
+            case 0:
+                return isOp || this.isPublic || player.getGameProfile().getId().equals(this.owner);
+            case 1:
+                return isOp || player.getGameProfile().getId().equals(this.owner);
+            //case 2: return player.getGameProfile().getId().equals(this.owner);
+            default:
+                return false;
+        }
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.yudream.yudreamaddons.common.network;
 
-import com.yudream.yudreamaddons.common.api.NetworkHubDataStorage;
+import com.yudream.yudreamaddons.common.api.data.NetworkHubDataStorage;
 import com.yudream.yudreamaddons.common.container.NetworkHubContainer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

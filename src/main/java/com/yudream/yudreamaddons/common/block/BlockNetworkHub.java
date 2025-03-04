@@ -2,13 +2,17 @@ package com.yudream.yudreamaddons.common.block;
 
 import com.yudream.yudreamaddons.Tags;
 import com.yudream.yudreamaddons.YuDreamAddons;
-import com.yudream.yudreamaddons.common.event.GUIHandler;
+import com.yudream.yudreamaddons.common.api.data.NetworkHubDataStorage;
+import com.yudream.yudreamaddons.common.api.data.NetworkStatus;
+import com.yudream.yudreamaddons.common.container.GUIContainerHandler;
 import com.yudream.yudreamaddons.common.title.TileNetworkHub;
+import com.yudream.yudreamaddons.common.util.Utils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -72,7 +77,12 @@ public class BlockNetworkHub extends Block {
         if (!worldIn.isRemote) {
             TileEntity te = worldIn.getTileEntity(pos);
             if (te instanceof TileNetworkHub) {
-                playerIn.openGui(YuDreamAddons.instance, GUIHandler.GUI_NETWORK_HUB, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                NetworkStatus network = NetworkHubDataStorage.get(worldIn).getNetwork(((TileNetworkHub) te).getNetworkUuid());
+                if (Utils.isPlayerOp(playerIn) || playerIn.getGameProfile().getId().equals(((TileNetworkHub) te).getOwner()) || (network != null && network.hasPermission(playerIn, 0))) {
+                    playerIn.openGui(YuDreamAddons.instance, GUIContainerHandler.GUI_NETWORK_HUB, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                } else {
+                    playerIn.sendStatusMessage(new TextComponentString(I18n.format("statusmessage.ymadditions.info.nopermission")), true);
+                }
             }
         }
         return true;

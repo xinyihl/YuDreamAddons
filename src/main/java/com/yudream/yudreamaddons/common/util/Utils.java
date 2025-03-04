@@ -2,7 +2,9 @@ package com.yudream.yudreamaddons.common.util;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -44,6 +46,15 @@ public class Utils {
         } catch (ClassNotFoundException e) {
             return false;
         }
+    }
+
+    public static boolean isPlayerOp(EntityPlayer player) {
+        MinecraftServer server = player.getServer();
+        boolean isOp = false;
+        if (server != null) {
+            isOp = server.getPlayerList().canSendCommands(player.getGameProfile());
+        }
+        return isOp;
     }
 
     /**

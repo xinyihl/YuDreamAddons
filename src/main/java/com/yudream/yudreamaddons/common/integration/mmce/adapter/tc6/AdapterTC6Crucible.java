@@ -68,22 +68,18 @@ public class AdapterTC6Crucible extends RecipeAdapter {
                     .map(itemStack -> new ChancedIngredientStack(ItemUtils.copyStackWithSize(itemStack, inAmount)))
                     .collect(Collectors.toList());
             if (!inputMainList.isEmpty()) {
-                if(items.containsKey(inputMain[0].toString())){
-                    Integer i = items.get(inputMain[0].toString());
-                    Item item = Item.getByNameOrId("contenttweaker:programming_circuit_"+i);
-                    if (item == null) {
-                        log.fatal(inputMain[0].toString() + " - no qdlb with id: contenttweaker:programming_circuit_"+i);
-                    } else {
-                        RequirementItem reqdlb = new RequirementItem(IOType.INPUT, new ItemStack(item));
-                        reqdlb.setParallelizeUnaffected(true);
-                        machineRecipe.addRequirement(reqdlb);
-                        RequirementItem out = new RequirementItem(IOType.OUTPUT, new ItemStack(item));
-                        machineRecipe.addRequirement(out);
-                    }
-                    items.replace(inputMain[0].toString(), i+1);
+                int i = items.getOrDefault(inputMain[0].toString(), 0);
+                Item item = Item.getByNameOrId("contenttweaker:programming_circuit_" + i);
+                if (item == null) {
+                    log.fatal(inputMain[0].toString() + " - no qdlb with id: contenttweaker:programming_circuit_" + i);
                 } else {
-                    items.put(inputMain[0].toString(), 0);
+                    RequirementItem reqdlb = new RequirementItem(IOType.INPUT, new ItemStack(item));
+                    reqdlb.setParallelizeUnaffected(true);
+                    machineRecipe.addRequirement(reqdlb);
+                    RequirementItem out = new RequirementItem(IOType.OUTPUT, new ItemStack(item));
+                    machineRecipe.addRequirement(out);
                 }
+                items.put(inputMain[0].toString(), i + 1);
                 machineRecipe.addRequirement(new RequirementIngredientArray(inputMainList));
             }
             // Aspect Inputs

@@ -1,10 +1,8 @@
 package com.yudream.yudreamaddons.common.integration.top;
 
 import com.yudream.yudreamaddons.Tags;
-import com.yudream.yudreamaddons.common.title.TileNetworkHub;
+import com.yudream.yudreamaddons.common.api.IHasProbeInfo;
 import com.yudream.yudreamaddons.common.title.TitleShareInfHandler;
-import com.yudream.yudreamaddons.common.title.base.TitleMEAspectBus;
-import com.yudream.yudreamaddons.common.title.base.TitleMeBase;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
@@ -24,29 +22,18 @@ public class TileTOPDataProvider implements IProbeInfoProvider {
         return Tags.MOD_ID + ":" + this.getClass().getSimpleName();
     }
 
-    protected String getLocalizedKey(IThELangKey key) {
-        return "{*" + key.getUnlocalizedKey() + "*}";
-    }
-
     protected String getYudreamKey(String key) {
         return "{*tooltip.yudreamaddons." + key + "*}";
     }
 
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world, IBlockState blockState, IProbeHitData data) {
         TileEntity te = world.getTileEntity(data.getPos());
-        if (te instanceof TitleMeBase) {
-            ((TitleMeBase) te).withPowerStateText(probeInfo::text, this::getLocalizedKey);
-        }
-        if (te instanceof TitleMEAspectBus) {
-            ((TitleMEAspectBus) te).withPowerStateText(probeInfo::text, this::getLocalizedKey);
-        }
         if (te instanceof TitleShareInfHandler){
             ((TitleShareInfHandler) te).withLinkStateText(probeInfo::text, this::getYudreamKey);
             probeInfo.text("连接至: " + ((TitleShareInfHandler) te).getBp().toString());
         }
-        if (te instanceof TileNetworkHub) {
-            probeInfo.text("连接状态: " + (((TileNetworkHub) te).isConnected() ? "已连接" : "未连接"));
-            probeInfo.text("网络: " + ((TileNetworkHub) te).getNetworkUuid().toString());
+        if (te instanceof IHasProbeInfo) {
+            ((IHasProbeInfo) te).addProbeInfo(probeInfo::text, this::getYudreamKey);
         }
     }
 }

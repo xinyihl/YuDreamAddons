@@ -2,17 +2,18 @@ package com.yudream.yudreamaddons.client.gui;
 
 import com.yudream.yudreamaddons.Tags;
 import com.yudream.yudreamaddons.YuDreamAddons;
-import com.yudream.yudreamaddons.common.api.NetworkStatus;
+import com.yudream.yudreamaddons.common.api.data.NetworkStatus;
 import com.yudream.yudreamaddons.common.container.NetworkHubContainer;
 import com.yudream.yudreamaddons.common.network.PacketClientToServer;
-import mezz.jei.config.Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLockIconButton;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -24,6 +25,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,45 +60,24 @@ public class NetworkHubGuiContainer extends GuiContainer {
         this.networkHubContainer = networkHubContainer;
     }
 
-    private boolean closeJei = false;
-
     private NetworkStatus showInfo() {
         return networkHubContainer.networks.getOrDefault(networkHubContainer.selectedNetwork, new NetworkStatus(new UUID(0, 0), "Unknown", true, 0, new BlockPos(0, 0, 0)));
     }
 
-    @Override
-    public void onGuiClosed() {
-        super.onGuiClosed();
-        if(closeJei){
-            Config.toggleOverlayEnabled();
-        }
+    public List<Rectangle> getExtraAreas() {
+        List<Rectangle> extraAreas = new ArrayList<>();
+        extraAreas.add(new Rectangle(this.lockButton.x, this.lockButton.y, this.lockButton.width, this.lockButton.height));
+        return extraAreas;
     }
 
     @Override
     public void initGui() {
         super.initGui();
-
-        if(Config.isOverlayEnabled()){
-            Config.toggleOverlayEnabled();
-            closeJei = true;
-        }
-
-        this.createButton = new GuiButton(995, guiLeft + 26, guiTop + 110, 70, 18, "创建");
-        this.deleteButton = new GuiButton(996, guiLeft + 26, guiTop + 135, 70, 18, "删除");
-        this.connectButton = new GuiButton(997, guiLeft + 103, guiTop + 110, 70, 18, "连接");
-        this.disConnectButton = new GuiButton(998, guiLeft + 103, guiTop + 135, 70, 18, "断开");
-        this.lockButton = new GuiLockIconButton(999, guiLeft + 201, guiTop + 12) {
-            @Override
-            public void drawButton(@Nonnull Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-                super.drawButton(mc, mouseX, mouseY, partialTicks);
-                if (this.visible) {
-                    int relx = mouseX - this.x, rely = mouseY - this.y;
-                    if (relx >= 0 && rely >= 0 && relx < this.width && rely < this.height) {
-                        mc.fontRenderer.drawString("切换网络是否公开", mouseX + 5, mouseY + 5, 0xFFFFFF);
-                    }
-                }
-            }
-        };
+        this.createButton = new GuiButton(995, guiLeft + 26, guiTop + 110, 70, 18, I18n.format("gui.ymadditions.network_hub.button.create"));
+        this.deleteButton = new GuiButton(996, guiLeft + 26, guiTop + 135, 70, 18, I18n.format("gui.ymadditions.network_hub.button.delete"));
+        this.connectButton = new GuiButton(997, guiLeft + 103, guiTop + 110, 70, 18, I18n.format("gui.ymadditions.network_hub.button.connect"));
+        this.disConnectButton = new GuiButton(998, guiLeft + 103, guiTop + 135, 70, 18, I18n.format("gui.ymadditions.network_hub.button.disconnect"));
+        this.lockButton = new GuiLockIconButton(999, guiLeft + 201, guiTop + 12);
         this.textField = new GuiTextField(1000, this.fontRenderer, guiLeft + 26, guiTop + 110, 70, 18);
 
         if (this.networkHubContainer.networkHub.isConnected()) {
@@ -160,6 +141,7 @@ public class NetworkHubGuiContainer extends GuiContainer {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
 
         GlStateManager.disableRescaleNormal();
@@ -201,18 +183,22 @@ public class NetworkHubGuiContainer extends GuiContainer {
         if (isCreating) {
             this.textField.drawTextBox();
         }
+
+        if (this.isMouseOverButton(lockButton, mouseX, mouseY)) {
+            this.drawHoveringText(I18n.format("gui.ymadditions.network_hub.button.public.desc"), mouseX, mouseY);
+        }
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         int rightPanelX = 110;
         int rightPanelY = 19;
-        this.fontRenderer.drawString("无线连接器", 7, 5, 0xFF404040);
-        this.fontRenderer.drawString("名称: " + this.showInfo().getNetworkName(), rightPanelX, rightPanelY, 0xFFFFFF);
-        this.fontRenderer.drawString("剩余频道: " + this.showInfo().getSurplusChannels(), rightPanelX, rightPanelY + 15, 0xFFFFFF);
-        this.fontRenderer.drawString("维度ID: " + this.showInfo().getDimensionId(), rightPanelX, rightPanelY + 30, 0xFFFFFF);
-        this.fontRenderer.drawString("是否公开: " + (this.showInfo().isPublic() ? "是" : "否"), rightPanelX, rightPanelY + 45, 0xFFFFFF);
-        this.fontRenderer.drawString("连接状态: " + (networkHubContainer.networkHub.isConnected() ? "已连接" : "未连接"), rightPanelX, rightPanelY + 60, 0xFFFFFF);
+        this.fontRenderer.drawString(I18n.format("tile.yudreamaddons.network_hub.name"), 7, 5, 0xFF404040);
+        this.fontRenderer.drawString(I18n.format("gui.ymadditions.network_hub.info.network_name") + " " + this.showInfo().getNetworkName(), rightPanelX, rightPanelY, 0xFFFFFF);
+        this.fontRenderer.drawString(I18n.format("gui.ymadditions.network_hub.info.surplus_channels") + " " + this.showInfo().getSurplusChannels(), rightPanelX, rightPanelY + 15, 0xFFFFFF);
+        this.fontRenderer.drawString(I18n.format("gui.ymadditions.network_hub.info.dimension_id") + " " + this.showInfo().getDimensionId(), rightPanelX, rightPanelY + 30, 0xFFFFFF);
+        this.fontRenderer.drawString(I18n.format("gui.ymadditions.network_hub.info.public." + this.showInfo().isPublic()), rightPanelX, rightPanelY + 45, 0xFFFFFF);
+        this.fontRenderer.drawString(I18n.format("gui.ymadditions.network_hub.info.state." + networkHubContainer.networkHub.isConnected()), rightPanelX, rightPanelY + 60, 0xFFFFFF);
     }
 
     @Override
@@ -299,11 +285,28 @@ public class NetworkHubGuiContainer extends GuiContainer {
         return mouseX >= textField.x && mouseX < textField.x + textField.width && mouseY >= textField.y && mouseY < textField.y + textField.height;
     }
 
+    private boolean isMouseOverButton(GuiButton button, int mouseX, int mouseY) {
+        return mouseX >= button.x && mouseY >= button.y && mouseX < button.x + button.width && mouseY < button.y + button.height;
+    }
+
     public static class NetButton extends GuiButton {
         public NetworkStatus networkStatus;
         public NetButton(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, NetworkStatus networkStatus) {
             super(buttonId, x, y, widthIn, heightIn, buttonText);
             this.networkStatus = networkStatus;
+        }
+    }
+
+    public static class ScissorHelper {
+        public static void enableScissor(Minecraft mc, int x, int y, int width, int height) {
+            ScaledResolution res = new ScaledResolution(mc);
+            int scaleFactor = res.getScaleFactor();
+            GL11.glEnable(GL11.GL_SCISSOR_TEST);
+            GL11.glScissor(x * scaleFactor, mc.displayHeight - (y + height) * scaleFactor, width * scaleFactor, height * scaleFactor);
+        }
+
+        public static void disableScissor() {
+            GL11.glDisable(GL11.GL_SCISSOR_TEST);
         }
     }
 }

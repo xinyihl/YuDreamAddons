@@ -4,20 +4,25 @@ import blusunrize.immersiveengineering.common.util.IEDamageSources.ElectricDamag
 import com.yudream.yudreamaddons.Configurations;
 import com.yudream.yudreamaddons.YuDreamAddons;
 import com.yudream.yudreamaddons.common.api.IContaierTickable;
-import com.yudream.yudreamaddons.common.api.NetworkHubDataStorage;
-import com.yudream.yudreamaddons.common.api.NetworkStatus;
+import com.yudream.yudreamaddons.common.api.data.NetworkHubDataStorage;
+import com.yudream.yudreamaddons.common.api.data.NetworkStatus;
 import com.yudream.yudreamaddons.common.network.PacketServerToClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.yudream.yudreamaddons.common.network.PacketServerToClient.ServerToClient.UPDATE_NETWORKS;
 
@@ -32,19 +37,12 @@ public class EventHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerTick(PlayerTickEvent event) {
-        if (event.side.isClient()) return;
-        if (event.phase != Phase.START) return;
-        if (!(event.player instanceof EntityPlayerMP)) return;
-        Container container = event.player.openContainer;
-        if (container instanceof IContaierTickable) {
-            ((IContaierTickable) container).update();
-        }
-        if (event.player.world.getTotalWorldTime() % 20 != 0) return;
+    public void onPlayerJoinWorld(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.player.world.isRemote) return;
         World world = event.player.world;
         EntityPlayerMP player = (EntityPlayerMP) event.player;
         NetworkHubDataStorage storage = NetworkHubDataStorage.get(world);
-        List<NetworkStatus> networks = storage.getNeedUpdateNetworks(player.getGameProfile().getId());
+        List<NetworkStatus> networks = storage.getPlayerNetworks(player);
         if (!networks.isEmpty()) {
             NBTTagCompound tag = new NBTTagCompound();
             NBTTagList list = new NBTTagList();
@@ -54,6 +52,43 @@ public class EventHandler {
             }
             tag.setTag("networks", list);
             YuDreamAddons.instance.networkWrapper.sendTo(new PacketServerToClient(UPDATE_NETWORKS, tag), player);
+        }
+    }
+
+    @SubscribeEvent
+    public void onWorldTick(TickEvent.WorldTickEvent event) {
+        if (event.side.isClient()) return;
+        if (event.phase != Phase.START) return;
+        if (!(event.world instanceof WorldServer)) return;
+        if (event.world.getTotalWorldTime() % 20 != 0) return;
+        NetworkHubDataStorage storage = NetworkHubDataStorage.get(event.world);
+        if (event.world.getMinecraftServer() != null) {
+            Set<NetworkStatus> updateNetworks = new HashSet<>();
+            event.world.getMinecraftServer().getPlayerList().getPlayers().forEach(player -> {
+                List<NetworkStatus> networks = storage.getPlayerNeedUpdateNetworks(player);
+                if (!networks.isEmpty()) {
+                    updateNetworks.addAll(networks);
+                    NBTTagCompound tag = new NBTTagCompound();
+                    NBTTagList list = new NBTTagList();
+                    for (NetworkStatus network : networks) {
+                        list.appendTag(network.writeToNBT(new NBTTagCompound()));
+                    }
+                    tag.setTag("networks", list);
+                    YuDreamAddons.instance.networkWrapper.sendTo(new PacketServerToClient(UPDATE_NETWORKS, tag), player);
+                }
+            });
+            updateNetworks.forEach((networkStatus) -> networkStatus.setNeedTellClient(false));
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(PlayerTickEvent event) {
+        if (event.side.isClient()) return;
+        if (event.phase != Phase.START) return;
+        if (!(event.player instanceof EntityPlayerMP)) return;
+        Container container = event.player.openContainer;
+        if (container instanceof IContaierTickable) {
+            ((IContaierTickable) container).update();
         }
     }
 }

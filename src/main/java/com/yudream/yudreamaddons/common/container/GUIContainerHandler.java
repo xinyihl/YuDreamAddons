@@ -1,7 +1,6 @@
-package com.yudream.yudreamaddons.common.event;
+package com.yudream.yudreamaddons.common.container;
 
 import com.yudream.yudreamaddons.client.gui.NetworkHubGuiContainer;
-import com.yudream.yudreamaddons.common.container.NetworkHubContainer;
 import com.yudream.yudreamaddons.common.title.TileNetworkHub;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -10,7 +9,7 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 
 import javax.annotation.Nullable;
 
-public class GUIHandler implements IGuiHandler {
+public class GUIContainerHandler implements IGuiHandler {
 
     public static final int GUI_NETWORK_HUB = 1;
 
