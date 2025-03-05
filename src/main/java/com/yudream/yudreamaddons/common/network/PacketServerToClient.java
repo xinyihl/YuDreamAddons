@@ -4,13 +4,15 @@ import com.yudream.yudreamaddons.common.api.data.NetworkHubDataStorage;
 import com.yudream.yudreamaddons.common.container.NetworkHubContainer;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketServerToClient implements IMessage, IMessageHandler<PacketServerToClient, IMessage> {
     private String type;
@@ -38,11 +40,12 @@ public class PacketServerToClient implements IMessage, IMessageHandler<PacketSer
     }
 
     @Override
+    @SideOnly(value = Side.CLIENT)
     public IMessage onMessage(PacketServerToClient message, MessageContext ctx) {
         Minecraft mc = Minecraft.getMinecraft();
         mc.addScheduledTask(() -> {
             Container container = mc.player.openContainer;
-            WorldClient world = Minecraft.getMinecraft().world;
+            World world = Minecraft.getMinecraft().world;
             NetworkHubDataStorage storage = NetworkHubDataStorage.get(world);
             switch (ServerToClient.valueOf(message.type)) {
                 case UPDATE_NETWORKS: {
