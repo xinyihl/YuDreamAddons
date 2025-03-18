@@ -18,7 +18,6 @@ public class ModelRegistry {
     @SubscribeEvent
     public static void registerModel(ModelRegistryEvent event) {
         ModelLoader.setCustomModelResourceLocation(linkCard, 0, new ModelResourceLocation(Objects.requireNonNull(linkCard.getRegistryName()), "inventory"));
-        ModelLoader.setCustomModelResourceLocation(itemNetworkHub, 0, new ModelResourceLocation(Objects.requireNonNull(itemNetworkHub.getRegistryName()), "inventory"));
         ModelLoader.setCustomModelResourceLocation(itemMEAspectInputBus, 0, new ModelResourceLocation(Objects.requireNonNull(itemMEAspectInputBus.getRegistryName()), "inventory"));
         ModelLoader.setCustomModelResourceLocation(itemMEAspectOutputBus, 0, new ModelResourceLocation(Objects.requireNonNull(itemMEAspectOutputBus.getRegistryName()), "inventory"));
         ModelLoader.setCustomModelResourceLocation(itemShareInfHandler, 0, new ModelResourceLocation(Objects.requireNonNull(itemShareInfHandler.getRegistryName()), "inventory"));

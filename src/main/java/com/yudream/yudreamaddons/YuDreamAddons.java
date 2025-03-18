@@ -1,7 +1,5 @@
 package com.yudream.yudreamaddons;
 
-import com.yudream.yudreamaddons.common.network.PacketClientToServer;
-import com.yudream.yudreamaddons.common.network.PacketServerToClient;
 import com.yudream.yudreamaddons.common.network.PacketWandOops;
 import com.yudream.yudreamaddons.common.proxy.CommonProxy;
 import net.minecraftforge.fml.common.Mod;
@@ -35,8 +33,6 @@ public class YuDreamAddons {
         configDir = event.getModConfigurationDirectory();
         networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Tags.MOD_ID);
         networkWrapper.registerMessage(PacketWandOops.class, PacketWandOops.class, 0, Side.SERVER);
-        networkWrapper.registerMessage(PacketClientToServer.class, PacketClientToServer.class, 1, Side.SERVER);
-        networkWrapper.registerMessage(PacketServerToClient.class, PacketServerToClient.class, 2, Side.CLIENT);
         PROXY.preInit();
     }
 

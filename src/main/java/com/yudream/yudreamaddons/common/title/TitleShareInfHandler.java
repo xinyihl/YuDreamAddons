@@ -1,5 +1,6 @@
 package com.yudream.yudreamaddons.common.title;
 
+import com.yudream.yudreamaddons.common.api.IHasProbeInfo;
 import github.kasuminova.mmce.common.tile.MEPatternProvider;
 import github.kasuminova.mmce.common.util.InfItemFluidHandler;
 import hellfirepvp.modularmachinery.common.crafting.ComponentType;
@@ -18,24 +19,24 @@ import javax.annotation.Nullable;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class TitleShareInfHandler extends TileColorableMachineComponent implements MachineComponentTile {
+public class TitleShareInfHandler extends TileColorableMachineComponent implements MachineComponentTile, IHasProbeInfo {
     private BlockPos bp;
     @Nullable
     @Override
     public MachineComponent<?> provideComponent() {
-        if (bp == null) return null;
-        TileEntity tileEntity = this.world.getTileEntity(bp);
+        if (bp != null) {
+            TileEntity tileEntity = this.world.getTileEntity(bp);
             if (tileEntity instanceof MEPatternProvider){
-                MEPatternProvider mePatternProvider = (MEPatternProvider) tileEntity;
                 return new MachineComponent<InfItemFluidHandler>(IOType.INPUT) {
                     public ComponentType getComponentType() {
                         return ComponentTypesMM.COMPONENT_ITEM_FLUID_GAS;
                     }
                     public InfItemFluidHandler getContainerProvider() {
-                        return mePatternProvider.getInfHandler();
+                        return ((MEPatternProvider) tileEntity).getInfHandler();
                     }
                 };
             }
+        }
         return null;
     }
 
@@ -63,7 +64,8 @@ public class TitleShareInfHandler extends TileColorableMachineComponent implemen
         }
     }
 
-    public void withLinkStateText(Consumer<String> consumer, Function<String, String> loc){
+    @Override
+    public void addProbeInfo(Consumer<String> consumer, Function<String, String> loc) {
         if(bp == null){
             consumer.accept(loc.apply("blockshareinfhandler.offline"));
         }else {
@@ -71,11 +73,8 @@ public class TitleShareInfHandler extends TileColorableMachineComponent implemen
                 consumer.accept(loc.apply("blockshareinfhandler.error"));
             }else {
                 consumer.accept(loc.apply("blockshareinfhandler.online"));
+                consumer.accept("连接至: " + bp.toString());
             }
         }
-    }
-
-    public BlockPos getBp() {
-        return bp;
     }
 }

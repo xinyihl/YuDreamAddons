@@ -23,7 +23,8 @@ public enum Mods {
     GUGU("gugu-utils", true),
     FORESTRY("forestry", false),
     NOVECORE("novaeng_core", true),
-    IC2("ic2", true);
+    IC2("ic2", true),
+    NATURE("naturesaura", true),;
     public final String modid;
     private final boolean mixin;
     private final boolean loaded;
