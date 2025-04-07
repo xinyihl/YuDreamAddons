@@ -2,6 +2,7 @@ package com.yudream.yudreamaddons.common.block;
 
 import com.yudream.yudreamaddons.Tags;
 import com.yudream.yudreamaddons.common.title.base.TitleMEAspectBus;
+import com.yudream.yudreamaddons.common.title.base.TitleMEAspectBusMMCE;
 import github.kasuminova.mmce.common.block.appeng.BlockMEMachineComponent;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -36,6 +37,11 @@ public abstract class BlockMEAspectBus extends BlockMEMachineComponent {
             TileEntity te = world.getTileEntity(pos);
             if (te instanceof TitleMEAspectBus && placer instanceof EntityPlayer) {
                 TitleMEAspectBus tn = (TitleMEAspectBus) te;
+                tn.setOwner((EntityPlayer) placer);
+                tn.getActionableNode();
+            }
+            if (te instanceof TitleMEAspectBusMMCE && placer instanceof EntityPlayer) {
+                TitleMEAspectBusMMCE tn = (TitleMEAspectBusMMCE) te;
                 tn.setOwner((EntityPlayer) placer);
                 tn.getActionableNode();
             }

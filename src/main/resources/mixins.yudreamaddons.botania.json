@@ -6,5 +6,9 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "TileRuneAltarMixin"
+  ],
+  "client": [
+    "ManaPoolRecipeWrapperMixin",
+    "RuneAltarPoolRecipeWrapperMixin"
   ]
 }

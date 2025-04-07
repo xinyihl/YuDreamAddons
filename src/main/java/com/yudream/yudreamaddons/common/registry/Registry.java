@@ -1,14 +1,10 @@
 package com.yudream.yudreamaddons.common.registry;
 
 import com.yudream.yudreamaddons.Tags;
-import com.yudream.yudreamaddons.common.block.BlockMEAspectInputBus;
-import com.yudream.yudreamaddons.common.block.BlockMEAspectOutputBus;
-import com.yudream.yudreamaddons.common.block.BlockShareInfHandler;
+import com.yudream.yudreamaddons.common.block.*;
 import com.yudream.yudreamaddons.common.item.LinkCard;
 import com.yudream.yudreamaddons.common.item.MyItemBlock;
-import com.yudream.yudreamaddons.common.title.TitleMEAspectInputBus;
-import com.yudream.yudreamaddons.common.title.TitleMEAspectOutputBus;
-import com.yudream.yudreamaddons.common.title.TitleShareInfHandler;
+import com.yudream.yudreamaddons.common.title.*;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -40,6 +36,8 @@ public class Registry {
                 linkCard = new LinkCard(),
                 itemMEAspectInputBus = new MyItemBlock(blockMEAspectInputBus),
                 itemMEAspectOutputBus = new MyItemBlock(blockMEAspectOutputBus),
+                itemMEAspectInputBusMMCE = new MyItemBlock(blockMEAspectInputBusMMCE),
+                itemMEAspectOutputBusMMCE = new MyItemBlock(blockMEAspectOutputBusMMCE),
                 itemShareInfHandler = new MyItemBlock(blockShareInfHandler)
         );
     }
@@ -49,10 +47,14 @@ public class Registry {
         event.getRegistry().registerAll(
                 blockMEAspectInputBus = new BlockMEAspectInputBus(),
                 blockMEAspectOutputBus = new BlockMEAspectOutputBus(),
+                blockMEAspectInputBusMMCE = new BlockMEAspectInputBusMMCE(),
+                blockMEAspectOutputBusMMCE = new BlockMEAspectOutputBusMMCE(),
                 blockShareInfHandler = new BlockShareInfHandler()
         );
         GameRegistry.registerTileEntity(TitleMEAspectInputBus.class, new ResourceLocation(Tags.MOD_ID, "tile_measpectinputbus"));
         GameRegistry.registerTileEntity(TitleMEAspectOutputBus.class, new ResourceLocation(Tags.MOD_ID, "tile_measpectoutputbus"));
+        GameRegistry.registerTileEntity(TitleMEAspectInputBusMMCE.class, new ResourceLocation(Tags.MOD_ID, "tile_measpectinputbusmmce"));
+        GameRegistry.registerTileEntity(TitleMEAspectOutputBusMMCE.class, new ResourceLocation(Tags.MOD_ID, "tile_measpectoutputbusmmce"));
         GameRegistry.registerTileEntity(TitleShareInfHandler.class, new ResourceLocation(Tags.MOD_ID, "tile_shareinfhandler"));
     }
 }

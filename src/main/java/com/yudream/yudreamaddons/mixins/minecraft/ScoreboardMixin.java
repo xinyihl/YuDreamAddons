@@ -43,15 +43,13 @@ public abstract class ScoreboardMixin {
             cancellable = true
     )
     private void injected1(String name, CallbackInfoReturnable<ScorePlayerTeam> cir) {
-        ScorePlayerTeam scoreplayerteam = teams.get(name);;
-        if (scoreplayerteam != null) {
-            cir.setReturnValue(scoreplayerteam);
-        } else {
+        ScorePlayerTeam scoreplayerteam = teams.get(name);
+        if (scoreplayerteam == null) {
             scoreplayerteam = new ScorePlayerTeam((Scoreboard)(Object)this, name);
             teams.put(name, scoreplayerteam);
             broadcastTeamCreated(scoreplayerteam);
-            cir.setReturnValue(scoreplayerteam);
         }
+        cir.setReturnValue(scoreplayerteam);
     }
 
     @Inject(

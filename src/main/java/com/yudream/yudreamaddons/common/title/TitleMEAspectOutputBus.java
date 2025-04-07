@@ -4,6 +4,7 @@ import com.warmthdawn.mod.gugu_utils.modularmachenary.MMCompoments;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.components.GenericMachineCompoment;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.RequirementAspect;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.basic.IGeneratable;
+import com.yudream.yudreamaddons.common.BlocksAndItems;
 import com.yudream.yudreamaddons.common.title.base.TitleMEAspectBus;
 import hellfirepvp.modularmachinery.common.crafting.ComponentType;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,7 @@ public class TitleMEAspectOutputBus extends TitleMEAspectBus implements IGenerat
 
     @Override
     public ItemStack getVisualItemStack() {
-        return null;
+        return new ItemStack(BlocksAndItems.itemMEAspectOutputBus);
     }
 
     @Nullable

@@ -1,7 +1,6 @@
 package com.yudream.yudreamaddons.common.integration.mmce.adapter.tc6;
 
 import com.warmthdawn.mod.gugu_utils.modularmachenary.MMRequirements;
-import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.RequirementAspect;
 import com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.types.RequirementTypeAspect;
 import crafttweaker.util.IEventHandler;
 import github.kasuminova.mmce.common.event.recipe.RecipeEvent;
@@ -15,6 +14,7 @@ import hellfirepvp.modularmachinery.common.lib.RequirementTypesMM;
 import hellfirepvp.modularmachinery.common.machine.IOType;
 import hellfirepvp.modularmachinery.common.modifier.RecipeModifier;
 import hellfirepvp.modularmachinery.common.util.ItemUtils;
+import kport.modularmagic.common.crafting.requirement.RequirementAspect;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.ResourceLocation;
@@ -24,6 +24,8 @@ import thaumcraft.api.crafting.InfusionRecipe;
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.yudream.yudreamaddons.Configurations.OTHER_CONFIG;
 
 public class AdapterTC6InfusionMatrix extends RecipeAdapter {
     public static final int BASE_WORK_TIME = 300;
@@ -83,7 +85,7 @@ public class AdapterTC6InfusionMatrix extends RecipeAdapter {
                 if (inAmounta <= 0) {
                     return;
                 }
-                machineRecipe.addRequirement(RequirementAspect.createInput(inAmounta, aspect));
+                machineRecipe.addRequirement(OTHER_CONFIG.useGuguAspect ? com.warmthdawn.mod.gugu_utils.modularmachenary.requirements.RequirementAspect.createInput(inAmounta, aspect) : new RequirementAspect(IOType.INPUT, inAmounta, aspect));
             });
 
             // Outputs

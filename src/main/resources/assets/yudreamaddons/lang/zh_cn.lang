@@ -11,8 +11,10 @@ item.yudreamaddons.link_card.name=闪存卡
 
 tile.yudreamaddons.network_hub.name=无线连接器
 tile.yudreamaddons.blockshareinfhandler.name=库存共享总线
-tile.yudreamaddons.blockmeaspectinputbus.name=ME机械源质输入总线
-tile.yudreamaddons.blockmeaspectoutputbus.name=ME机械源质输出总线
+tile.yudreamaddons.blockmeaspectinputbus.name=GUGU-ME机械源质输入总线
+tile.yudreamaddons.blockmeaspectoutputbus.name=GUGU-ME机械源质输出总线
+tile.yudreamaddons.blockmeaspectinputbusmmce.name=MMCE-ME机械源质输入总线
+tile.yudreamaddons.blockmeaspectoutputbusmmce.name=MMCE-ME机械源质输出总线
 tile.modularmachinery.blockparallelcontroller.yudream_a.name=§d极限并行控制器
 tile.modularmachinery.blockparallelcontroller.yudream_b.name=§1无尽并行控制器
 

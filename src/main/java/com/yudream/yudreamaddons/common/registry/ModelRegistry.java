@@ -20,6 +20,8 @@ public class ModelRegistry {
         ModelLoader.setCustomModelResourceLocation(linkCard, 0, new ModelResourceLocation(Objects.requireNonNull(linkCard.getRegistryName()), "inventory"));
         ModelLoader.setCustomModelResourceLocation(itemMEAspectInputBus, 0, new ModelResourceLocation(Objects.requireNonNull(itemMEAspectInputBus.getRegistryName()), "inventory"));
         ModelLoader.setCustomModelResourceLocation(itemMEAspectOutputBus, 0, new ModelResourceLocation(Objects.requireNonNull(itemMEAspectOutputBus.getRegistryName()), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(itemMEAspectInputBusMMCE, 0, new ModelResourceLocation(Objects.requireNonNull(itemMEAspectInputBusMMCE.getRegistryName()), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(itemMEAspectOutputBusMMCE, 0, new ModelResourceLocation(Objects.requireNonNull(itemMEAspectOutputBusMMCE.getRegistryName()), "inventory"));
         ModelLoader.setCustomModelResourceLocation(itemShareInfHandler, 0, new ModelResourceLocation(Objects.requireNonNull(itemShareInfHandler.getRegistryName()), "inventory"));
 
     }

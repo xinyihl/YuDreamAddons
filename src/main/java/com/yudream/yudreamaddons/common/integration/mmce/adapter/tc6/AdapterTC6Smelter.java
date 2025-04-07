@@ -14,6 +14,7 @@ import hellfirepvp.modularmachinery.common.crafting.requirement.RequirementItem;
 import hellfirepvp.modularmachinery.common.lib.RequirementTypesMM;
 import hellfirepvp.modularmachinery.common.machine.IOType;
 import hellfirepvp.modularmachinery.common.modifier.RecipeModifier;
+import kport.modularmagic.common.crafting.requirement.RequirementAspect;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
@@ -72,7 +73,7 @@ public class AdapterTC6Smelter extends RecipeAdapter {
                     if (outAmount <= 0) {
                         return;
                     }
-                    machineRecipe.addRequirement(new RequirementAspectOutput(outAmount, aspect));
+                    machineRecipe.addRequirement(OTHER_CONFIG.useGuguAspect ? new  RequirementAspectOutput(outAmount, aspect) : new RequirementAspect(IOType.OUTPUT, outAmount, aspect));
                 });
                 machineRecipeList.add(machineRecipe);
                 incId++;

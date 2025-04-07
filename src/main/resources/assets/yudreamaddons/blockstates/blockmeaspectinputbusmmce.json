@@ -1,0 +1,13 @@
+{
+  "defaults": {
+    "model": "yudreamaddons:blockmeaspectinputbus"
+  },
+  "variants": {
+    "inventory": {
+      "model": "yudreamaddons:blockmeaspectinputbus"
+    },
+    "normal": {
+      "model": "yudreamaddons:blockmeaspectinputbus"
+    }
+  }
+}
