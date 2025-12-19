@@ -1,5 +1,5 @@
-## YuDreamAddons
-
+# YuDreamAddons
+### 由于大部分功能分离至[WhimCraft](https://github.com/xinyihl/WhimCraft)现予公开
 > 服务器私用mod，不提供维护&技术支持。
 
 1. 修改 可配置符文祭坛是否消耗符文
